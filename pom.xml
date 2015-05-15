@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>it.polimi.tower4clouds</groupId>
+	<version>0.1-SNAPSHOT</version>
+	<artifactId>tower4clouds</artifactId>
+	<packaging>pom</packaging>
+	<name>Tower4Clouds</name>
+	<inceptionYear>2015</inceptionYear>
+	<description>Tower4Clouds Parent Project</description>
+	<url>http://deib-polimi.github.io/tower4clouds</url>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<organization>
+		<name>Politecnico di Milano</name>
+		<url>http://www.polimi.it</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>mmiglier</id>
+			<name>Marco Miglierina</name>
+			<email>marco.miglierina@polimi.it</email>
+			<organization>Politecnico di Milano</organization>
+			<organizationUrl>http://www.polimi.it</organizationUrl>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+			<timezone>Europe/Rome</timezone>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git@github.com:deib-polimi/tower4clouds.git</connection>
+		<developerConnection>scm:git:git@github.com:deib-polimi/tower4clouds.git</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/deib-polimi/tower4clouds</url>
+	</scm>
+
+	<repositories>
+		<repository>
+			<id>streamreasoning_repository</id>
+			<name>Csparql server repository</name>
+			<url>http://streamreasoning.org/maven/</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>maven-restlet</id>
+			<name>Public online Restlet repository</name>
+			<url>http://maven.restlet.com</url>
+		</repository>
+		<repository>
+			<id>deib-polimi-releases</id>
+			<url>https://github.com/deib-polimi/deib-polimi-mvn-repo/raw/master/releases</url>
+		</repository>
+		<repository>
+			<id>deib-polimi-snapshots</id>
+			<url>https://github.com/deib-polimi/deib-polimi-mvn-repo/raw/master/snapshots</url>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<repository>
+			<id>internal-repo</id>
+			<name>Temporary Staging Repository</name>
+			<url>file://${project.build.directory}/mvn-repo/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>internal-snapshot-repo</id>
+			<name>Temporary Staging Snapshot Repository</name>
+			<url>file://${project.build.directory}/mvn-repo/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<github.global.server>github</github.global.server>
+	</properties>
+	
+	<modules>
+		<module>data-analyzer</module>
+		<module>manager</module>
+		<module>rules</module>
+		<module>model</module>
+		<module>data-collectors</module>
+		<module>website</module>
+		<module>integration</module>
+		<module>use-cases</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.11</version>
+				<configuration>
+					<header>${project.basedir}/APACHE-2-header.txt</header>
+					<properties>
+						<owner>Politecnico di Milano</owner>
+						<email>marco.miglierina@polimi.it</email>
+					</properties>
+					<mapping>
+						<g4>JAVADOC_STYLE</g4>
+						<tex>PERCENT3_STYLE</tex>
+					</mapping>
+					<excludes>
+						<exclude>**/README</exclude>
+						<exclude>*.log</exclude>
+						<exclude>src/test/resources/**</exclude>
+						<exclude>src/main/resources/**</exclude>
+						<exclude>LICENSE.txt</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.2</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8.2</version>
+			</plugin>
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.11</version>
+				<configuration>
+					<merge>true</merge> <!-- deploy without removing existing artifacts on the repo!!! -->
+					<message>Maven artifacts for ${project.artifactId}
+						${project.version}</message>
+					<noJekyll>true</noJekyll> <!-- disable webpage processing -->
+					<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
+					<branch>refs/heads/master</branch>
+					<includes>
+						<include>**/*</include>
+					</includes>
+					<repositoryName>deib-polimi-mvn-repo</repositoryName>
+					<repositoryOwner>deib-polimi</repositoryOwner>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>deploy</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
