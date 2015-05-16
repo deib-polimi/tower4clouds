@@ -40,7 +40,7 @@ Desktop.ini
  
  
 ######################
-# Eclipse
+# IDEs
 ######################
  
 *.pydevproject
@@ -69,3 +69,10 @@ local.properties
  
 # PDT-specific
 .buildpath
+
+.idea
+
+######################
+# Website
+######################
+.couscous

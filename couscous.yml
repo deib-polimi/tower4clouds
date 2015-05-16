@@ -1,0 +1,37 @@
+template:
+    directory: website
+
+exclude:
+    - data-analyzer
+    - data-collectors
+    - integration
+    - manager
+    - model
+    - rules
+    - use-cases
+
+baseUrl: http://deib-polimi.github.io/tower4clouds
+
+# Used to link to the GitHub project
+github:
+    user: deib-polimi
+    repo: tower4clouds
+
+title: Tower 4Clouds
+subTitle: A monitoring framework for clouds
+
+# The left menu bar
+menu:
+    items:
+        home:
+            text: Home
+            relativeUrl: .
+        getting-started:
+            text: Get started
+            relativeUrl: docs/get-started.html
+        changelog:
+            text: Change log
+            relativeUrl: changelog.html
+        contributing:
+            text: Contributing
+            relativeUrl: contributing.html
