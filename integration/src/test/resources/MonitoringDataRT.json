@@ -1,0 +1,5 @@
+[{
+	"resourceId":  "register1",
+	"metric": "ResponseTime",
+	"value": 2000
+}]

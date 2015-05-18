@@ -1,0 +1,37 @@
+[
+    {
+    "clazz": "InternalComponent",
+      "id": "mic3", 
+      "providedMethods": [
+        "mic3-register", 
+        "mic3-answerQuestions", 
+        "mic3-saveAnswers"
+      ], 
+      "requiredComponents": [
+        "frontend3"
+      ], 
+      "type": "Mic"
+    },
+    {
+    "clazz": "Method",
+      "id": "mic3-answerQuestions", 
+      "type": "answerQuestions"
+    }, 
+    {
+     "clazz": "Method",
+      "id": "mic3-saveAnswers", 
+      "type": "saveAnswers"
+    }, 
+    {
+     "clazz": "Method",
+      "id": "mic3-register", 
+      "type": "register"
+    },
+    {
+    "clazz": "Method",
+      "cloudProvider": "amazon", 
+      "id": "frontend3", 
+      "numberOfCPUs": 2, 
+      "type": "Frontend"
+    }
+ ]

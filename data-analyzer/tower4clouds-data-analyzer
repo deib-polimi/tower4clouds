@@ -1,0 +1,31 @@
+#!/bin/sh
+
+export DATA_ANALYZER_HOME="${DATA_ANALYZER_HOME:-$PWD}"
+
+if [ ! -e "$DATA_ANALYZER_HOME" ]
+then
+    echo "$DATA_ANALYZER_HOME does not exist" 1>&2
+    exit 1
+    fi
+
+JAR="$DATA_ANALYZER_HOME/tower4clouds-data-analyzer.jar"
+if [ ! -e "$JAR" ]
+then
+    echo "Can't find jarfile to run"
+    exit 1
+fi
+
+# Deal with Cygwin path issues
+cygwin=false
+case "`uname`" in
+    CYGWIN*) cygwin=true;;
+esac
+if [ "$cygwin" = "true" ]
+then
+    JAR=`cygpath -w "$JAR"`
+    DATA_ANALYZER_HOME=`cygpath -w "$DATA_ANALYZER_HOME"`
+fi
+
+JVM_ARGS=${JVM_ARGS:--Xmx1200M}
+
+exec java  $JVM_ARGS -jar "$JAR" "$@"

@@ -1,0 +1,12 @@
+@prefix rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+@prefix rdfs: http://www.w3.org/2000/01/rdf-schema#
+@prefix mo: http://www.modaclouds.eu/model#
+# [idPropertySet: (?s1 mo:id ?id1), (?s1 ?p ?set), (?set rdf:type rdf:Bag), (?set ?li ?id2), (?s2 mo:id ?id2) -> (?s1 ?p ?s2)]
+
+# [requiredComponents: (?s1 mo:id ?id1), (?s1 mo:requiredComponents ?set), (?set ?li ?id2), (?s2 mo:id ?id2) -> (?s1 mo:requiredComponents ?s2)]
+# [providedMethods: (?s1 mo:id ?id1), (?s1 mo:providedMethods ?set), (?set ?li ?id2), (?s2 mo:id ?id2) -> (?s1 mo:providedMethods ?s2)]
+# [cloudProvider: (?s1 mo:id ?id1), (?s1 mo:cloudProvider ?id2), (?s2 mo:id ?id2) -> (?s1 mo:cloudProvider ?s2)]
+# [location: (?s1 mo:id ?id1), (?s1 mo:location ?id2), (?s2 mo:id ?id2) -> (?s1 mo:location ?s2)]
+
+[sets: (?s ?p ?set), (?set rdf:type rdf:Bag), (?set ?li ?o) -> (?s ?p ?o)]
+[idref: (?s1 mo:id ?id1), (?s1 ?p ?id2), (?p rdfs:subPropertyOf mo:IDRef), (?s2 mo:id ?id2) -> (?s1 ?p ?s2)]

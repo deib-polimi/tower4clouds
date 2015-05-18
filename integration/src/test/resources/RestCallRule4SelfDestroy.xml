@@ -1,0 +1,35 @@
+<!--
+
+    Copyright (C) 2014 Politecnico di Milano (marco.miglierina@polimi.it)
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<monitoringRules xmlns="http://www.modaclouds.eu/xsd/1.0/monitoring_rules_schema">
+    <monitoringRule id="RestCallRule"
+        startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Method" type="register"/>
+        </monitoredTargets>
+        <collectedMetric metricName="ResponseTime">
+            <parameter name="samplingProbability">1</parameter>
+        </collectedMetric>
+        <metricAggregation aggregateFunction="Average" groupingClass="Method"/>
+        <actions>
+            <action name="RestCall">
+                <parameter name="url">http://localhost:8170/v1/monitoring-rules/RestCallRule</parameter>
+                <parameter name="method">DELETE</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+</monitoringRules>
