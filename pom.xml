@@ -337,7 +337,18 @@
 				<groupId>de.jutzig</groupId>
 				<artifactId>github-release-plugin</artifactId>
 				<version>1.1.1</version>
-				<executions>
+				<configuration>
+					<description>See the
+						[Changelog](https://github.com/deib-polimi/tower4clouds/blob/master/CHANGELOG.md)</description>
+					<releaseName>v${project.version}</releaseName>
+					<tag>v${project.version}</tag>
+					<fileSets>
+						<fileSet>**/target/*.tar.gz</fileSet>
+						<fileSet>**/target/*.zip</fileSet>
+						<fileSet>**/target/*jar-with-dependencies.jar</fileSet>
+					</fileSets>
+				</configuration>
+				<!-- <executions>
 					<execution>
 						<id>github-upload</id>
 						<phase>deploy</phase>
@@ -345,19 +356,8 @@
 							<goal>release</goal>
 						</goals>
 						<inherited>false</inherited>
-						<configuration>
-							<description>See the
-								[Changelog](https://github.com/deib-polimi/tower4clouds/blob/master/CHANGELOG.md)</description>
-							<releaseName>v${project.version}</releaseName>
-							<tag>v${project.version}</tag>
-							<fileSets>
-								<fileSet>**/target/*.tar.gz</fileSet>
-								<fileSet>**/target/*.zip</fileSet>
-								<fileSet>**/target/*jar-with-dependencies.jar</fileSet>
-							</fileSets>
-						</configuration>
 					</execution>
-				</executions>
+				</executions> -->
 			</plugin>
 		</plugins>
 	</build>
