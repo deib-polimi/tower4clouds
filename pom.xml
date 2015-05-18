@@ -270,32 +270,6 @@
 						<tagNameFormat>v@{project.version}</tagNameFormat>
 					</configuration>
 				</plugin>
-				<plugin>
-					<groupId>com.github.github</groupId>
-					<artifactId>site-maven-plugin</artifactId>
-					<version>0.11</version>
-					<configuration>
-						<merge>true</merge>
-						<message>Maven artifacts for ${project.artifactId}
-							${project.version}</message>
-						<noJekyll>true</noJekyll>
-						<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
-						<branch>refs/heads/master</branch>
-						<includes>
-							<include>**/*</include>
-						</includes>
-						<repositoryName>deib-polimi-mvn-repo</repositoryName>
-						<repositoryOwner>deib-polimi</repositoryOwner>
-					</configuration>
-					<executions>
-						<execution>
-							<goals>
-								<goal>site</goal>
-							</goals>
-							<phase>deploy</phase>
-						</execution>
-					</executions>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -334,19 +308,48 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.11</version>
+				<configuration>
+					<merge>true</merge>
+					<message>Maven artifacts for ${project.artifactId}
+						${project.version}</message>
+					<noJekyll>true</noJekyll>
+					<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
+					<branch>refs/heads/master</branch>
+					<includes>
+						<include>**/*</include>
+					</includes>
+					<repositoryName>deib-polimi-mvn-repo</repositoryName>
+					<repositoryOwner>deib-polimi</repositoryOwner>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>deploy</phase>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>de.jutzig</groupId>
 				<artifactId>github-release-plugin</artifactId>
 				<version>1.1.1</version>
+				<inherited>false</inherited>
 				<configuration>
 					<description>See the
 						[Changelog](https://github.com/deib-polimi/tower4clouds/blob/master/CHANGELOG.md)</description>
 					<releaseName>v${project.version}</releaseName>
 					<tag>v${project.version}</tag>
-					<fileSets>
-						<fileSet>**/target/*.tar.gz</fileSet>
-						<fileSet>**/target/*.zip</fileSet>
-						<fileSet>**/target/*jar-with-dependencies.jar</fileSet>
-					</fileSets>
+					<fileSet>
+						<includes>
+							<include>**/target/*.tar.gz</include>
+							<include>**/target/*.zip</include>
+							<include>**/target/*jar-with-dependencies.jar</include>
+						</includes>
+					</fileSet>
 				</configuration>
 				<!-- <executions>
 					<execution>
