@@ -20,14 +20,20 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>it.polimi.tower4clouds</groupId>
-		<artifactId>data-collectors</artifactId>
+		<artifactId>tower4clouds</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>java-app-dc</artifactId>
+	<artifactId>server-facade</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>it.polimi.tower4clouds</groupId>
-			<artifactId>server-facade</artifactId>
+			<artifactId>common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>it.polimi.tower4clouds</groupId>
+			<artifactId>model</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

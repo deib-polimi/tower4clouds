@@ -27,12 +27,12 @@ import it.polimi.modaclouds.qos_models.util.XMLHelper;
 import it.polimi.tower4clouds.common.net.NetUtil;
 import it.polimi.tower4clouds.data_analyzer.DAServer;
 import it.polimi.tower4clouds.manager.Observer;
+import it.polimi.tower4clouds.manager.server.MMServer;
 import it.polimi.tower4clouds.model.data_collectors.DCConfiguration;
 import it.polimi.tower4clouds.model.data_collectors.DCDescriptor;
 import it.polimi.tower4clouds.model.ontology.Resource;
 import it.polimi.tower4clouds.rules.MonitoringRule;
 import it.polimi.tower4clouds.rules.MonitoringRules;
-import it.polimi.tower4clouds.server.MMServer;
 
 import java.io.InputStream;
 import java.util.ArrayList;

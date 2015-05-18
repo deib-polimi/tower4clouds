@@ -24,18 +24,27 @@
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>manager</artifactId>
+
+	<properties>
+		<dist.file.name>tower4clouds-manager</dist.file.name>
+		<main.class>it.polimi.tower4clouds.manager.server.MMServer</main.class>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>it.polimi.tower4clouds</groupId>
 			<artifactId>model</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>it.polimi.tower4clouds</groupId>
 			<artifactId>rules</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>it.polimi.tower4clouds</groupId>
 			<artifactId>common</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.beust</groupId>
@@ -73,4 +82,58 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>${main.class}</mainClass>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>jar-with-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<attach>false</attach>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<archive>
+								<manifest>
+									<mainClass>${main.class}</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</execution>
+					<execution>
+						<id>make-archives</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<attach>false</attach>
+							<appendAssemblyId>false</appendAssemblyId>
+							<descriptors>
+								<descriptor>src/main/assembly/dist.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

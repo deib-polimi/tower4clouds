@@ -39,17 +39,22 @@ public class ManagerConfig {
 
 	@Parameter(names = "-mmport", description = "Monitoring Manager endpoint port")
 	private int mmPort;
+	
+	@Parameter(names = "-version", description = "Shows the version number")
+	private boolean version = false;
+
+	
 
 	private static ManagerConfig _instance = null;
 	public static String usage = null;
 
-	public static void init(String[] CLIargs) throws ConfigurationException {
+	public static void init(String[] CLIargs, String programName) throws ConfigurationException {
 		_instance = new ManagerConfig();
 		if (CLIargs != null) {
 			StringBuilder stringBuilder = new StringBuilder();
 			try {
 				JCommander jc = new JCommander(_instance, CLIargs);
-				jc.setProgramName("monitoring-manager");
+				jc.setProgramName(programName);
 				jc.usage(stringBuilder);
 			} catch (ParameterException e) {
 				throw new ConfigurationException(e.getMessage());
@@ -104,6 +109,10 @@ public class ManagerConfig {
 
 	public void setDaIP(String daIP) {
 		this.daIP = daIP;
+	}
+	
+	public boolean isVersion() {
+		return version;
 	}
 
 	public int getDaPort() {

@@ -19,12 +19,8 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>it.polimi.tower4clouds</groupId>
-    <artifactId>tower4clouds</artifactId>
+    <artifactId>observers</artifactId>
     <version>0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>use-cases</artifactId>
-  <packaging>pom</packaging>
-  <modules>
-  	<module>mock-application</module>
-  </modules>
+  <artifactId>rdf-history-db</artifactId>
 </project>

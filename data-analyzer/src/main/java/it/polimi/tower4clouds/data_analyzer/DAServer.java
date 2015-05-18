@@ -15,40 +15,55 @@
  */
 package it.polimi.tower4clouds.data_analyzer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import it.polimi.deib.rsp_services_csparql.observers.utilities.OutputDataMarshaller;
 import it.polimi.deib.rsp_services_csparql.server.rsp_services_csparql_server;
 import it.polimi.deib.rsp_services_csparql.streams.utilities.InputDataUnmarshaller;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.ParameterException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DAServer {
-	
+
 	public static final Logger logger = LoggerFactory.getLogger(DAServer.class);
-	
+
 	public static void main(String[] args) {
-		Config config = new Config();
+		PropertiesConfiguration releaserProperties = null;
 		try {
-			new JCommander(config, args);
-			String[] rspArgs = new String[1];
-			rspArgs[0] = "setup.properties";
-			System.setProperty(
-					InputDataUnmarshaller.INPUT_DATA_UNMARSHALLER_IMPL_PROPERTY_NAME,
-					DAInputDataUnmarshaller.class.getName());
-			System.setProperty(
-					OutputDataMarshaller.OUTPUT_DATA_MARSHALLER_IMPL_PROPERTY_NAME,
-					DAOutputDataMarshaller.class.getName());
-			System.setProperty("log4j.configuration", "log4j.properties");
-			System.setProperty("rsp_server.static_resources.path",
-					config.getKBFolder());
-			System.setProperty("csparql_server.port",
-					Integer.toString(config.getPort()));
-			rsp_services_csparql_server.main(rspArgs);
-		} catch (ParameterException e) {
-			logger.error(e.getMessage());
+			releaserProperties = new PropertiesConfiguration(
+					"release.properties");
+		} catch (org.apache.commons.configuration.ConfigurationException e) {
+			logger.error("Internal error", e);
+			System.exit(1);
+		}
+		String programName = releaserProperties.getString("dist.file.name");
+		try {
+			DAConfig config = new DAConfig(args, programName);
+			if (config.isHelp()) {
+				logger.info(config.usage);
+			} else if (config.isVersion()) {
+				logger.info("Version: {}",
+						releaserProperties.getString("release.version"));
+			} else {
+				String[] rspArgs = new String[1];
+				rspArgs[0] = "setup.properties";
+				System.setProperty(
+						InputDataUnmarshaller.INPUT_DATA_UNMARSHALLER_IMPL_PROPERTY_NAME,
+						DAInputDataUnmarshaller.class.getName());
+				System.setProperty(
+						OutputDataMarshaller.OUTPUT_DATA_MARSHALLER_IMPL_PROPERTY_NAME,
+						DAOutputDataMarshaller.class.getName());
+				System.setProperty("log4j.configuration", "log4j.properties");
+				System.setProperty("rsp_server.static_resources.path",
+						config.getKBFolder());
+				System.setProperty("csparql_server.port",
+						Integer.toString(config.getPort()));
+				rsp_services_csparql_server.main(rspArgs);
+			}
+		} catch (ConfigurationException e) {
+			logger.error("Configuration problem: " + e.getMessage());
+			logger.error("Run \"" + programName + " -help\" for help");
+			System.exit(1);
 		} catch (Exception e) {
 			logger.error("Unknown error", e);
 		}

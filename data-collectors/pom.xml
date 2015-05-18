@@ -27,13 +27,13 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>java-app-dc</module>
-		<module>collector-utility</module>
+		
 	</modules>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>it.polimi.tower4clouds</groupId>
-				<artifactId>collector-utility</artifactId>
+				<artifactId>server-facade</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		</dependencies>

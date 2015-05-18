@@ -19,12 +19,10 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>it.polimi.tower4clouds</groupId>
-    <artifactId>tower4clouds</artifactId>
+    <artifactId>use-cases</artifactId>
     <version>0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>use-cases</artifactId>
-  <packaging>pom</packaging>
-  <modules>
-  	<module>mock-application</module>
-  </modules>
+  <artifactId>mock-application</artifactId>
+  <name>Mock Application</name>
+  <description>An application used for simulating data collection</description>
 </project>

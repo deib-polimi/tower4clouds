@@ -27,6 +27,7 @@
 
 	<logger name="it.polimi.modaclouds" level="DEBUG" />
 	<logger name="it.polimi.deib" level="DEBUG" />
+	<logger name="eu.larkc" level="DEBUG" />
 	
 
 	<root level="ERROR">

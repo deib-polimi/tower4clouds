@@ -46,7 +46,7 @@ public class ManagerConfigTest {
 		String expected = "100.100.100.100";
 		System.setProperty(Env.MODACLOUDS_MONITORING_DA_ENDPOINT_IP,
 				"99.99.99.99");
-		ManagerConfig.init(new String[] { "-daip", expected });
+		ManagerConfig.init(new String[] { "-daip", expected },"");
 		assertEquals(ManagerConfig.getInstance().getDaIP(), expected);
 	}
 

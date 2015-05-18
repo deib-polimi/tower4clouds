@@ -27,7 +27,7 @@
 	<inceptionYear>2014</inceptionYear>
 	<description>Tower4Clouds</description>
 	<url>http://deib-polimi.github.io/tower4clouds</url>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -63,12 +63,21 @@
 		</developer>
 	</developers>
 
+	<contributors>
+	<!-- to add: Riccardo, Leonardo Cella, Balduini, Guerriero, Mattioli, Lisa -->
+	</contributors>
+
 	<scm>
 		<connection>scm:git:git@github.com:deib-polimi/tower4clouds.git</connection>
 		<developerConnection>scm:git:git@github.com:deib-polimi/tower4clouds.git</developerConnection>
 		<tag>HEAD</tag>
 		<url>https://github.com/deib-polimi/tower4clouds</url>
 	</scm>
+
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/deib-polimi/tower4clouds/issues</url>
+	</issueManagement>
 
 	<repositories>
 		<repository>
@@ -113,27 +122,13 @@
 		<module>data-collectors</module>
 		<module>integration</module>
 		<module>use-cases</module>
-
 		<module>common</module>
+		<module>observers</module>
+		<module>server-facade</module>
 	</modules>
 
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>it.polimi.tower4clouds</groupId>
-				<artifactId>model</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>it.polimi.tower4clouds</groupId>
-				<artifactId>common</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>it.polimi.tower4clouds</groupId>
-				<artifactId>rules</artifactId>
-				<version>${project.version}</version>
-			</dependency>
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
@@ -211,7 +206,6 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.3</version>
 					<configuration>
@@ -220,26 +214,17 @@
 					</configuration>
 				</plugin>
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.9.1</version>
-					<configuration>
-						<javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
-						<aggregate>true</aggregate>
-						<show>public</show>
-						<nohelp>true</nohelp>
-						<header>${project.artifactId}, ${project.version}</header>
-						<footer>${project.artifactId}, ${project.version}</footer>
-						<doctitle>${project.artifactId}, ${project.version}</doctitle>
-					</configuration>
-					<executions>
-						<execution>
-							<id>attach-javadocs</id>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.6</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.5.4</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>rpm-maven-plugin</artifactId>
+					<version>2.1.3</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-deploy-plugin</artifactId>
@@ -311,6 +296,38 @@
 					<execution>
 						<goals>
 							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<configuration>
+					<aggregate>true</aggregate>
+					<show>public</show>
+					<nohelp>true</nohelp>
+					<header>${project.artifactId}, ${project.version}</header>
+					<footer>${project.artifactId}, ${project.version}</footer>
+					<doctitle>${project.artifactId}, ${project.version}</doctitle>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.2</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
 						</goals>
 					</execution>
 				</executions>

@@ -26,6 +26,11 @@
 	<artifactId>data-analyzer</artifactId>
 	<name>Data Analyzer</name>
 
+	<properties>
+		<dist.file.name>tower4clouds-data-analyzer</dist.file.name>
+		<main.class>it.polimi.tower4clouds.data_analyzer.DAServer</main.class>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>polimi.deib</groupId>
@@ -49,6 +54,7 @@
 		<dependency>
 			<groupId>it.polimi.tower4clouds</groupId>
 			<artifactId>model</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -65,4 +71,58 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>${main.class}</mainClass>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>jar-with-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<attach>false</attach>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<archive>
+								<manifest>
+									<mainClass>${main.class}</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</execution>
+					<execution>
+						<id>make-archives</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<attach>false</attach>
+							<appendAssemblyId>false</appendAssemblyId>
+							<descriptors>
+								<descriptor>src/main/assembly/dist.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
