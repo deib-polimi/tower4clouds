@@ -96,7 +96,7 @@ public class MonitoringRuleFactory {
 		}
 
 		if (minValue != null) {
-			conditionValue += (maxValue != null ? " && " : "") + "METRIC < "
+			conditionValue += (maxValue != null ? " || " : "") + "METRIC < "
 					+ minValue;
 		}
 		Condition condition = new Condition();
