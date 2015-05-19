@@ -81,8 +81,7 @@ public class ServerFacade extends Observable {
 
 	private Future<?> registrationJob;
 
-	public ServerFacade(String monitoringManagerIP,
-			String monitoringManagerPort) {
+	public ServerFacade(String monitoringManagerIP, String monitoringManagerPort) {
 		dcBaseUrl = "http://" + monitoringManagerIP + ":"
 				+ monitoringManagerPort + "/v1/data-collectors";
 		restClient = new DefaultRestClient();
@@ -97,7 +96,6 @@ public class ServerFacade extends Observable {
 		this.restClient = restClient;
 	}
 
-	
 	public void setDCDescriptor(DCDescriptor dCDescriptor) {
 		validate(dCDescriptor);
 		this.dCDescriptor = dCDescriptor;
@@ -135,8 +133,8 @@ public class ServerFacade extends Observable {
 						dCDescriptor.toString());
 				responseBody = restClient.execute(method, url, jsonEntity,
 						expectedCode, timeout);
-				dcAssignedId = new JsonParser().parse(responseBody).getAsJsonObject()
-						.get("id").getAsString();
+				dcAssignedId = new JsonParser().parse(responseBody)
+						.getAsJsonObject().get("id").getAsString();
 				registered = true;
 			} catch (Exception e) {
 				logger.warn(
@@ -179,21 +177,27 @@ public class ServerFacade extends Observable {
 			public void run() {
 				try {
 					Map<String, DCConfiguration> newConfig = getRemoteDCConfiguration();
-					if (!newConfig.equals(dCConfigs)){
+					if (!newConfig.equals(dCConfigs)) {
 						dCConfigs = newConfig;
-						logger.debug("Downloaded new dc configuration: {}", dCConfigs);
+						logger.debug("Downloaded new dc configuration: {}",
+								dCConfigs);
 						setChanged();
 						notifyObservers();
 					} else {
-						logger.debug("Downloaded dc configuration, nothing changed from previous config", dCConfigs);
+						logger.debug(
+								"Downloaded dc configuration, nothing changed from previous config",
+								dCConfigs);
 					}
 				} catch (UnexpectedAnswerFromServerException e) {
 					logger.warn("DC does not seem to be registered anymore, re-registering DC");
 					registerDC();
 				} catch (IOException e) {
 					logger.error(
-							"Could not download new DC configuration, the server may be down: {}",
+							"Could not download new DC configuration, the server may be down, cancelling any local dc configuration: {}",
 							e.getMessage());
+					dCConfigs = new HashMap<String, DCConfiguration>();
+					setChanged();
+					notifyObservers();
 				}
 			}
 
@@ -234,8 +238,6 @@ public class ServerFacade extends Observable {
 
 		}, 0, (long) maxKeepAlivePeriod, TimeUnit.SECONDS);
 	}
-	
-	
 
 	public boolean shouldMonitor(Resource resource, String metric) {
 		if (!dCConfigs.containsKey(metric))
@@ -267,7 +269,9 @@ public class ServerFacade extends Observable {
 
 	public void send(Resource resource, String metric, Object value) {
 		if (!shouldMonitor(resource, metric)) {
-			logger.error("Monitoring is not required for the given resource and the given metric, datum won't be sent");
+			logger.error(
+					"Monitoring is not required for the given resource and the given metric, datum [{},{},{}] won't be sent",
+					resource.getId(), metric, value.toString());
 			return;
 		}
 		JsonObject jsonDatum = new JsonObject();
@@ -348,13 +352,17 @@ public class ServerFacade extends Observable {
 						data.toString(), 200, timeout);
 				logger.debug("Data sent in {} seconds",
 						((double) (System.currentTimeMillis() - ts)) / 1000);
-			} catch (Exception e) {
+			} catch (UnexpectedAnswerFromServerException e ) {
 				logger.error(
 						"Error while trying to send data. This may not be an error, "
 								+ "monitoring for metric {} may be not required"
 								+ " anymore, the stream may have been closed by the server "
-								+ "and dc configuration may not have been synchronized yet",
-						metric, e);
+								+ "and dc configuration may not have been synchronized yet. Error message: {}",
+						metric, e.getMessage());
+			} catch (Exception e){
+				logger.error(
+						"Unknwon error while trying to send data for metric {}: {}",
+						metric, e.getMessage());
 			}
 		}
 
