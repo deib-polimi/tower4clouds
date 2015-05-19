@@ -1,0 +1,5 @@
+/bin
+/target
+/S4Clogs
+/hdbconf.properties
+.DS_Store
