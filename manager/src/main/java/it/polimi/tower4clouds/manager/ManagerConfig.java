@@ -34,21 +34,38 @@ public class ManagerConfig {
 	@Parameter(names = "-daport", description = "DA endpoint port")
 	private int daPort;
 
-	@Parameter(names = "-mmip", description = "Monitoring Manager endpoint IP public address")
+	@Parameter(names = "-mmip", description = "Monitoring Manager endpoint IP address")
 	private String mmIP;
 
 	@Parameter(names = "-mmport", description = "Monitoring Manager endpoint port")
 	private int mmPort;
-	
+
+	@Parameter(names = "-rdf-history-db-port", description = "RDF History DB endpoint port")
+	private int rdfHistoryDbPort;
+
+	@Parameter(names = "-rdf-history-db-ip", description = "RDF History DB endpoint IP address")
+	private String rdfHistoryDbIP;
+
 	@Parameter(names = "-version", description = "Shows the version number")
 	private boolean version = false;
 
-	
+	@Override
+	public String toString() {
+		String toString = "\tDA URL: " + getDaUrl() + "\n"
+				+ "\tMonitoring Manager Port: " + mmPort + "\n"
+				+ "\tMonitoring Manager IP: " + mmIP;
+		if (rdfHistoryDbIP != null && rdfHistoryDbPort != 0) {
+			toString += "\n\tRDF History DB Port: " + rdfHistoryDbPort + "\n"
+					+ "\tRDF History DB IP: " + rdfHistoryDbIP;
+		}
+		return toString;
+	}
 
 	private static ManagerConfig _instance = null;
 	public static String usage = null;
 
-	public static void init(String[] CLIargs, String programName) throws ConfigurationException {
+	public static void init(String[] CLIargs, String programName)
+			throws ConfigurationException {
 		_instance = new ManagerConfig();
 		if (CLIargs != null) {
 			StringBuilder stringBuilder = new StringBuilder();
@@ -76,27 +93,23 @@ public class ManagerConfig {
 
 		try {
 			daPort = Integer.parseInt(getEnvVar(
-					Env.MODACLOUDS_MONITORING_DA_ENDPOINT_PORT, "8175"));
+					Env.MODACLOUDS_TOWER4CLOUDS_DATAANALYZER_PORT, "8175"));
 			mmPort = Integer.parseInt(getEnvVar(
-					Env.MODACLOUDS_MONITORING_MANAGER_PORT, "8170"));
+					Env.MODACLOUDS_TOWER4CLOUDS_MANAGER_PORT, "8170"));
+			rdfHistoryDbPort = Integer.parseInt(getEnvVar(
+					Env.MODACLOUDS_TOWER4CLOUDS_RDFHISTORYDB_PORT, "0"));
 		} catch (NumberFormatException e) {
 			throw new ConfigurationException(
 					"The chosen port is not a valid number");
 		}
 
-		daIP = getEnvVar(Env.MODACLOUDS_MONITORING_DA_ENDPOINT_IP,
-				"127.0.0.1");
-		mmIP = getEnvVar(Env.MODACLOUDS_MONITORING_MANAGER_IP, "127.0.0.1");
+		daIP = getEnvVar(Env.MODACLOUDS_TOWER4CLOUDS_DATAANALYZER_IP, "127.0.0.1");
+		mmIP = getEnvVar(Env.MODACLOUDS_TOWER4CLOUDS_MANAGER_IP, "127.0.0.1");
+		rdfHistoryDbIP = getEnvVar(Env.MODACLOUDS_TOWER4CLOUDS_RDFHISTORYDB_IP, null);
 
 		if (!validator.isValid(getDaUrl()))
 			throw new ConfigurationException(getDaUrl() + " is not a valid URL");
 
-	}
-
-	@Override
-	public String toString() {
-		return "\tDA URL: " + getDaUrl() + "\n" + "\tMonitoring Manager Port: "
-				+ mmPort + "\n" + "\tMonitoring Manager IP: " + mmIP;
 	}
 
 	public boolean isHelp() {
@@ -110,7 +123,7 @@ public class ManagerConfig {
 	public void setDaIP(String daIP) {
 		this.daIP = daIP;
 	}
-	
+
 	public boolean isVersion() {
 		return version;
 	}
@@ -141,6 +154,22 @@ public class ManagerConfig {
 
 	public void setMmPort(int mmPort) {
 		this.mmPort = mmPort;
+	}
+	
+	public String getRdfHistoryDbIP() {
+		return rdfHistoryDbIP;
+	}
+	
+	public int getRdfHistoryDbPort() {
+		return rdfHistoryDbPort;
+	}
+	
+	public void setRdfHistoryDbIP(String rdfHistoryDbIP) {
+		this.rdfHistoryDbIP = rdfHistoryDbIP;
+	}
+	
+	public void setRdfHistoryDbPort(int rdfHistoryDbPort) {
+		this.rdfHistoryDbPort = rdfHistoryDbPort;
 	}
 
 	private String getEnvVar(String varName, String defaultValue) {

@@ -16,6 +16,6 @@
 package it.polimi.tower4clouds.common.net;
 
 public enum RestMethod {
-	PUT, POST, GET
+	PUT, POST, GET, DELETE
 
 }

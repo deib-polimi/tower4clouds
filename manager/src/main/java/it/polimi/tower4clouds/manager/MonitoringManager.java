@@ -99,6 +99,7 @@ public class MonitoringManager {
 
 	private KbAPI knowledgeBase;
 	private RSP_services_csparql_API dataAnalyzer;
+	private RdfHistoryDBAPI rdfHistoryDB;
 
 	private ManagerConfig config;
 
@@ -150,6 +151,13 @@ public class MonitoringManager {
 
 		logger.info("Uploading ontology to KB");
 		knowledgeBase.putModel(MO.model, ManagerConfig.MODEL_GRAPH_NAME);
+
+		if (config.getRdfHistoryDbIP() != null
+				&& config.getRdfHistoryDbPort() != 0) {
+			rdfHistoryDB = new RdfHistoryDBAPI(config.getRdfHistoryDbIP(),
+					config.getRdfHistoryDbPort());
+			rdfHistoryDB.setAsync(true);
+		}
 	}
 
 	public synchronized void resetDA() {
@@ -584,6 +592,14 @@ public class MonitoringManager {
 			resourcesKeepAlive.remove(resourceId);
 			resourcesKATimestamp.remove(resourceId);
 		}
+		if (rdfHistoryDB != null) {
+			try {
+				logger.info("Sending udpate to RDF History DB");
+				rdfHistoryDB.deleteResource(resourceId);
+			} catch (Exception e) {
+				logger.error("Error while sending udpate to RDF History DB: {}", e.getMessage());
+			}
+		}
 	}
 
 	public void replaceResources(Set<Resource> resources) throws IOException,
@@ -602,6 +618,14 @@ public class MonitoringManager {
 				registeredResources.put(resource.getId(), resource);
 				resourcesKATimestamp.put(resource.getId(), timestamp);
 				resourcesKeepAlive.put(resource.getId(), Integer.MAX_VALUE);
+			}
+		}
+		if (rdfHistoryDB != null) {
+			try {
+				logger.info("Sending udpate to RDF History DB");
+				rdfHistoryDB.replaceResources(resources);
+			} catch (Exception e) {
+				logger.error("Error while sending udpate to RDF History DB: {}", e.getMessage());
 			}
 		}
 	}
@@ -642,6 +666,14 @@ public class MonitoringManager {
 				resourcesKeepAlive.put(resource.getId(), Integer.MAX_VALUE);
 			}
 		}
+		if (rdfHistoryDB != null) {
+			try {
+				logger.info("Sending udpate to RDF History DB");
+				rdfHistoryDB.addResources(resources);
+			} catch (Exception e) {
+				logger.error("Error while sending udpate to RDF History DB: {}", e.getMessage());
+			}
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -670,10 +702,11 @@ public class MonitoringManager {
 
 	public void registerDataCollector(String dcId, DCDescriptor dCDescriptor)
 			throws SerializationException, IOException {
+		Set<Resource> resources;
 		synchronized (dcAndResourcesLock) {
 			long timestamp = System.currentTimeMillis();
 			logger.debug("Registering DC: {}", dCDescriptor);
-			Set<Resource> resources = dCDescriptor.getAllResources();
+			resources = dCDescriptor.getAllResources();
 			updateExistingRelations(resources);
 			knowledgeBase.addMany(resources, MOVocabulary.idParameterName,
 					ManagerConfig.MODEL_GRAPH_NAME);
@@ -692,6 +725,14 @@ public class MonitoringManager {
 					resourcesKeepAlive.put(resource.getId(), keepAlive);
 				}
 				resourcesKATimestamp.put(resource.getId(), timestamp);
+			}
+		}
+		if (rdfHistoryDB != null) {
+			try {
+				logger.info("Sending udpate to RDF History DB");
+				rdfHistoryDB.addResources(resources);
+			} catch (Exception e) {
+				logger.error("Error while sending udpate to RDF History DB: {}", e.getMessage());
 			}
 		}
 	}
@@ -761,6 +802,14 @@ public class MonitoringManager {
 							ManagerConfig.MODEL_GRAPH_NAME);
 					registeredResources.put(resource.getId(), resource);
 					resourcesKeepAlive.put(resource.getId(), keepAlive);
+					if (rdfHistoryDB != null) {
+						try {
+							logger.info("Sending udpate to RDF History DB");
+							rdfHistoryDB.addResource(resource);
+						} catch (Exception e) {
+							logger.error("Error while sending udpate to RDF History DB: {}", e.getMessage());
+						}
+					}
 				}
 				resourcesKATimestamp.put(resource.getId(), timestamp);
 			}
@@ -905,6 +954,7 @@ public class MonitoringManager {
 
 		@Override
 		public void run() {
+			Set<String> resourcesIdsToRemove = new HashSet<String>();
 			synchronized (dcAndResourcesLock) {
 				long timestamp = System.currentTimeMillis();
 				logger.info("Checking for expired resources");
@@ -932,6 +982,9 @@ public class MonitoringManager {
 											dcsKeepAlive.get(dcId));
 									resourcesKATimestamp.put(resource.getId(),
 											dcsKATimestamp.get(dcId));
+									if (rdfHistoryDB != null) {
+										rdfHistoryDB.addResource(resource);
+									}
 								} catch (Exception e) {
 									logger.error(
 											"Could not register resource {}",
@@ -941,7 +994,6 @@ public class MonitoringManager {
 						}
 					}
 				}
-				Set<String> resourcesIdsToRemove = new HashSet<String>();
 				for (String resourceId : registeredResources.keySet()) {
 					if (timestamp - resourcesKATimestamp.get(resourceId) > resourcesKeepAlive
 							.get(resourceId) * 1000) {
@@ -965,6 +1017,14 @@ public class MonitoringManager {
 				} catch (Exception e) {
 					logger.error("Could not delete expired resources from kb",
 							e);
+				}
+			}
+			if (rdfHistoryDB != null) {				
+				try {
+					logger.info("Sending udpate to RDF History DB");
+					rdfHistoryDB.deleteResources(resourcesIdsToRemove);
+				} catch (Exception e) {
+					logger.error("Error while sending udpate to RDF History DB: {}", e.getMessage());
 				}
 			}
 		}

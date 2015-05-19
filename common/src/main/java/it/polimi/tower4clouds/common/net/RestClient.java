@@ -22,4 +22,7 @@ public interface RestClient {
 	String execute(RestMethod method, String url, String jsonEntity,
 			int expectedCode, int timeout) throws UnexpectedAnswerFromServerException, IOException;
 
+	String execute(RestMethod delete, String string, String jsonEntity, int expectedCode,
+			int timeout, boolean async) throws UnexpectedAnswerFromServerException, IOException;
+
 }
