@@ -16,7 +16,8 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.polimi.tower4clouds</groupId>
 	<version>0.2-SNAPSHOT</version>
@@ -65,7 +66,6 @@
 	<contributors>
 	<!-- to add: Leonardo Cella, Balduini, Guerriero, Mattioli, Lisa -->
 		<contributor>
-			<id>rickdesantis</id>
 			<name>Riccardo Benito Desantis</name>
 			<email>riccardobenito.desantis@polimi.it</email>
 			<organization>Politecnico di Milano</organization>
@@ -74,7 +74,17 @@
 				<role>developer</role>
 			</roles>
 			<timezone>Europe/Rome</timezone>
-    	</contributor>
+		</contributor>
+		<contributor>
+			<name>Leonardo Cella</name>
+			<email>leonardo.cella@mail.polimi.it</email>
+			<organization>Politecnico di Milano</organization>
+			<organizationUrl>http://www.polimi.it</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>Europe/Rome</timezone>
+		</contributor>
 	</contributors>
 
 	<scm>
@@ -201,6 +211,27 @@
 			</groupId>
 				<artifactId>knowledge-base-api</artifactId>
 				<version>2.4.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.jse</groupId>
+				<artifactId>org.restlet</artifactId>
+				<version>2.3.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.jse</groupId>
+				<artifactId>org.restlet.ext.jaxb</artifactId>
+				<version>2.3.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.jee</groupId>
+				<artifactId>org.restlet.ext.slf4j</artifactId>
+				<version>2.3.2</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>slf4j-api</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
