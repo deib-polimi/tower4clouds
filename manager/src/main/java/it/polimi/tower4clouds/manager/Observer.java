@@ -24,14 +24,16 @@ public class Observer {
 	private String observerHost;
 	private int observerPort;
 	private String protocol;
-	
+
 	public Observer() {
 	}
 
-	public Observer(String id, String callbackUrl, String queryUri, String format) {
+	public Observer(String id, String queryUri, String callbackUrl,
+			String protocol, String format) {
 		setId(id);
 		setCallbackUrl(callbackUrl);
 		setQueryUri(queryUri);
+		setProtocol(protocol);
 		setFormat(format);
 	}
 
@@ -44,11 +46,11 @@ public class Observer {
 		setProtocol(protocol);
 		setFormat(format);
 	}
-	
+
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 	public void setCallbackUrl(String callbackUrl) {
 		this.callbackUrl = callbackUrl;
 	}
@@ -56,11 +58,11 @@ public class Observer {
 	public void setFormat(String format) {
 		this.format = format;
 	}
-	
+
 	public String getFormat() {
 		return format;
 	}
-	
+
 	public String getId() {
 		return id;
 	}

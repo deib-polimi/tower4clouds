@@ -52,8 +52,9 @@ function jsonParser(json) {
         strToPrint += "<div class='panel-heading' id='panelHeader'>";
         strToPrint += "<span class='glyphicon glyphicon-sort' aria-hidden='true' onclick=toggle('" + obj.metrics[i] + "')></span>";
         strToPrint += "  " + obj.metrics[i];
-        strToPrint += "<input type='button' value='add' onclick=sendFetching('" + obj.metrics[i] + "') class='floatRight' />";
-        strToPrint += "<input type='text' placeholder='add here the callbackUrl' class='floatRight' id='callbackUrl" + obj.metrics[i] + "' />";
+        strToPrint += "<input type='button' value='Add Observer' onclick=sendFetching('" + obj.metrics[i] + "') class='floatRight' />";
+        strToPrint += "<input type='text' size='50' placeholder='Callback URL' class='floatRight' id='callbackUrl" + obj.metrics[i] + "' />";
+        strToPrint += "<input type='text' size='50' placeholder='Format (RDF/JSON, GRAPHITE, INFLUXDB...)' class='floatRight' id='format" + obj.metrics[i] + "' />";
         strToPrint += "</div>";
 
         $("#metricsKeeper").append(strToPrint);
@@ -98,17 +99,21 @@ function observersParser(obj, metricID) {
     //var obj = $.parseJSON(jsonString);a
     var returnStr = "<div class='panel-body borderedDiv' id='toggled_" + metricID + "'>";
     var param = "";
-    returnStr += "<div class='col-lg-4'><p><u>Observer ID:</u></p></div>";
-    returnStr += "<div class='col-lg-4'><p><u>Callback Url:</u></p></div>";
-    returnStr += "<div class='col-lg-4'><p><u>Delete</u></p></div>";
+    returnStr += "<div class='col-lg-2'><u>Observer ID</u></div>";
+    returnStr += "<div class='col-lg-4'><u>Callback Address</u></div>";
+    returnStr += "<div class='col-lg-2'><u>Protocol</u></div>";
+    returnStr += "<div class='col-lg-2'><u>Format</u></div>";
+    returnStr += "<div class='col-lg-2'><u>Delete</u></div>";
     var length = obj.observers.length;
 
     for (var i = 0; i < length; i++) {
         param = "";
         returnStr += "<div class='row'>";
-        returnStr += "<div class='col-lg-4'><p>" + obj.observers[i].id + "</p></div>";
-        returnStr += "<div class='col-lg-4'><p>" + obj.observers[i].callbackUrl + "</p></div>";
-        returnStr += "<div class='col-lg-4'>";
+        returnStr += "<div class='col-lg-2'>" + obj.observers[i].id + "</div>";
+        returnStr += "<div class='col-lg-4'>" + obj.observers[i].callbackUrl + "</div>";
+        returnStr += "<div class='col-lg-2'>" + obj.observers[i].protocol + "</div>";
+        returnStr += "<div class='col-lg-2'>" + obj.observers[i].format + "</div>";
+        returnStr += "<div class='col-lg-2'>";
         param = obj.observers[i].id + "§" + metricID ;
         returnStr += "<button onclick=deleteObserver('" + param + "')>";
         returnStr += "<span class = 'glyphicon glyphicon-trash floatRight' aria-hidden = 'true' /></button> </div>";
@@ -126,21 +131,23 @@ function toggle(metricID) {
 }
 
 function sendFetching(metricID) {
-    var inputTextID = "#callbackUrl" + metricID;
-    var callbackUrl = $(inputTextID).val();
+    var callbackTextID = "#callbackUrl" + metricID;
+    var formatTextID = "#format" + metricID;
+    var observerInfo = "{ \"callbackUrl\": \"" + $(callbackTextID).val() + "\", " +
+    		" \"format\": \""+ $(formatTextID).val() + "\" }";
     var metricURL = "../v1/metrics/" + metricID + "/observers";
-    sender(metricURL, callbackUrl);
+    sender(metricURL, observerInfo);
 
 }
 
 /*
  * decides in which of the two possibilities is sended the XML rule
  */
-function sender(metricURL, observerURL) {
+function sender(metricURL, observerInfo) {
     $.ajax({type: "POST",
         url: "../" + metricURL,
-        data: observerURL,
-        contentType: "text",
+        data: observerInfo,
+        contentType: "application/json",
         cache: false,
         error: function (jqXHR, textStatus, errorThrown) {
             detectError(textStatus + " " + jqXHR.status  + " : " + errorThrown);

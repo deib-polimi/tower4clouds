@@ -18,6 +18,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - DefaultRestClient NullPointerException problem fixed
 - Webapp rest call to model is updated to the new version, and the model loads fine now
 - Fixed bug that was causing null pointer exception when loading an empty list of observers
+- Fixed bug that did not allow to attach observers through the web control panel
 
 
 [keep-a-changelog]: https://github.com/olivierlacan/keep-a-changelog

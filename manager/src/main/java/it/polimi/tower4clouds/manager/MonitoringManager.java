@@ -492,8 +492,7 @@ public class MonitoringManager {
 		}
 		String observerId = returnedObserverUri.substring(returnedObserverUri
 				.lastIndexOf("/") + 1);
-		Observer observer = new Observer(observerId, callbackUrl, queryUri,
-				format);
+		Observer observer = new Observer(observerId, queryUri, callbackUrl, "HTTP", format);
 		addObserver(metric, observer);
 		return observer;
 	}
