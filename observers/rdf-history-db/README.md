@@ -7,12 +7,21 @@ A **queue** (usually [RabbitMQ](http://www.rabbitmq.com)) is used for decoupling
 
 ## Documentation
 Useful links to the documentation:
-* [User Manual](https://github.com/deib-polimi/modaclouds-history-db/blob/master/doc/user-manual.md)
-* [API reference](https://github.com/deib-polimi/modaclouds-history-db/blob/master/doc/api.md)
-* [DataStore reference](https://github.com/deib-polimi/modaclouds-history-db/blob/master/doc/datastore.md)
-* [Install Guide](https://github.com/deib-polimi/modaclouds-history-db/blob/master/doc/install.md)
+* [User Manual](https://github.com/deib-polimi/tower4clouds/blob/develop/observers/rdf-history-db/doc/user-manual.md)
+* [API reference](https://github.com/deib-polimi/tower4clouds/blob/develop/observers/rdf-history-db/doc/api.md)
+* [DataStore reference](https://github.com/deib-polimi/tower4clouds/blob/develop/observers/rdf-history-db/doc/datastore.md)
+* [Install Guide](https://github.com/deib-polimi/tower4clouds/blob/develop/observers/rdf-history-db/doc/install.md)
 
 ## ChangeLog
+v0.1.5 (not yet realeased):
+
+* Changed the packages names everywhere (from `it.polimi.modaclouds.hdb` to `it.polimi.tower4clouds.observers.hdb`) to resemble the parent projects.
+* Updated the versions of the used libraries.
+* Restructured the packages in a multi-pom fashion.
+* Solved the bugs given by the modifications in the used libraries.
+* Changed the REST URIs for the models from `/model/resources` to `/resources`.
+
+
 [v0.1.4](https://github.com/deib-polimi/modaclouds-history-db/blob/master/bin/historydb-0.1.4.zip):
 
 * A subscription is used instead of polling the queue: better performances should be expected.
