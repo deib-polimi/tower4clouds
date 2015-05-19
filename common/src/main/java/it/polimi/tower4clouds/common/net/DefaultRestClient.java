@@ -51,6 +51,8 @@ public class DefaultRestClient implements RestClient {
 	private String response = null;
 	private UnexpectedAnswerFromServerException unexpectedExc = null;
 	private IOException ioExc = null;
+	
+	private final Object responseLock = new Object();
 
 	private final int maxThreads = 500;
 
@@ -104,7 +106,7 @@ public class DefaultRestClient implements RestClient {
 			executor.execute(command);
 			return null;
 		} else {
-			synchronized (response) {
+			synchronized (responseLock) {
 				ioExc = null;
 				unexpectedExc = null;
 				response = null;
@@ -169,7 +171,7 @@ public class DefaultRestClient implements RestClient {
 			try {
 				response = client.execute(request);
 				if (response.getStatusLine().getStatusCode() != expectedCode) {
-					synchronized (DefaultRestClient.this.response) {
+					synchronized (responseLock) {
 						unexpectedExc = new UnexpectedAnswerFromServerException(
 								response.getStatusLine().getStatusCode());
 						logger.error(unexpectedExc.getMessage());
@@ -178,22 +180,22 @@ public class DefaultRestClient implements RestClient {
 				}
 				HttpEntity entity = response.getEntity();
 				if (entity == null) {
-					synchronized (DefaultRestClient.this.response) {
+					synchronized (responseLock) {
 						DefaultRestClient.this.response = null;
 					}
 					return;
 				}
 				String content = EntityUtils.toString(entity);
-				synchronized (DefaultRestClient.this.response) {
+				synchronized (responseLock) {
 					DefaultRestClient.this.response = content;
 				}
 			} catch (SocketTimeoutException e) {
-				synchronized (DefaultRestClient.this.response) {
+				synchronized (responseLock) {
 					ioExc = new IOException("Request timed out");
 					logger.error(ioExc.getMessage());
 				}
 			} catch (IOException e) {
-				synchronized (DefaultRestClient.this.response) {
+				synchronized (responseLock) {
 					ioExc = e;
 					logger.error(ioExc.getMessage());
 				}
