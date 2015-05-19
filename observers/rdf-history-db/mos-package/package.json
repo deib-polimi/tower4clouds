@@ -1,0 +1,63 @@
+{
+	"_schema" : "tag:ieat.ro,2014:mosaic:v2:mos-package-builder:descriptors:composite-package",
+	"_schema/version" : 1,
+
+	"package" : {
+		"name" : "@{definitions:package:name}",
+		"version" : "@{definitions:package:version}",
+		"release" : "@{definitions:package:release}",
+		"architecture" : "i686",
+		"root" : "/opt/@{package:identifier}"
+	},
+
+	"dependencies" : {
+		"provides" : ["@{definitions:package:name}"],
+		"requires" : [
+			"mosaic-components-rabbitmq",
+			"mosaic-object-store",
+			"mosaic-rt-jre-7"
+		]
+	},
+
+	"miscellaneous" : {
+		"license" : "apache-2.0",
+		"url" : "https://github.com/deib-polimi/modaclouds-history-db",
+		"summary" : "MODAClouds HistoryDB: a component logging the history of a system"
+	},
+
+	"overlays" : [
+		{
+			"generator" : "folders",
+			"target" : "@{package:root}",
+			"folders" : [
+				"/"
+			]
+		},
+		{
+			"generator" : "unarchiver",
+			"target" : "@{package:root}",
+			"resource" : "historydb.tar.gz",
+			"format" : "tar+gzip",
+			"options" : {
+				"strip-components" : 1
+			}
+		}
+	],
+
+	"resources" : {
+		"historydb.tar.gz" : {
+			"generator" : "fetcher",
+			"uri" : "@{definitions:resources:repository:url:releases}/@{definitions:resources:packagename}-@{definitions:package:version}.tar.gz"
+		}
+	},
+
+	"definitions" : {
+		"package:name" : "modaclouds-history-db",
+		"package:version" : "0.1.4",
+		"package:release" : "@{execution:timestamp}",
+		"resources:packagename" : "historydb",
+		"resources:repository:url:base" : "https://github.com/deib-polimi/modaclouds-history-db",
+		"resources:repository:url:releases" : "https://raw.githubusercontent.com/deib-polimi/modaclouds-history-db/master/bin/",
+		"environment:JAVA_HOME" : "/opt/mosaic-rt-jre-7"
+	}
+}

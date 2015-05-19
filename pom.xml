@@ -63,7 +63,18 @@
 	</developers>
 
 	<contributors>
-	<!-- to add: Riccardo, Leonardo Cella, Balduini, Guerriero, Mattioli, Lisa -->
+	<!-- to add: Leonardo Cella, Balduini, Guerriero, Mattioli, Lisa -->
+		<contributor>
+			<id>rickdesantis</id>
+			<name>Riccardo Benito Desantis</name>
+			<email>riccardobenito.desantis@polimi.it</email>
+			<organization>Politecnico di Milano</organization>
+			<organizationUrl>http://www.polimi.it</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>Europe/Rome</timezone>
+    	</contributor>
 	</contributors>
 
 	<scm>
