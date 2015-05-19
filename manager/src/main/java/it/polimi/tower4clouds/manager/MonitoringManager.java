@@ -543,8 +543,10 @@ public class MonitoringManager {
 		}
 		Set<String> observersIds = observersIdsByMetric.get(metric);
 		HashSet<Observer> observers = new HashSet<Observer>();
-		for (String id : observersIds) {
-			observers.add(observersById.get(id));
+		if (observersIds != null) {
+			for (String id : observersIds) {
+				observers.add(observersById.get(id));
+			}
 		}
 		return observers;
 	}
@@ -597,7 +599,9 @@ public class MonitoringManager {
 				logger.info("Sending udpate to RDF History DB");
 				rdfHistoryDB.deleteResource(resourceId);
 			} catch (Exception e) {
-				logger.error("Error while sending udpate to RDF History DB: {}", e.getMessage());
+				logger.error(
+						"Error while sending udpate to RDF History DB: {}",
+						e.getMessage());
 			}
 		}
 	}
@@ -625,7 +629,9 @@ public class MonitoringManager {
 				logger.info("Sending udpate to RDF History DB");
 				rdfHistoryDB.replaceResources(resources);
 			} catch (Exception e) {
-				logger.error("Error while sending udpate to RDF History DB: {}", e.getMessage());
+				logger.error(
+						"Error while sending udpate to RDF History DB: {}",
+						e.getMessage());
 			}
 		}
 	}
@@ -671,7 +677,9 @@ public class MonitoringManager {
 				logger.info("Sending udpate to RDF History DB");
 				rdfHistoryDB.addResources(resources);
 			} catch (Exception e) {
-				logger.error("Error while sending udpate to RDF History DB: {}", e.getMessage());
+				logger.error(
+						"Error while sending udpate to RDF History DB: {}",
+						e.getMessage());
 			}
 		}
 	}
@@ -732,7 +740,9 @@ public class MonitoringManager {
 				logger.info("Sending udpate to RDF History DB");
 				rdfHistoryDB.addResources(resources);
 			} catch (Exception e) {
-				logger.error("Error while sending udpate to RDF History DB: {}", e.getMessage());
+				logger.error(
+						"Error while sending udpate to RDF History DB: {}",
+						e.getMessage());
 			}
 		}
 	}
@@ -798,6 +808,7 @@ public class MonitoringManager {
 			}
 			for (Resource resource : resources) {
 				if (!registeredResources.containsKey(resource.getId())) {
+					logger.info("Restoring resource {}", resource.getId());
 					knowledgeBase.add(resource, MOVocabulary.idParameterName,
 							ManagerConfig.MODEL_GRAPH_NAME);
 					registeredResources.put(resource.getId(), resource);
@@ -807,7 +818,9 @@ public class MonitoringManager {
 							logger.info("Sending udpate to RDF History DB");
 							rdfHistoryDB.addResource(resource);
 						} catch (Exception e) {
-							logger.error("Error while sending udpate to RDF History DB: {}", e.getMessage());
+							logger.error(
+									"Error while sending udpate to RDF History DB: {}",
+									e.getMessage());
 						}
 					}
 				}
@@ -1019,12 +1032,14 @@ public class MonitoringManager {
 							e);
 				}
 			}
-			if (rdfHistoryDB != null) {				
+			if (rdfHistoryDB != null) {
 				try {
 					logger.info("Sending udpate to RDF History DB");
 					rdfHistoryDB.deleteResources(resourcesIdsToRemove);
 				} catch (Exception e) {
-					logger.error("Error while sending udpate to RDF History DB: {}", e.getMessage());
+					logger.error(
+							"Error while sending udpate to RDF History DB: {}",
+							e.getMessage());
 				}
 			}
 		}
