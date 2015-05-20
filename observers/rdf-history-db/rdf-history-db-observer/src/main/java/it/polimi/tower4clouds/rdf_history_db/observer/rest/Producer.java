@@ -57,18 +57,35 @@ public class Producer {
 		sendMessage(path, "", method);
 	}
 	
+	private static final int ATTEMPTS = 5;
+	
 	private void sendMessage(String path, String body, Method method) {
 		Client client = new Client(new Context(), Protocol.HTTP);
 		
 		ClientResource request = new ClientResource(Configuration.DEFAULT_BASEPATH + ":" + port + path);
 		
 		Representation representation = null;
-		if (method == Method.POST)
-			representation = request.post(body);
-		else if (method == Method.PUT)
-			representation = request.put(body);
-		else if (method == Method.DELETE)
-			representation = request.delete();
+		
+		for (int attempt = 0; attempt < ATTEMPTS; ++attempt) {
+		
+			if (method == Method.POST)
+				try {
+					representation = request.post(body);
+					attempt = ATTEMPTS;
+				} catch (Exception e) { }
+			else if (method == Method.PUT)
+				try {
+					representation = request.put(body);
+					attempt = ATTEMPTS;
+				} catch (Exception e) { }
+			else if (method == Method.DELETE)
+				try {
+					representation = request.delete();
+					attempt = ATTEMPTS;
+				} catch (Exception e) { }
+			else
+				attempt = ATTEMPTS;
+		}
 		
 		if (representation != null) {
 			logger.info("Message sent!");
@@ -78,7 +95,7 @@ public class Producer {
 				logger.error("Argh!", e);
 			}
 		} else {
-			logger.error("Error while sending the message! Method not recognized.");
+			logger.error("Error while sending the message!");
 		}
 		
 		try {

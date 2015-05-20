@@ -19,6 +19,7 @@ import it.polimi.modaclouds.monitoring.kb.api.FusekiKbAPI;
 import it.polimi.modaclouds.monitoring.kb.api.SerializationException;
 import it.polimi.tower4clouds.model.ontology.MO;
 import it.polimi.tower4clouds.model.ontology.MOVocabulary;
+import it.polimi.tower4clouds.model.ontology.Resource;
 import it.polimi.tower4clouds.rdf_history_db.manager.data.Model;
 import it.polimi.tower4clouds.rdf_history_db.manager.data.MonitoringData;
 
@@ -26,6 +27,8 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -110,10 +113,112 @@ public class DataStore {
 		
 	}
 	
-	public boolean addModel(String jsonDatum) {
-		Model m = Model.modelFromJson(jsonDatum);	
+	public static void main(String[] args) {
+		getAsResourceSet(
+				"{\n" +
+				"  \"cloudProviders\": [\n" +
+				"    {\n" +
+				"      \"id\": \"amazon\",\n" +
+				"      \"type\": \"IaaS\"\n" +
+				"    }\n" +
+				"  ],\n" +
+				"  \"internalComponents\": [\n" +
+				"    {\n" +
+				"      \"id\": \"mic1\",\n" +
+				"      \"providedMethods\": [\n" +
+				"        \"mic1-register\",\n" +
+				"        \"mic1-answerQuestions\",\n" +
+				"        \"mic1-saveAnswers\"\n" +
+				"      ],\n" +
+				"      \"requiredComponents\": [\n" +
+				"        \"frontend1\"\n" +
+				"      ],\n" +
+				"      \"type\": \"Mic\"\n" +
+				"    },\n" +
+				"    {\n" +
+				"      \"id\": \"mic2\",\n" +
+				"      \"providedMethods\": [\n" +
+				"        \"mic2-register\",\n" +
+				"        \"mic2-answerQuestions\",\n" +
+				"        \"mic2-saveAnswers\"\n" +
+				"      ],\n" +
+				"      \"requiredComponents\": [\n" +
+				"        \"frontend2\"\n" +
+				"      ],\n" +
+				"      \"type\": \"Mic\"\n" +
+				"    }\n" +
+				"  ],\n" +
+				"  \"methods\": [\n" +
+				"    {\n" +
+				"      \"id\": \"mic1-answerQuestions\",\n" +
+				"      \"type\": \"answerQuestions\"\n" +
+				"    },\n" +
+				"    {\n" +
+				"      \"id\": \"mic1-saveAnswers\",\n" +
+				"      \"type\": \"saveAnswers\"\n" +
+				"    },\n" +
+				"    {\n" +
+				"      \"id\": \"mic1-register\",\n" +
+				"      \"type\": \"register\"\n" +
+				"    },\n" +
+				"    {\n" +
+				"      \"id\": \"mic2-answerQuestions\",\n" +
+				"      \"type\": \"answerQuestions\"\n" +
+				"    },\n" +
+				"    {\n" +
+				"      \"id\": \"mic2-saveAnswers\",\n" +
+				"      \"type\": \"saveAnswers\"\n" +
+				"    },\n" +
+				"    {\n" +
+				"      \"id\": \"mic2-register\",\n" +
+				"      \"type\": \"register\"\n" +
+				"    }\n" +
+				"  ],\n" +
+				"  \"vMs\": [\n" +
+				"    {\n" +
+				"      \"cloudProvider\": \"amazon\",\n" +
+				"      \"id\": \"frontend1\",\n" +
+				"      \"numberOfCPUs\": 0,\n" +
+				"      \"type\": \"Frontend\"\n" +
+				"    },\n" +
+				"    {\n" +
+				"      \"cloudProvider\": \"amazon\",\n" +
+				"      \"id\": \"frontend2\",\n" +
+				"      \"numberOfCPUs\": 0,\n" +
+				"      \"type\": \"Frontend\"\n" +
+				"    }\n" +
+				"  ]\n" +
+				"}"
+				);
 		
-		if (m == null)
+		
+		
+	}
+	
+	private static Set<Resource> getAsResourceSet(String jsonDatum) {
+		HashSet<Resource> res = new HashSet<Resource>();
+		
+		if (jsonDatum == null || jsonDatum.trim().length() == 0)
+			return res;
+		
+//		Model m = Model.modelFromJson(jsonDatum);
+//		if (m != null)
+//			res.addAll(m.getResources());
+
+		try {
+			res.addAll(Resource.fromJsonResources(jsonDatum));
+		} catch (Exception e) {
+			logger.debug(jsonDatum);
+			logger.error("Error while getting the resource set.", e);
+		}
+		
+		res.remove(null);
+		return res;
+	}
+	
+	public boolean addModel(String jsonDatum) {
+		Set<Resource> resources = getAsResourceSet(jsonDatum);
+		if (resources.size() == 0)
 			return false;
 		
 		long timestamp = System.currentTimeMillis();
@@ -122,7 +227,7 @@ public class DataStore {
 	
 		boolean res1 = true;
 		try {
-			knowledgeBaseModels.addMany(m.getResources(), MOVocabulary.idParameterName, graphUri);
+			knowledgeBaseModels.addMany(resources, MOVocabulary.idParameterName, graphUri);
 			logger.info("New model added to the datastore.");
 		} catch (SerializationException e) {
 			logger.error("Error while adding the model to the datastore.", e);
@@ -174,9 +279,8 @@ public class DataStore {
 	}
 	
 	public boolean addDeltaModel(String jsonDatum) {
-		Model m = Model.modelFromJson(jsonDatum);	
-		
-		if (m == null)
+		Set<Resource> resources = getAsResourceSet(jsonDatum);
+		if (resources.size() == 0)
 			return false;
 		
 		long timestamp = System.currentTimeMillis();
@@ -185,7 +289,7 @@ public class DataStore {
 		
 		boolean res1 = true;
 		try {
-			knowledgeBaseModels.addMany(m.getResources(), MOVocabulary.idParameterName, graphUri);
+			knowledgeBaseModels.addMany(resources, MOVocabulary.idParameterName, graphUri);
 			logger.info("Updated model added to the datastore.");
 		} catch (SerializationException e) {
 			logger.error("Error while adding the update to the model to the datastore.", e);
