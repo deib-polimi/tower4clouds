@@ -25,8 +25,8 @@ public class DAConfig {
 	@Parameter(names = "-port", description = "Data Analyzer endpoint port")
 	private int port = 8175;
 
-	@Parameter(names = "-kbloc", description = "Knowledge Base folder location")
-	private String kBFolder = "/tmp/tower4clouds/kb";
+//	@Parameter(names = "-kbloc", description = "Knowledge Base folder location")
+//	private String kBFolder = "/tmp/tower4clouds/kb";
 
 	@Parameter(names = "-help", help = true, description = "Shows this message")
 	private boolean help;
@@ -64,7 +64,7 @@ public class DAConfig {
 		return port;
 	}
 
-	public String getKBFolder() {
-		return kBFolder;
-	}
+//	public String getKBFolder() {
+//		return kBFolder;
+//	}
 }
