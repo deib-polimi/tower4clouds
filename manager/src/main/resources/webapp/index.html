@@ -32,99 +32,91 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <html>
-    <head>
-        <title>MODAClouds Monitoring Manager | Rules</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        
-        <!-- Mine style sheet -->
-        <link rel="stylesheet" type="text/css" href="css/commonLayout.css">
-
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<head>
+<title>MODAClouds Monitoring Manager | Rules</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+<!-- Mine style sheet -->
+<link rel="stylesheet" type="text/css" href="css/commonLayout.css">
 
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="js/bootstrap.min.js"></script>
-                        
-        <!-- jQuery library -->
-        <script src="js/jquery-1.11.2.js"></script>
-    </head>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
-    <body>
-        <nav class="navbar navbar-inverse navbar-static-top">
-            <div class="container">
-                <ul class="nav navbar-nav">
-                    <li id="logo">
-                        <img src="images/logo.png" class="navbar-height" alt="MODAClouds" />
-                    </li>
-                    <li class="active">
-                        <a href="#" class="navbar-height selected">Rules
-                            <span class="sr-only">(current)</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="menuMetrics.html" class="navbar-height">
-                            Metrics
-                        </a>
-                    </li>
-                    <li>
-                        <a href="menuModel.html" class="navbar-height">
-                            Model
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
 
-        <div class="panel panel-default" id="boxAdd">
-            <div class="panel-heading">
-                <h3 class="panel-title">Add a new Rule</h3>
-            </div>
-            <div class="panel-body">
-                <form id="rulesForm">
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-lg-6">
-                                <textarea id="textual" class="form-control" rows="3" placeholder="Insert here your XML code" ></textarea>
-                            </div>
-                            <div class="col-lg-6">
-                                <input type="file" id="addedFile" >
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12" id="btn">
-                            <button type="submit" class="btn btn-default" id="btn" value="Submit">Submit</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+<!-- Optional theme -->
+<link rel="stylesheet" href="css/bootstrap-theme.min.css">
 
-        <div class="panel panel-default" id="boxList">
-            <div class="panel-heading">
-                <h3 class="panel-title">List of rules</h3>
-            </div>
-            <div class="panel-body">
-                <ul id="treeView" style="display: none">
-                    <li></li>
-                </ul>
-            </div>
-        </div>
+<!-- Latest compiled and minified JavaScript -->
+<script src="js/bootstrap.min.js"></script>
 
-        <div id="error">
-        </div>
+<!-- jQuery library -->
+<script src="js/jquery-1.11.2.js"></script>
+</head>
 
-        <div id="success">
-        </div>
+<body>
+	<nav class="navbar navbar-inverse navbar-static-top">
+		<div class="container">
+			<ul class="nav navbar-nav">
+				<li id="logo"><img src="images/logo.png" class="navbar-height"
+					alt="MODAClouds" /></li>
+				<li class="active"><a href="#" class="navbar-height selected">Rules
+						<span class="sr-only">(current)</span>
+				</a></li>
+				<li><a href="menuMetrics.html" class="navbar-height">
+						Metrics </a></li>
+				<li><a href="menuModel.html" class="navbar-height"> Model </a>
+				</li>
+			</ul>
+		</div>
+	</nav>
 
-        <script src="js/rulesManager.js"></script>
+	<div class="panel panel-default" id="boxAdd">
+		<div class="panel-heading">
+			<h3 class="panel-title">Add a new Rule</h3>
+		</div>
+		<div class="panel-body">
+			<form id="rulesForm">
+				<div class="row">
+					<div class="form-group">
+						<div class="col-lg-6">
+							<textarea id="textual" class="form-control" rows="3"
+								placeholder="Insert here your XML code"></textarea>
+						</div>
+						<div class="col-lg-6">
+							<input type="file" id="addedFile">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12" id="btn">
+						<button type="submit" class="btn btn-default" id="btn"
+							value="Submit">Submit</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
 
-    </body>
+	<div class="panel panel-default" id="boxList">
+		<div class="panel-heading">
+			<h3 class="panel-title">List of rules</h3>
+		</div>
+		<div class="panel-body">
+			<ul id="treeView" style="display: none">
+				<li></li>
+			</ul>
+		</div>
+	</div>
+
+	<div id="error"></div>
+
+	<div id="success"></div>
+
+	<script src="js/rulesManager.js"></script>
+
+</body>
 </html>
 
