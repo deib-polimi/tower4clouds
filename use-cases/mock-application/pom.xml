@@ -23,6 +23,6 @@
     <version>0.2-SNAPSHOT</version>
   </parent>
   <artifactId>mock-application</artifactId>
-  <name>Mock Application</name>
+  <name>MODAClous - Tower4Clouds - A Mock Application</name>
   <description>An application used for simulating data collection</description>
 </project>

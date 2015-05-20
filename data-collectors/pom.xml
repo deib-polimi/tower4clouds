@@ -23,10 +23,10 @@
 		<version>0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>data-collectors</artifactId>
+	<name>MODAClous - Tower4Clouds - Data Collectors Parent Pom</name>
 	<packaging>pom</packaging>
 	<modules>
 		<module>java-app-dc</module>
-		
 	</modules>
 	<dependencyManagement>
 		<dependencies>

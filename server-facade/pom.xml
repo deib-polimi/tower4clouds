@@ -23,6 +23,7 @@
 		<version>0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>server-facade</artifactId>
+	<name>MODAClous - Tower4Clouds - Server Facade Library</name>
 	<dependencies>
 		<dependency>
 			<groupId>it.polimi.tower4clouds</groupId>

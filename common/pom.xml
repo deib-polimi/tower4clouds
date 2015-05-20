@@ -23,6 +23,7 @@
 		<version>0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>common</artifactId>
+	<name>MODAClous - Tower4Clouds - Common Libraries</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>

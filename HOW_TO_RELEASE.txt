@@ -19,9 +19,9 @@
 mvn clean license:format release:prepare
 mvn release:perform
 
-# IF SOMETHING GOES WRONG:
+# IF SOMETHING GOES WRONG (WARNING: ALL RECENT COMMITS IN THE CURRENT BRANCH WILL BE LOST!)
 git reset --hard <id of the commit you want to reset to>
-git push origin master --force
+git push origin <current branch name> --force
 
 
 # RELEASE WEBSITE (see the doc: http://couscous.io)

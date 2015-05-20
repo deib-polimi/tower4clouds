@@ -8,7 +8,7 @@ then
     exit 1
 fi
 
-JAR="$HDB_HOME/historydb.jar"
+JAR="$HDB_HOME/tower4clouds-rdf-history-db.jar"
 if [ ! -e "$JAR" ]
 then
     echo "Can't find jarfile to run"

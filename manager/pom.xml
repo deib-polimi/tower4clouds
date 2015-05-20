@@ -23,6 +23,7 @@
 		<version>0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>manager</artifactId>
+	<name>MODAClous - Tower4Clouds - Manager</name>
 
 	<properties>
 		<dist.file.name>tower4clouds-manager</dist.file.name>

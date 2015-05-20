@@ -26,6 +26,7 @@
 		<version>0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>rdf-history-db-manager</artifactId>
+	<name>MODAClous - Tower4Clouds - RDF History DB Manager Library</name>
 
 	<dependencies>
 		<dependency>

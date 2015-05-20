@@ -28,33 +28,27 @@
   </formats>
 
   <baseDirectory>${project.artifactId}-${project.version}</baseDirectory>
-
+  
   <files>
-    <file>
-      <source>${project.build.directory}/${project.artifactId}-${project.version}.jar</source>
-      <outputDirectory></outputDirectory>
-      <destName>historydb.jar</destName>
-    </file>
-    <file>
-      <source>LICENSE</source>
-      <destName>LICENSE</destName>
-    </file>
-  </files>
+		<file>
+			<source>${project.build.directory}/${project.artifactId}-${project.version}-jar-with-dependencies.jar</source>
+			<destName>${dist.file.name}.jar</destName>
+		</file>
+	</files>
 
-  <fileSets>
-    <fileSet>
-      <outputDirectory></outputDirectory>
-      <includes>
-        <include>README*</include>
-        <include>doc/**</include>
-      </includes>
-    </fileSet>
-
-    <fileSet>
-      <outputDirectory></outputDirectory>
-      <includes>
-        <include>historydb</include>
-      </includes>
-    </fileSet>
-  </fileSets>
+	<fileSets>
+		<fileSet>
+			<outputDirectory></outputDirectory>
+			<includes>
+				<include>${dist.file.name}</include>
+			</includes>
+			<fileMode>0755</fileMode>
+		</fileSet>
+		<fileSet>
+			<outputDirectory></outputDirectory>
+			<includes>
+				<include>LICENSE</include>
+			</includes>
+		</fileSet>
+	</fileSets>
 </assembly>

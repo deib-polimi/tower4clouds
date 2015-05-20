@@ -23,7 +23,7 @@
 	<version>0.2-SNAPSHOT</version>
 	<artifactId>tower4clouds</artifactId>
 	<packaging>pom</packaging>
-	<name>Tower4Clouds</name>
+	<name>MODAClous - Tower4Clouds - Parent Pom</name>
 	<inceptionYear>2014</inceptionYear>
 	<description>Tower4Clouds</description>
 	<url>http://deib-polimi.github.io/tower4clouds</url>

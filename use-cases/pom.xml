@@ -23,6 +23,7 @@
     <version>0.2-SNAPSHOT</version>
   </parent>
   <artifactId>use-cases</artifactId>
+  <name>MODAClous - Tower4Clouds - Use Cases Parent Pom</name>
   <packaging>pom</packaging>
   <modules>
   	<module>mock-application</module>

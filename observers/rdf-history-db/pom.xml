@@ -26,7 +26,7 @@
 	</parent>
 	<artifactId>rdf-history-db</artifactId>
 	<packaging>pom</packaging>
-	<name>rdf-history-db</name>
+	<name>MODAClous - Tower4Clouds - RDF History DB Parent Pom</name>
 	<modules>
 		<module>rdf-history-db-main</module>
 		<module>rdf-history-db-manager</module>

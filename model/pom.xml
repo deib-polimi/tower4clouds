@@ -23,6 +23,7 @@
 		<version>0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>model</artifactId>
+	<name>MODAClous - Tower4Clouds - Model Library</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.jena</groupId>

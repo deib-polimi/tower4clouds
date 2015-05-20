@@ -23,6 +23,7 @@
 		<version>0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>integration</artifactId>
+	<name>MODAClous - Tower4Clouds - Integration Module</name>
 	<dependencies>
 		<dependency>
 			<groupId>it.polimi.tower4clouds</groupId>

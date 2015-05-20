@@ -23,6 +23,7 @@
 		<version>0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>rules</artifactId>
+	<name>MODAClous - Tower4Clouds - Rules Library</name>
 	<dependencies>
 		<dependency>
 			<groupId>it.polimi.modaclouds.qos-models</groupId>

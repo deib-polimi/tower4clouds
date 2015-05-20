@@ -23,6 +23,7 @@
 		<version>0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>java-app-dc</artifactId>
+	<name>MODAClous - Tower4Clouds - Java Application Data Collector</name>
 	<dependencies>
 		<dependency>
 			<groupId>it.polimi.tower4clouds</groupId>

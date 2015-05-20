@@ -24,26 +24,31 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DAServer {
+	
+	public static String APP_NAME;
+	public static String APP_FILE_NAME;
+	public static String APP_VERSION;
 
 	public static final Logger logger = LoggerFactory.getLogger(DAServer.class);
 
 	public static void main(String[] args) {
-		PropertiesConfiguration releaserProperties = null;
+		PropertiesConfiguration releaseProperties = null;
 		try {
-			releaserProperties = new PropertiesConfiguration(
+			releaseProperties = new PropertiesConfiguration(
 					"release.properties");
 		} catch (org.apache.commons.configuration.ConfigurationException e) {
 			logger.error("Internal error", e);
 			System.exit(1);
 		}
-		String programName = releaserProperties.getString("dist.file.name");
+		APP_NAME = releaseProperties.getString("application.name");
+		APP_FILE_NAME = releaseProperties.getString("dist.file.name");
+		APP_VERSION = releaseProperties.getString("release.version");
 		try {
-			DAConfig config = new DAConfig(args, programName);
+			DAConfig config = new DAConfig(args, APP_FILE_NAME);
 			if (config.isHelp()) {
-				logger.info(config.usage);
+				System.out.println(config.usage);
 			} else if (config.isVersion()) {
-				logger.info("Version: {}",
-						releaserProperties.getString("release.version"));
+				System.out.println("Version: " + APP_VERSION);
 			} else {
 				String[] rspArgs = new String[1];
 				rspArgs[0] = "setup.properties";
@@ -58,11 +63,12 @@ public class DAServer {
 						config.getKBFolder());
 				System.setProperty("csparql_server.port",
 						Integer.toString(config.getPort()));
+				logger.info("{} {}", APP_NAME, APP_VERSION);
 				rsp_services_csparql_server.main(rspArgs);
 			}
 		} catch (ConfigurationException e) {
 			logger.error("Configuration problem: " + e.getMessage());
-			logger.error("Run \"" + programName + " -help\" for help");
+			logger.error("Run \"" + APP_FILE_NAME + " -help\" for help");
 			System.exit(1);
 		} catch (Exception e) {
 			logger.error("Unknown error", e);

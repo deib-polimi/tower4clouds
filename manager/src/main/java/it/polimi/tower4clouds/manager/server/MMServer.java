@@ -40,6 +40,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MMServer extends Application {
+	public static String APP_NAME;
+	public static String APP_FILE_NAME;
+	public static String APP_VERSION;
+	
 	private MonitoringManager manager = null;
 	private static final String apiVersion = "v1";
 
@@ -50,25 +54,29 @@ public class MMServer extends Application {
 	}
 
 	public static void main(String[] args) {
-		PropertiesConfiguration releaserProperties = null;
+		PropertiesConfiguration releaseProperties = null;
 		try {
-			releaserProperties = new PropertiesConfiguration(
+			releaseProperties = new PropertiesConfiguration(
 					"release.properties");
 		} catch (org.apache.commons.configuration.ConfigurationException e) {
 			logger.error("Internal error", e);
 			System.exit(1);
 		}
-		String programName = releaserProperties.getString("dist.file.name");
+		APP_NAME = releaseProperties.getString("application.name");
+		APP_FILE_NAME = releaseProperties.getString("dist.file.name");
+		APP_VERSION = releaseProperties.getString("release.version");
+		
 		try {
-			ManagerConfig.init(args, programName);
+			ManagerConfig.init(args, APP_FILE_NAME);
 
 			if (ManagerConfig.getInstance().isHelp()) {
 				logger.info(ManagerConfig.usage);
 			} else if (ManagerConfig.getInstance().isVersion()) {
 				logger.info("Version: {}",
-						releaserProperties.getString("release.version"));
+						APP_VERSION);
 			} else {
-
+				
+				logger.info("{} {}", APP_NAME, APP_VERSION);
 				logger.info("Current configuration:\n{}", ManagerConfig
 						.getInstance().toString());
 
@@ -95,7 +103,7 @@ public class MMServer extends Application {
 			}
 		} catch (ConfigurationException e) {
 			logger.error("Configuration problem: " + e.getMessage());
-			logger.error("Run \"" + programName + " -help\" for help");
+			logger.error("Run \"" + APP_FILE_NAME + " -help\" for help");
 			System.exit(1);
 		} catch (HttpException | IOException | ServerErrorException e) {
 			logger.error("Connection problem: {}", e.getMessage());
