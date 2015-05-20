@@ -492,8 +492,21 @@ public class MonitoringManager {
 		}
 		String observerId = returnedObserverUri.substring(returnedObserverUri
 				.lastIndexOf("/") + 1);
-		Observer observer = new Observer(observerId, queryUri, callbackUrl, "HTTP", format);
-		addObserver(metric, observer);
+
+		Observer observer = observersById.get(observerId);
+		if (observer == null) {
+			observer = new Observer(observerId, callbackUrl, "HTTP", format);
+			observersById.put(observerId, observer);
+		}
+		observer.addObservedQueryUri(queryUri);
+
+		Set<String> observersIds = observersIdsByMetric.get(metric);
+		if (observersIds == null) {
+			observersIds = new HashSet<String>();
+			observersIdsByMetric.put(metric, observersIds);
+		}
+		observersIds.add(observer.getId());
+
 		return observer;
 	}
 
@@ -519,20 +532,23 @@ public class MonitoringManager {
 		}
 		String observerId = returnedObserverUri.substring(returnedObserverUri
 				.lastIndexOf("/") + 1);
-		Observer observer = new Observer(observerId, queryUri, observerHost,
-				observerPort, protocol, format);
-		addObserver(metric, observer);
-		return observer;
-	}
 
-	private void addObserver(String metric, Observer observer) {
+		Observer observer = observersById.get(observerId);
+		if (observer == null) {
+			observer = new Observer(observerId, observerHost, observerPort,
+					protocol, format);
+			observersById.put(observerId, observer);
+		}
+		observer.addObservedQueryUri(queryUri);
+
 		Set<String> observersIds = observersIdsByMetric.get(metric);
 		if (observersIds == null) {
 			observersIds = new HashSet<String>();
 			observersIdsByMetric.put(metric, observersIds);
 		}
 		observersIds.add(observer.getId());
-		observersById.put(observer.getId(), observer);
+
+		return observer;
 	}
 
 	public synchronized Set<Observer> getObservers(String metric)
@@ -560,8 +576,17 @@ public class MonitoringManager {
 			throw new NotFoundException(observerId);
 		}
 		try {
-			dataAnalyzer.deleteObserver(observersById.get(observerId).getUri());
-			removeObserver(metric, observerId);
+			String ruleId = ruleIdByObservableMetric.get(metric);
+			String queryId = queryIdByRuleId
+					.get(ruleId);
+			String queryUri = prepareQueryURI(queryId);
+			dataAnalyzer.deleteObserver(queryUri + "/observers/" + observerId);
+			Observer observer = observersById.get(observerId);
+			Set<String> observerdQueriesUris = observer.getObserverdQueriesUris();
+			observerdQueriesUris.remove(queryUri);
+			if (observerdQueriesUris.isEmpty())
+				observersById.remove(observerId);
+			observersIdsByMetric.get(metric).remove(observerId);
 		} catch (ServerErrorException e) {
 			throw new IOException();
 		} catch (ObserverErrorException e) {
@@ -572,11 +597,6 @@ public class MonitoringManager {
 	private boolean isMetricObservedBy(String metric, String observerId) {
 		return observersIdsByMetric.get(metric) != null
 				&& observersIdsByMetric.get(metric).contains(observerId);
-	}
-
-	private void removeObserver(String metric, String observerId) {
-		observersById.remove(observerId);
-		observersIdsByMetric.get(metric).remove(observerId);
 	}
 
 	public void deleteResource(String resourceId) throws IOException,

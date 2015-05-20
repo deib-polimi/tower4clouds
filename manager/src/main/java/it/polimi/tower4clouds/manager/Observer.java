@@ -15,11 +15,14 @@
  */
 package it.polimi.tower4clouds.manager;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Observer {
 
 	private String id;
 	private String callbackUrl;
-	private transient String queryUri;
+	private transient Set<String> observerdQueriesUris;
 	private String format;
 	private String observerHost;
 	private int observerPort;
@@ -27,20 +30,33 @@ public class Observer {
 
 	public Observer() {
 	}
+	
+	public void addObservedQueryUri(String observedQueryUri) {
+		getObserverdQueriesUris().add(observedQueryUri);
+	}
+	
+	public void setObserverdQueriesUris(Set<String> observerdQueriesUris) {
+		this.observerdQueriesUris = observerdQueriesUris;
+	}
+	
+	public Set<String> getObserverdQueriesUris() {
+		if (observerdQueriesUris==null){
+			observerdQueriesUris= new HashSet<String>();
+		}
+		return observerdQueriesUris;
+	}
 
-	public Observer(String id, String queryUri, String callbackUrl,
+	public Observer(String id, String callbackUrl,
 			String protocol, String format) {
 		setId(id);
 		setCallbackUrl(callbackUrl);
-		setQueryUri(queryUri);
 		setProtocol(protocol);
 		setFormat(format);
 	}
 
-	public Observer(String id, String queryUri, String observerHost,
+	public Observer(String id, String observerHost,
 			int observerPort, String protocol, String format) {
 		setId(id);
-		setQueryUri(queryUri);
 		setObserverHost(observerHost);
 		setObserverPort(observerPort);
 		setProtocol(protocol);
@@ -69,18 +85,6 @@ public class Observer {
 
 	public String getCallbackUrl() {
 		return callbackUrl;
-	}
-
-	public String getQueryUri() {
-		return queryUri;
-	}
-
-	public void setQueryUri(String queryUri) {
-		this.queryUri = queryUri;
-	}
-
-	public String getUri() {
-		return queryUri + "/observers/" + id;
 	}
 
 	public String getObserverHost() {
