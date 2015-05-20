@@ -153,8 +153,7 @@ public class MonitoringManager {
 		logger.info("Uploading ontology to KB");
 		knowledgeBase.putModel(MO.model, ManagerConfig.MODEL_GRAPH_NAME);
 
-		if (config.getRdfHistoryDbIP() != null
-				&& config.getRdfHistoryDbPort() != 0) {
+		if (config.getRdfHistoryDbIP() != null) {
 			rdfHistoryDB = new RdfHistoryDBAPI(config.getRdfHistoryDbIP(),
 					config.getRdfHistoryDbPort());
 			rdfHistoryDB.setAsync(true);

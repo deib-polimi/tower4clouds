@@ -54,7 +54,7 @@ public class ManagerConfig {
 		String toString = "\tDA URL: " + getDaUrl() + "\n"
 				+ "\tMonitoring Manager Port: " + mmPort + "\n"
 				+ "\tMonitoring Manager IP: " + mmIP;
-		if (rdfHistoryDbIP != null && rdfHistoryDbPort != 0) {
+		if (rdfHistoryDbIP != null) {
 			toString += "\n\tRDF History DB Port: " + rdfHistoryDbPort + "\n"
 					+ "\tRDF History DB IP: " + rdfHistoryDbIP;
 		}
@@ -97,7 +97,7 @@ public class ManagerConfig {
 			mmPort = Integer.parseInt(getEnvVar(
 					Env.MODACLOUDS_TOWER4CLOUDS_MANAGER_PORT, "8170"));
 			rdfHistoryDbPort = Integer.parseInt(getEnvVar(
-					Env.MODACLOUDS_TOWER4CLOUDS_RDFHISTORYDB_PORT, "0"));
+					Env.MODACLOUDS_TOWER4CLOUDS_RDFHISTORYDB_PORT, "31337"));
 		} catch (NumberFormatException e) {
 			throw new ConfigurationException(
 					"The chosen port is not a valid number");
