@@ -28,5 +28,6 @@
   <name>MODAClous - Tower4Clouds - Observers Parent Pom</name>
   <modules>
   	<module>rdf-history-db</module>
+  	<module>data2stdout</module>
   </modules>
 </project>
