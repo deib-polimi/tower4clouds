@@ -31,6 +31,7 @@ import it.polimi.tower4clouds.model.data_collectors.DCDescriptor;
 import it.polimi.tower4clouds.model.ontology.MO;
 import it.polimi.tower4clouds.model.ontology.MOVocabulary;
 import it.polimi.tower4clouds.model.ontology.Resource;
+import it.polimi.tower4clouds.rdf_history_db.api.RdfHistoryDBAPI;
 import it.polimi.tower4clouds.rules.AbstractAction;
 import it.polimi.tower4clouds.rules.MonitoredTarget;
 import it.polimi.tower4clouds.rules.MonitoringRule;

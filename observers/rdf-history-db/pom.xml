@@ -31,6 +31,7 @@
 		<module>rdf-history-db-main</module>
 		<module>rdf-history-db-manager</module>
 		<module>rdf-history-db-observer</module>
+		<module>rdf-history-db-api</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>

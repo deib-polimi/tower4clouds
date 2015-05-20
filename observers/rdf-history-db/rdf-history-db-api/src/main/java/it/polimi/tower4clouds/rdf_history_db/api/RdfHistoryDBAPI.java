@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.polimi.tower4clouds.manager;
+package it.polimi.tower4clouds.rdf_history_db.api;
 
 import it.polimi.tower4clouds.common.net.DefaultRestClient;
 import it.polimi.tower4clouds.common.net.RestClient;
@@ -25,11 +25,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gson.Gson;
-
 public class RdfHistoryDBAPI {
 
 	private final static int timeout = 10000;

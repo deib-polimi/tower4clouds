@@ -8,7 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - If an RDF history db is configured, the manager is now sending updates about resources
-- The History DB has been moved from its [original repository](https://github.com/deib-polimi/modaclouds-history-db) to this one, and it has been integrated with the other subprojects
+- The RDF History DB has been moved from its [original repository](https://github.com/deib-polimi/modaclouds-history-db) to this one, and it has been integrated with the other subprojects
 
 ### Changed
 - Data collector configuration is now deleted from the ServerFacade local memory when the server is down

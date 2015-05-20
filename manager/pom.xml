@@ -71,6 +71,11 @@
 			<groupId>org.restlet.jee</groupId>
 			<artifactId>org.restlet.ext.slf4j</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>it.polimi.tower4clouds</groupId>
+			<artifactId>rdf-history-db-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<resources>

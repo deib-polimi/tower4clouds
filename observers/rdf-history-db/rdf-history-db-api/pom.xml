@@ -1,0 +1,25 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>it.polimi.tower4clouds</groupId>
+    <artifactId>rdf-history-db</artifactId>
+    <version>0.2-SNAPSHOT</version>
+  </parent>
+  <artifactId>rdf-history-db-api</artifactId>
+  <dependencies>
+  	<dependency>
+  		<groupId>it.polimi.tower4clouds</groupId>
+  		<artifactId>common</artifactId>
+  		<version>${project.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.google.code.gson</groupId>
+  		<artifactId>gson</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>it.polimi.tower4clouds</groupId>
+  		<artifactId>model</artifactId>
+  		<version>${project.version}</version>
+  	</dependency>
+  </dependencies>
+</project>
