@@ -15,131 +15,110 @@
     limitations under the License.
 
 -->
-<!DOCTYPE html>
-<!--
-Copyright 2015 Leo.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
 <html>
-    <head>
-        <title>MODAClouds Monitoring Manager | Model</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+<title>MODAClouds Monitoring Manager | Model</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!-- jQuery library -->
-        <script type="text/javascript"  src="js/jquery-1.11.2.js"></script>
+<!-- jQuery library -->
+<script type="text/javascript" src="js/jquery-1.11.2.js"></script>
 
-        <!-- script necessary for the JSON parsing -->
-        <script type="text/javascript"  src="js/jquery.json-view.js"></script>
-        
-        <!-- Mine style sheet -->
-        <link rel="stylesheet" type="text/css" href="css/commonLayout.css">
+<!-- script necessary for the JSON parsing -->
+<script type="text/javascript" src="js/jquery.json-view.js"></script>
 
-        <!-- CSS useful for the tree -->
-        <link rel="stylesheet" type="text/css" href="css/jquery.json-view.css">
+<!-- Latest compiled and minified JavaScript -->
+<script src="js/bootstrap.min.js"></script>
 
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<!-- Mine style sheet -->
+<link rel="stylesheet" type="text/css" href="css/commonLayout.css">
 
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+<!-- CSS useful for the tree -->
+<link rel="stylesheet" type="text/css" href="css/jquery.json-view.css">
 
-        <!-- Latest compiled and minified JavaScript -->
-        <script type="text/javascript"  src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
-    </head>
+<!-- Optional theme -->
+<link rel="stylesheet" href="css/bootstrap-theme.min.css">
 
-    <body>
-        <nav class="navbar navbar-inverse navbar-static-top">
-            <div class="container">
-                <ul class="nav navbar-nav">
-                    <li id="logo">
-                        <img src="images/logo.png" class="navbar-height" alt="MODAClouds" />
-                    </li>
-                    <li>
-                        <a href="index.html" class="navbar-height">Rules</a>
-                    </li>
-                    <li>
-                        <a href="menuMetrics.html"  class="navbar-height">Metrics</a>
-                    </li>
-                    <li  class="navbar-height active">
-                        <a href="menuModel.html"  class="navbar-height selected">
-                            Model
-                            <span class="sr-only">(current)</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+</head>
 
-        <div class="panel panel-default" id="boxAdd">
-            <div class="panel-heading">
-                <h3 class="panel-title">Add a new Model</h3>
-            </div>
-            <div class="panel-body">
-                <form id="modelForm">
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-lg-6">
-                                <textarea class="form-control" rows="3" placeholder="Insert here your JSON code" id="textual"></textarea>
-                            </div>
-                            <div class="col-lg-6">
-                                <input type="file" id="addedFile" >
-                            </div>
-                        </div>
-                    </div>
+<body>
+	<nav class="navbar navbar-inverse navbar-static-top">
+		<div class="container">
+			<ul class="nav navbar-nav">
+				<li id="logo"><img src="images/logo.png" class="navbar-height"
+					alt="MODAClouds" /></li>
+				<li><a href="index.html" class="navbar-height">Rules</a></li>
+				<li><a href="menuMetrics.html" class="navbar-height">Metrics</a>
+				</li>
+				<li class="navbar-height active"><a href="menuModel.html"
+					class="navbar-height selected"> Model <span class="sr-only">(current)</span>
+				</a></li>
+			</ul>
+		</div>
+	</nav>
 
-                    <div class="row control-group col-lg-12">
-                        <div class="col-lg-6">
-                            <label class="radio-inline"> 
-                                <input type="radio" name="AddingMode" id="PutMode" value="PUT" > Upload Model </label>
-                        </div>
-                        <div class="col-lg-6">
-                            <label class="radio-inline"> 
-                                <input type="radio" name="AddingMode" id="PostMode" value="POST" checked="checked"> Update Model </label>
-                        </div>
-                    </div>
+	<div class="panel panel-default" id="boxAdd">
+		<div class="panel-heading">
+			<h3 class="panel-title">Add a new Model</h3>
+		</div>
+		<div class="panel-body">
+			<form id="modelForm">
+				<div class="row">
+					<div class="form-group">
+						<div class="col-lg-6">
+							<textarea class="form-control" rows="3"
+								placeholder="Insert here your JSON code" id="textual"></textarea>
+						</div>
+						<div class="col-lg-6">
+							<input type="file" id="addedFile">
+						</div>
+					</div>
+				</div>
 
-                    <div class="row">
-                        <div class="col-lg-12" id="btn">
-                            <button type="submit" class="btn btn-default" id="btn" value="Submit">Submit</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+				<div class="row control-group col-lg-12">
+					<div class="col-lg-6">
+						<label class="radio-inline"> <input type="radio"
+							name="AddingMode" id="PutMode" value="PUT"> Upload Model
+						</label>
+					</div>
+					<div class="col-lg-6">
+						<label class="radio-inline"> <input type="radio"
+							name="AddingMode" id="PostMode" value="POST" checked="checked">
+							Update Model
+						</label>
+					</div>
+				</div>
 
-        <div class="panel panel-default" id="boxList">
-            <div class="panel-heading">
-                <h3 class="panel-title">Models</h3>
-            </div>
-            <div class="panel-body">
-                <div id="element">
-                    
-                </div>
-            </div>
-        </div>
+				<div class="row">
+					<div class="col-lg-12" id="btn">
+						<button type="submit" class="btn btn-default" id="btn"
+							value="Submit">Submit</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="panel panel-default" id="boxList">
+		<div class="panel-heading">
+			<h3 class="panel-title">Models</h3>
+		</div>
+		<div class="panel-body">
+			<div id="element"></div>
+		</div>
+	</div>
 
 
-        <div id="error">
-        </div>
+	<div id="error"></div>
 
-        <div id="success">
-        </div>
+	<div id="success"></div>
 
-        <!-- JS Manager -->
-        <script type="text/javascript" src="js/modelManager.js"></script>
+	<!-- JS Manager -->
+	<script type="text/javascript" src="js/modelManager.js"></script>
 
-    </body>
+</body>
 </html>

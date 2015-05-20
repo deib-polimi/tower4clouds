@@ -128,8 +128,11 @@ function observersParser(obj, metricID) {
 		param = "";
 		returnStr += "<div class='row'>";
 		returnStr += "<div class='col-xs-2'>" + obj.observers[i].id + "</div>";
-		returnStr += "<div class='col-xs-4'>" + obj.observers[i].callbackUrl
-				+ "</div>";
+		var callbackAddress = obj.observers[i].callbackUrl;
+		if (callbackAddress == null)
+			callbackAddress = obj.observers[i].observerHost + ":"
+					+ obj.observers[i].observerPort;
+		returnStr += "<div class='col-xs-4'>" + callbackAddress + "</div>";
 		returnStr += "<div class='col-xs-2'>" + obj.observers[i].protocol
 				+ "</div>";
 		returnStr += "<div class='col-xs-2'>" + obj.observers[i].format
