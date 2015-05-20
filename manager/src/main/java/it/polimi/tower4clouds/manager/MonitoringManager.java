@@ -1031,7 +1031,7 @@ public class MonitoringManager {
 							e);
 				}
 			}
-			if (rdfHistoryDB != null) {
+			if (rdfHistoryDB != null && !resourcesIdsToRemove.isEmpty()) {
 				try {
 					logger.info("Sending udpate to RDF History DB");
 					rdfHistoryDB.deleteResources(resourcesIdsToRemove);

@@ -72,6 +72,10 @@ public class MultipleObserversDataServer extends ServerResource {
 			this.getResponse().setStatus(Status.SUCCESS_CREATED);
 			this.getResponse().setEntity(jsonResponse,
 					MediaType.APPLICATION_JSON);
+		} catch (NullPointerException e) { //TODO do a better check
+			logger.error(e.getMessage());
+			this.getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,
+					e.getMessage());
 		} catch (NotFoundException e) {
 			logger.error(e.getMessage());
 			this.getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND,
