@@ -59,8 +59,8 @@ public class DAServer {
 						OutputDataMarshaller.OUTPUT_DATA_MARSHALLER_IMPL_PROPERTY_NAME,
 						DAOutputDataMarshaller.class.getName());
 				System.setProperty("log4j.configuration", "log4j.properties");
-				System.setProperty("rsp_server.static_resources.path",
-						config.getKBFolder());
+//				System.setProperty("rsp_server.static_resources.path",
+//						config.getKBFolder()); NOT USED BY RSP!!!
 				System.setProperty("csparql_server.port",
 						Integer.toString(config.getPort()));
 				logger.info("{} {}", APP_NAME, APP_VERSION);
