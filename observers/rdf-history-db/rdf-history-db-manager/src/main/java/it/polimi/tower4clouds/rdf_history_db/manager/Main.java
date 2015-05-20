@@ -100,12 +100,17 @@ public class Main {
 		
 		Manager.RUNNING_TIME = -1;
 		Manager m1 = new Manager(Configuration.QUEUE_RESULTS);
-		m1.start();
 		Manager m2 = new Manager(Configuration.QUEUE_MODELS);
-		m2.start();
 		Manager m3 = new Manager(Configuration.QUEUE_DELTA_MODELS);
-		m3.start();
 		Manager m4 = new Manager(Configuration.QUEUE_MODELS_DELETE);
+		
+		try {
+			Thread.sleep(500);
+		} catch (Exception e) { }
+		
+		m1.start();
+		m2.start();
+		m3.start();
 		m4.start();
 		
 		logger.debug("Managers started!");
