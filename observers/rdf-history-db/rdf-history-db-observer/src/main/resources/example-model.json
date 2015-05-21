@@ -1,74 +1,119 @@
-{
-  "cloudProviders": [
+[
     {
-      "id": "amazon",
-      "type": "IaaS"
+        "clazz": "Method",
+        "id": "Frontend1-addtocartbulk",
+        "type": "addtocartbulk"
+    },
+    {
+        "clazz": "VM",
+        "cloudProvider": "Amazon",
+        "id": "FrontendVM1",
+        "type": "FrontendVM"
+    },
+    {
+        "clazz": "VM",
+        "cloudProvider": "Amazon",
+        "id": "BackendVM1",
+        "type": "BackendVM"
+    },
+    {
+        "clazz": "CloudProvider",
+        "id": "Amazon"
+    },
+    {
+        "clazz": "Method",
+        "id": "Frontend1-checkoutoptions",
+        "type": "checkoutoptions"
+    },
+    {
+        "clazz": "Method",
+        "id": "MySQL1-update",
+        "type": "update"
+    },
+    {
+        "clazz": "InternalComponent",
+        "id": "JVM1",
+        "providedMethods": [],
+        "requiredComponents": [
+            "BackendVM1",
+            "FrontendVM1"
+        ],
+        "type": "JVM"
+    },
+    {
+        "clazz": "InternalComponent",
+        "id": "MySQL1",
+        "providedMethods": [
+            "MySQL1-create",
+            "MySQL1-read",
+            "MySQL1-update",
+            "MySQL1-delete"
+        ],
+        "requiredComponents": [],
+        "type": "MySQL"
+    },
+    {
+        "clazz": "InternalComponent",
+        "id": "Frontend1",
+        "providedMethods": [
+            "Frontend1-quickadd",
+            "Frontend1-logout",
+            "Frontend1-orderhistory",
+            "Frontend1-checkoutoptions",
+            "Frontend1-checkLogin",
+            "Frontend1-login",
+            "Frontend1-main",
+            "Frontend1-addtocartbulk"
+        ],
+        "requiredComponents": [
+            "JVM1",
+            "MySQL1"
+        ],
+        "type": "Frontend"
+    },
+    {
+        "clazz": "Method",
+        "id": "Frontend1-quickadd",
+        "type": "quickadd"
+    },
+    {
+        "clazz": "Method",
+        "id": "MySQL1-read",
+        "type": "read"
+    },
+    {
+        "clazz": "Method",
+        "id": "Frontend1-logout",
+        "type": "logout"
+    },
+    {
+        "clazz": "Method",
+        "id": "Frontend1-checkLogin",
+        "type": "checkLogin"
+    },
+    {
+        "clazz": "Method",
+        "id": "Frontend1-orderhistory",
+        "type": "orderhistory"
+    },
+    {
+        "clazz": "Method",
+        "id": "MySQL1-delete",
+        "type": "delete"
+    },
+    {
+        "clazz": "Method",
+        "id": "Frontend1-main",
+        "type": "main"
+    },
+    {
+        "clazz": "Method",
+        "id": "MySQL1-create",
+        "type": "create"
+    },
+    {
+        "clazz": "Method",
+        "id": "Frontend1-login",
+        "type": "login"
     }
-  ],
-  "internalComponents": [
-    {
-      "id": "mic1",
-      "providedMethods": [
-        "mic1-register",
-        "mic1-answerQuestions",
-        "mic1-saveAnswers"
-      ],
-      "requiredComponents": [
-        "frontend1"
-      ],
-      "type": "Mic"
-    },
-    {
-      "id": "mic2",
-      "providedMethods": [
-        "mic2-register",
-        "mic2-answerQuestions",
-        "mic2-saveAnswers"
-      ],
-      "requiredComponents": [
-        "frontend2"
-      ],
-      "type": "Mic"
-    }
-  ],
-  "methods": [
-    {
-      "id": "mic1-answerQuestions",
-      "type": "answerQuestions"
-    },
-    {
-      "id": "mic1-saveAnswers",
-      "type": "saveAnswers"
-    },
-    {
-      "id": "mic1-register",
-      "type": "register"
-    },
-    {
-      "id": "mic2-answerQuestions",
-      "type": "answerQuestions"
-    },
-    {
-      "id": "mic2-saveAnswers",
-      "type": "saveAnswers"
-    },
-    {
-      "id": "mic2-register",
-      "type": "register"
-    }
-  ],
-  "vMs": [
-    {
-      "cloudProvider": "amazon",
-      "id": "frontend1",
-      "numberOfCPUs": 0,
-      "type": "Frontend"
-    },
-    {
-      "cloudProvider": "amazon",
-      "id": "frontend2",
-      "numberOfCPUs": 0,
-      "type": "Frontend"
-    }
-  ]
-}
+]
