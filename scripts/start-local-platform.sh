@@ -1,6 +1,6 @@
 #!/bin/bash 
 function log {
-	printf "\036[1;31m$1\033[0m\n"
+	printf "\033[1;36m$1\033[0m\n"
 }
 
 cd ..
