@@ -27,7 +27,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>it.polimi.tower4clouds</groupId>
-			<artifactId>server-facade</artifactId>
+			<artifactId>data-collector-library</artifactId>
 		</dependency>
 	</dependencies>
 </project>

@@ -80,7 +80,7 @@ public class BatchTool {
 				MonitoringRuleFactory factory = new MonitoringRuleFactory();
 				MonitoringRules rules = factory
 						.makeRulesFromQoSConstraints(constraints);
-				XMLHelper.serialize(rules, MonitoringRules.class, System.out);
+				XMLHelper.serialize(rules, System.out);
 			}
 		} catch (ParseException e) {
 			System.err.println("Parsing failed.  Reason: " + e.getMessage());

@@ -26,7 +26,7 @@ public class MO {
 	
 	public static final String URI = "http://www.modaclouds.eu/model#";
     public static String prefix = "mo";
-
+    
 	public static OntModel model = ModelFactory.createOntologyModel(OntModelSpec.RDFS_MEM);
 	
 	public static OntClass Component = makeClass(MOVocabulary.Component);

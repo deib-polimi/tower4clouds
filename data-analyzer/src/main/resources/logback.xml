@@ -27,7 +27,6 @@
 
 	<logger name="it.polimi" level="DEBUG" />
 	<!-- <logger name="eu.larkc" level="DEBUG" /> -->
-	<logger name="org.restlet" level="INFO" />
 	
 
 	<root level="INFO">

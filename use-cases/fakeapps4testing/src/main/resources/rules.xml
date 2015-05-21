@@ -1,0 +1,35 @@
+<monitoringRules xmlns="http://www.modaclouds.eu/xsd/1.0/monitoring_rules_schema">
+	<monitoringRule id="ResponseTimeRule"
+        startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Method" type="register"/>
+        </monitoredTargets>
+        <collectedMetric metricName="ResponseTime">
+            <parameter name="samplingProbability">1</parameter>
+        </collectedMetric>
+        <metricAggregation aggregateFunction="Average" groupingClass="Method"/>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="resourceId">ID</parameter>
+                <parameter name="metric">AverageResponseTime</parameter>
+                <parameter name="value">METRIC</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+     <monitoringRule id="ViolationRule"
+        startEnabled="true" timeStep="10" timeWindow="10">
+        <monitoredTargets>
+            <monitoredTarget class="Method" type="register"/>
+        </monitoredTargets>
+        <collectedMetric metricName="AverageResponseTime"/>
+        <metricAggregation aggregateFunction="Average" groupingClass="CloudProvider"/>
+        <condition>METRIC &gt; 2000</condition>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="resourceId">ID</parameter>
+                <parameter name="metric">ViolatedAvgResponseTime</parameter>
+                <parameter name="value">METRIC</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+</monitoringRules>

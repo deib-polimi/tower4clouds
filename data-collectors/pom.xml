@@ -32,7 +32,7 @@
 		<dependencies>
 			<dependency>
 				<groupId>it.polimi.tower4clouds</groupId>
-				<artifactId>server-facade</artifactId>
+				<artifactId>data-collector-library</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		</dependencies>

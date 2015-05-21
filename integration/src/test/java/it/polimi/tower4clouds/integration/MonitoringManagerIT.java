@@ -19,17 +19,17 @@ import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.hamcrest.Matchers.equalToIgnoringWhiteSpace;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import it.polimi.deib.csparql_rest_api.RSP_services_csparql_API;
 import it.polimi.modaclouds.qos_models.util.XMLHelper;
 import it.polimi.tower4clouds.common.net.NetUtil;
 import it.polimi.tower4clouds.data_analyzer.DAServer;
-import it.polimi.tower4clouds.manager.Observer;
+import it.polimi.tower4clouds.manager.api.Observer;
 import it.polimi.tower4clouds.manager.server.MMServer;
 import it.polimi.tower4clouds.model.data_collectors.DCConfiguration;
 import it.polimi.tower4clouds.model.data_collectors.DCDescriptor;
+import it.polimi.tower4clouds.model.ontology.MO;
 import it.polimi.tower4clouds.model.ontology.Resource;
 import it.polimi.tower4clouds.rules.MonitoringRule;
 import it.polimi.tower4clouds.rules.MonitoringRules;
@@ -99,7 +99,7 @@ public class MonitoringManagerIT {
 		daThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				String[] args = new String[] { "-kbloc", "/tmp/kb", "-port",
+				String[] args = new String[] { "-port",
 						Integer.toString(daPort) };
 				DAServer.main(args);
 			}
@@ -132,35 +132,37 @@ public class MonitoringManagerIT {
 
 	private void resetPlatform() throws JAXBException, SAXException {
 		InputStream response = given()
-				.get("http://localhost:" + mmPort + "/v1/monitoring-rules").andReturn()
-				.asInputStream();
+				.get("http://localhost:" + mmPort + "/v1/monitoring-rules")
+				.andReturn().asInputStream();
 		MonitoringRules rules = XMLHelper.deserialize(response,
 				MonitoringRules.class);
 		for (MonitoringRule rule : rules.getMonitoringRules()) {
 			given().delete(
-					"http://localhost:" + mmPort + "/v1/monitoring-rules/" + rule.getId())
-					.then().statusCode(204);
+					"http://localhost:" + mmPort + "/v1/monitoring-rules/"
+							+ rule.getId()).then().statusCode(204);
 		}
 
 		String dcsJson = given()
-				.get("http://localhost:" + mmPort + "/v1/data-collectors").andReturn()
-				.asString();
+				.get("http://localhost:" + mmPort + "/v1/data-collectors")
+				.andReturn().asString();
 		Map<String, DCDescriptor> dcs = new Gson().fromJson(dcsJson,
 				new TypeToken<Map<String, DCConfiguration>>() {
 				}.getType());
 
 		for (String dcId : dcs.keySet()) {
-			given().delete("http://localhost:" + mmPort + "/v1/data-collectors/" + dcId)
-					.then().statusCode(204);
+			given().delete(
+					"http://localhost:" + mmPort + "/v1/data-collectors/"
+							+ dcId).then().statusCode(204);
 		}
 
 		String resourcesJson = given()
-				.get("http://localhost:" + mmPort + "/v1/resources").andReturn()
-				.asString();
+				.get("http://localhost:" + mmPort + "/v1/resources")
+				.andReturn().asString();
 		Set<Resource> resources = Resource.fromJsonResources(resourcesJson);
 		for (Resource res : resources) {
-			given().delete("http://localhost:" + mmPort + "/v1/resources/" + res.getId())
-					.then().statusCode(204);
+			given().delete(
+					"http://localhost:" + mmPort + "/v1/resources/"
+							+ res.getId()).then().statusCode(204);
 		}
 	}
 
@@ -233,7 +235,6 @@ public class MonitoringManagerIT {
 		assertEquals(observers.get(0).getId(), registeredObserver.getId());
 		assertEquals(observers.get(0).getCallbackUrl(), callbackUrl);
 		assertEquals(observers.get(0).getFormat(), format);
-		assertNull(observers.get(0).getQueryUri());
 		assertEquals(observers.size(), 1);
 		given().delete(
 				mmUrl + "/v1/metrics/AverageResponseTime/observers/"
@@ -300,53 +301,53 @@ public class MonitoringManagerIT {
 		return getClass().getClassLoader().getResourceAsStream(fileName);
 	}
 
-//	@Test
-//	public void restCallRuleShouldSelfDestroy() throws Exception {
-//		DCDescriptor dc = new DCDescriptor();
-//
-//		Method method = new Method();
-//		method.setId("register1");
-//		method.setType("register");
-//		dc.addMonitoredResource("ResponseTime", method);
-//		dc.setKeepAlive(0);
-//
-//		String dcId = given().body(new Gson().toJson(dc))
-//				.post(mmUrl + "/v1/data-collectors").then().statusCode(200)
-//				.extract().path("id");
-//		given().body(
-//				IOUtils.toString(getResourceAsStream("RestCallRule4SelfDestroy.xml")))
-//				.post(mmUrl + "/v1/monitoring-rules").then().assertThat()
-//				.statusCode(204);
-//
-//		Map<String, DCConfiguration> dcConfigByMetric = new Gson().fromJson(
-//				given().get(
-//						mmUrl + "/v1/data-collectors/" + dcId
-//								+ "/configuration").asString(),
-//				new TypeToken<Map<String, DCConfiguration>>() {
-//				}.getType());
-//
-//		DCConfiguration dcconfig = dcConfigByMetric.get("ResponseTime");
-//
-//		// TODO temp fix: first datum is ignored by csparql engine
-//		given().body(
-//				IOUtils.toString(getResourceAsStream("MonitoringDataRT.json")))
-//				.post(dcconfig.getDaUrl()).then().assertThat().statusCode(200);
-//
-//		// TODO temp fix: some time not to have this datum ignored as well
-//		Thread.sleep(1000);
-//		given().body(
-//				IOUtils.toString(getResourceAsStream("MonitoringDataRT.json")))
-//				.post(dcconfig.getDaUrl()).then().assertThat().statusCode(200);
-//
-//		// The rule have a 5 seconds period
-//		Thread.sleep(10000);
-//
-//		InputStream emptyMonitoringRulesIS = given().get(
-//				mmUrl + "/v1/monitoring-rules").asInputStream();
-//		assertTrue(XMLHelper
-//				.deserialize(emptyMonitoringRulesIS, MonitoringRules.class)
-//				.getMonitoringRules().isEmpty());
-//	}
+	// @Test
+	// public void restCallRuleShouldSelfDestroy() throws Exception {
+	// DCDescriptor dc = new DCDescriptor();
+	//
+	// Method method = new Method();
+	// method.setId("register1");
+	// method.setType("register");
+	// dc.addMonitoredResource("ResponseTime", method);
+	// dc.setKeepAlive(0);
+	//
+	// String dcId = given().body(new Gson().toJson(dc))
+	// .post(mmUrl + "/v1/data-collectors").then().statusCode(200)
+	// .extract().path("id");
+	// given().body(
+	// IOUtils.toString(getResourceAsStream("RestCallRule4SelfDestroy.xml")))
+	// .post(mmUrl + "/v1/monitoring-rules").then().assertThat()
+	// .statusCode(204);
+	//
+	// Map<String, DCConfiguration> dcConfigByMetric = new Gson().fromJson(
+	// given().get(
+	// mmUrl + "/v1/data-collectors/" + dcId
+	// + "/configuration").asString(),
+	// new TypeToken<Map<String, DCConfiguration>>() {
+	// }.getType());
+	//
+	// DCConfiguration dcconfig = dcConfigByMetric.get("ResponseTime");
+	//
+	// // TODO temp fix: first datum is ignored by csparql engine
+	// given().body(
+	// IOUtils.toString(getResourceAsStream("MonitoringDataRT.json")))
+	// .post(dcconfig.getDaUrl()).then().assertThat().statusCode(200);
+	//
+	// // TODO temp fix: some time not to have this datum ignored as well
+	// Thread.sleep(1000);
+	// given().body(
+	// IOUtils.toString(getResourceAsStream("MonitoringDataRT.json")))
+	// .post(dcconfig.getDaUrl()).then().assertThat().statusCode(200);
+	//
+	// // The rule have a 5 seconds period
+	// Thread.sleep(10000);
+	//
+	// InputStream emptyMonitoringRulesIS = given().get(
+	// mmUrl + "/v1/monitoring-rules").asInputStream();
+	// assertTrue(XMLHelper
+	// .deserialize(emptyMonitoringRulesIS, MonitoringRules.class)
+	// .getMonitoringRules().isEmpty());
+	// }
 
 	@Test
 	public void registeringWrongObserverUrlShouldFail() throws Exception {

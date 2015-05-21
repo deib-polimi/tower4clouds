@@ -26,6 +26,6 @@
   <name>MODAClous - Tower4Clouds - Use Cases Parent Pom</name>
   <packaging>pom</packaging>
   <modules>
-  	<module>mock-application</module>
+  	<module>fakeapps4testing</module>
   </modules>
 </project>

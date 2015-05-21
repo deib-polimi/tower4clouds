@@ -51,7 +51,7 @@ public class DAServer {
 				System.out.println("Version: " + APP_VERSION);
 			} else {
 				String[] rspArgs = new String[1];
-				rspArgs[0] = "setup.properties";
+				rspArgs[0] = "da.properties";
 				System.setProperty(
 						InputDataUnmarshaller.INPUT_DATA_UNMARSHALLER_IMPL_PROPERTY_NAME,
 						DAInputDataUnmarshaller.class.getName());

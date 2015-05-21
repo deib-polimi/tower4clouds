@@ -71,8 +71,6 @@ local.properties
 .buildpath
 
 .idea
-
-######################
-# Website
-######################
 .couscous
+.vagrant/
+
