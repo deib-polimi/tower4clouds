@@ -806,8 +806,8 @@ public class CloudMLCall extends AbstractAction {
 
 				if (n < 0 && instances.running.size() > 0) {
 					int toBeShuttedDown = -n;
-					if (instances.running.size() < toBeShuttedDown)
-						toBeShuttedDown = instances.running.size();
+					if (instances.running.size() - 1 < toBeShuttedDown)
+						toBeShuttedDown = instances.running.size() - 1;
 
 					ArrayList<String> ids = new ArrayList<String>();
 					for (int i = 0; i < toBeShuttedDown; ++i)
