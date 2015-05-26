@@ -1,0 +1,31 @@
+#!/bin/sh
+
+export HDB_HOME="/usr/local/lib/tower4clouds-rdf-history-db"
+
+if [ ! -e "$HDB_HOME" ]
+then
+    echo "$HDB_HOME does not exist" 1>&2
+    exit 1
+fi
+
+JAR="$HDB_HOME/tower4clouds-rdf-history-db.jar"
+if [ ! -e "$JAR" ]
+then
+    echo "Can't find jarfile to run"
+    exit 1
+fi
+
+# Deal with Cygwin path issues
+cygwin=false
+case "`uname`" in
+    CYGWIN*) cygwin=true;;
+esac
+if [ "$cygwin" = "true" ]
+then
+    JAR=`cygpath -w "$JAR"`
+    HDB_HOME=`cygpath -w "$HDB_HOME"`
+fi
+
+JVM_ARGS=${JVM_ARGS:--Xmx1200M}
+
+exec java  $JVM_ARGS -jar "$JAR" "$@"
