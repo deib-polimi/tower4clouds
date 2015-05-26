@@ -63,30 +63,6 @@ public class DefaultRestClient implements RestClient {
 		client = HttpClients.custom().setConnectionManager(connManager).build();
 	}
 
-	// public static void main(String[] args) throws InterruptedException {
-	// ExecutorService exec = Executors.newCachedThreadPool();
-	// final RestClient restClient = new DefaultRestClient();
-	// for (int i = 0; i < 50; i++) {
-	// exec.execute(new Runnable() {
-	//
-	// @Override
-	// public void run() {
-	// try {
-	// long ts = System.currentTimeMillis();
-	// restClient.execute(RestMethod.GET,
-	// // "http://localhost:8000/testing/sleep?time=1", null, 204, 5000);
-	// "http://localhost:8170/testing", null, 204, 10000);
-	// System.out.println(((double) (System
-	// .currentTimeMillis() - ts) / 1000 + " seconds"));
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	// });
-	//
-	// }
-	// exec.shutdown();
-	// }
 
 	@Override
 	public String execute(RestMethod method, String url, String jsonEntity,

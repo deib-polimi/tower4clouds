@@ -27,12 +27,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>it.polimi.tower4clouds</groupId>
-			<artifactId>common</artifactId>
+			<artifactId>model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>it.polimi.tower4clouds</groupId>
-			<artifactId>model</artifactId>
+			<artifactId>manager-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

@@ -18,54 +18,20 @@ package it.polimi.tower4clouds.model.ontology;
 
 public class VM extends ExternalComponent {
 	
-//	private int numberOfCPUs;
-	private String location;
-	
-//	public int getNumberOfCPUs() {
-//		return numberOfCPUs;
-//	}
-//	public void setNumberOfCPUs(int numberOfCPUs) {
-//		this.numberOfCPUs = numberOfCPUs;
-//	}
-	public String getLocation() {
-		return location;
+	public VM(String type, String id) {
+		super(type, id);
 	}
-	public void setLocation(String location) {
-		this.location = location;
+
+	public VM() {
 	}
+
 	@Override
 	public String toString() {
-		return "VM [location=" + location + ", getType()=" + getType()
-				+ ", getId()=" + getId() + "]";
+		return "VM [location=" + getLocation() + ", cloudProvider="
+				+ getCloudProvider() + ", type=" + getType()
+				+ ", id=" + getId() + "]";
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result
-				+ ((location == null) ? 0 : location.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		VM other = (VM) obj;
-		if (location == null) {
-			if (other.location != null)
-				return false;
-		} else if (!location.equals(other.location))
-			return false;
-		return true;
-	}
-
 	
-	
-
 	
 
 }

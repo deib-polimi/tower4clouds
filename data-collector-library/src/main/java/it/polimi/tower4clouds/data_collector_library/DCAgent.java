@@ -19,6 +19,7 @@ import it.polimi.tower4clouds.common.net.DefaultRestClient;
 import it.polimi.tower4clouds.common.net.RestClient;
 import it.polimi.tower4clouds.common.net.RestMethod;
 import it.polimi.tower4clouds.common.net.UnexpectedAnswerFromServerException;
+import it.polimi.tower4clouds.manager.api.ManagerAPI;
 import it.polimi.tower4clouds.model.data_collectors.DCConfiguration;
 import it.polimi.tower4clouds.model.data_collectors.DCDescriptor;
 import it.polimi.tower4clouds.model.ontology.MOVocabulary;
@@ -40,24 +41,20 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
 public class DCAgent extends Observable {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(DCAgent.class);
+	private static final Logger logger = LoggerFactory.getLogger(DCAgent.class);
 
 	private DCDescriptor dCDescriptor;
-	private String dcAssignedId;
-	private Map<String, DCConfiguration> dCConfigs = new HashMap<String, DCConfiguration>();
+	private String dataCollectorId;
+	private Map<String, DCConfiguration> dCConfigs;
 	private boolean registered = false;
 
 	private final int connectionRetryPeriod = 5;
-	private final int timeout = 10000;
+	private int timeout = 10000;
 
 	private final ScheduledExecutorService syncExecService = Executors
 			.newScheduledThreadPool(2);
@@ -73,25 +70,26 @@ public class DCAgent extends Observable {
 	private final ExecutorService registrationExecService = Executors
 			.newFixedThreadPool(1);
 
-	private final String dcBaseUrl;
-
 	private boolean timerRunning = false;
 
-	private RestClient restClient;
+	private ManagerAPI manager;
 
 	private Future<?> registrationJob;
+	
+	private RestClient restClient = new DefaultRestClient();
 
-	public DCAgent(String managerIP, String managerPort) {
-		dcBaseUrl = "http://" + managerIP + ":"
-				+ managerPort + "/v1/data-collectors";
-		restClient = new DefaultRestClient();
+	private boolean started = false;
+
+	public DCAgent(ManagerAPI manager) {
+		this.manager = manager;
+		dCConfigs = new HashMap<String, DCConfiguration>();
+		manager.setDefaultTimeout(timeout);
 	}
-
-	/**
-	 * Replace the default rest client with a custom one
-	 * 
-	 * @param restClient
-	 */
+	
+	public boolean isStarted() {
+		return started;
+	}
+	
 	public void setDefaultRestClient(RestClient restClient) {
 		this.restClient = restClient;
 	}
@@ -99,44 +97,23 @@ public class DCAgent extends Observable {
 	public void setDCDescriptor(DCDescriptor dCDescriptor) {
 		validate(dCDescriptor);
 		this.dCDescriptor = dCDescriptor;
-		if (registrationJob != null) {
-			registrationJob.cancel(true);
-		}
-		registrationJob = registrationExecService.submit(new Runnable() {
-
-			@Override
-			public void run() {
-				registerDC();
-				startSyncing();
-				startKeepAlive();
-			}
-		});
 	}
 
 	private void registerDC() {
-		RestMethod method;
-		String url;
-		if (dcAssignedId != null) {
-			method = RestMethod.PUT;
-			url = dcBaseUrl + "/" + dcAssignedId;
-		} else {
-			method = RestMethod.POST;
-			url = dcBaseUrl;
-		}
-		String jsonEntity = dCDescriptor.toJson();
-		int expectedCode = 200;
+		if (dCDescriptor == null)
+			throw new RuntimeException("DCDescriptor was not set");
 		registered = false;
-		String responseBody;
 		while (!registered) {
 			try {
 				logger.info("Registering DC descriptor: {}",
 						dCDescriptor.toString());
-				responseBody = restClient.execute(method, url, jsonEntity,
-						expectedCode, timeout);
-				dcAssignedId = new JsonParser().parse(responseBody)
-						.getAsJsonObject().get("id").getAsString();
+				if (dataCollectorId != null) {
+					manager.registerDataCollector(dataCollectorId, dCDescriptor);
+				} else {
+					dataCollectorId = manager.registerDataCollector(dCDescriptor);
+				}
 				registered = true;
-			} catch (Exception e) {
+			} catch (IOException e) {
 				logger.warn(
 						"Could not connect to server: {}. Retrying in {} seconds",
 						e.getMessage(), connectionRetryPeriod);
@@ -145,6 +122,8 @@ public class DCAgent extends Observable {
 				} catch (InterruptedException e1) {
 					throw new RuntimeException(e1);
 				}
+			} catch (UnexpectedAnswerFromServerException e) {
+				throw new RuntimeException(e);
 			}
 		}
 	}
@@ -160,13 +139,17 @@ public class DCAgent extends Observable {
 		}
 	}
 
-	private void startSyncing() {
-		int configSyncPeriod = dCDescriptor.getConfigSyncPeriod();
-
+	private void stopSyncing() {
 		if (syncJob != null) {
 			logger.info("Stopping DC configuration synchronization");
 			syncJob.cancel(true);
 		}
+	}
+
+	private void startSyncing() {
+		int configSyncPeriod = dCDescriptor.getConfigSyncPeriod();
+
+		stopSyncing();
 
 		logger.info(
 				"Starting DC configuration synchronization. Will run every {} seconds",
@@ -212,10 +195,7 @@ public class DCAgent extends Observable {
 			logger.info("Keep alive is not required, config sync period is short enough for keeping the resources alive");
 			return;
 		}
-		if (keepAliveJob != null) {
-			logger.info("Stopping existing keep alive job");
-			keepAliveJob.cancel(true);
-		}
+		stopKeepAlive();
 
 		logger.info("Starting keep alive. Will run every {} seconds",
 				maxKeepAlivePeriod);
@@ -237,6 +217,13 @@ public class DCAgent extends Observable {
 			}
 
 		}, 0, (long) maxKeepAlivePeriod, TimeUnit.SECONDS);
+	}
+
+	private void stopKeepAlive() {
+		if (keepAliveJob != null) {
+			logger.info("Stopping existing keep alive job");
+			keepAliveJob.cancel(true);
+		}
 	}
 
 	public boolean shouldMonitor(Resource resource, String metric) {
@@ -268,6 +255,10 @@ public class DCAgent extends Observable {
 	}
 
 	public void send(Resource resource, String metric, Object value) {
+		if (!started) {
+			logger.error("The DCAgent is not started, data won't be sent");
+			return;
+		}
 		if (!shouldMonitor(resource, metric)) {
 			logger.error(
 					"Monitoring is not required for the given resource and the given metric, datum [{},{},{}] won't be sent",
@@ -348,18 +339,19 @@ public class DCAgent extends Observable {
 			long ts = System.currentTimeMillis();
 			logger.debug("Sending {} monitoring data", data.size());
 			try {
+
 				restClient.execute(RestMethod.POST, dcConfiguration.getDaUrl(),
-						data.toString(), 200, timeout);
+						data.toString(), 200, timeout );
 				logger.debug("Data sent in {} seconds",
 						((double) (System.currentTimeMillis() - ts)) / 1000);
-			} catch (UnexpectedAnswerFromServerException e ) {
+			} catch (UnexpectedAnswerFromServerException e) {
 				logger.error(
 						"Error while trying to send data. This may not be an error, "
 								+ "monitoring for metric {} may be not required"
 								+ " anymore, the stream may have been closed by the server "
 								+ "and dc configuration may not have been synchronized yet. Error message: {}",
 						metric, e.getMessage());
-			} catch (Exception e){
+			} catch (Exception e) {
 				logger.error(
 						"Unknwon error while trying to send data for metric {}: {}",
 						metric, e.getMessage());
@@ -370,18 +362,37 @@ public class DCAgent extends Observable {
 
 	private Map<String, DCConfiguration> getRemoteDCConfiguration()
 			throws UnexpectedAnswerFromServerException, IOException {
-
-		String responseJson = restClient.execute(RestMethod.GET, dcBaseUrl
-				+ "/" + dcAssignedId + "/configuration", null, 200, timeout);
-
-		return new Gson().fromJson(responseJson,
-				new TypeToken<Map<String, DCConfiguration>>() {
-				}.getType());
+		return manager.getDCConfigurationByMetric(dataCollectorId);
 	}
 
 	private void keepAlive() throws UnexpectedAnswerFromServerException,
 			IOException {
-		restClient.execute(RestMethod.GET, dcBaseUrl + "/" + dcAssignedId
-				+ "/keepalive", null, 204, timeout);
+		manager.keepAlive(dataCollectorId);
+	}
+
+	public synchronized void start() {
+		stopDCRegistration();
+		registrationJob = registrationExecService.submit(new Runnable() {
+			@Override
+			public void run() {
+				registerDC();
+				startSyncing();
+				startKeepAlive();
+			}
+		});
+		started = true;
+	}
+
+	private void stopDCRegistration() {
+		if (registrationJob != null) {
+			registrationJob.cancel(true);
+		}
+	}
+
+	public synchronized void stop() {
+		stopDCRegistration();
+		stopSyncing();
+		stopKeepAlive();
+		started = false;
 	}
 }

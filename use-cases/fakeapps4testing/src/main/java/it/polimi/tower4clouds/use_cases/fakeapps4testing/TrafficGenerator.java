@@ -49,10 +49,10 @@ public class TrafficGenerator {
 	private static final String DATA2STDOUT_HOST = "localhost";
 	private static final int DATA2STDOUT_PORT = 8000;
 
-	public static final boolean RESET_PLATFORM_FIRST = true;
+	public static final boolean RESET_PLATFORM_FIRST = false;
 	private static final boolean ATTACH_GRAPHITE = true;
-	private static final boolean ATTACH_INFLUXDB = true;
-	private static final boolean ATTACH_DATA2STDOUT_SENDING_NEW_FORMAT = true;
+	private static final boolean ATTACH_INFLUXDB = false;
+	private static final boolean ATTACH_DATA2STDOUT_SENDING_NEW_FORMAT = false;
 	private static final boolean ATTACH_DATA2STDOUT_SENDING_OLD_RDF_JSON = false;
 
 	private static ManagerAPI managerServer = new ManagerAPI(MANAGER_HOST,
@@ -111,8 +111,9 @@ public class TrafficGenerator {
 
 			dCDescriptor.addRelatedResource(amazon);
 
-			DCAgent dcAgent = new DCAgent("127.0.0.1", "8170");
+			DCAgent dcAgent = new DCAgent(new ManagerAPI(MANAGER_HOST, MANAGER_PORT));
 			dcAgent.setDCDescriptor(dCDescriptor);
+			dcAgent.start();
 
 			// register rules
 			boolean sent = false;
@@ -192,8 +193,7 @@ public class TrafficGenerator {
 				Thread.sleep(100);
 			}
 
-			// Stops all threads
-			System.exit(0);
+			dcAgent.stop();
 
 		} catch (Exception e) {
 			e.printStackTrace();

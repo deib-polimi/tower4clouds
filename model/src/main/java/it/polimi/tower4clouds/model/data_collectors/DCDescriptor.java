@@ -88,7 +88,7 @@ public class DCDescriptor {
 
 	public Set<Resource> getAllResources() {
 		HashSet<Resource> resources = new HashSet<Resource>();
-		for (Set<Resource> monResources : getMonitoredResourcesByMetric()
+		for (Set<? extends Resource> monResources : getMonitoredResourcesByMetric()
 				.values()) {
 			resources.addAll(monResources);
 		}
@@ -146,6 +146,20 @@ public class DCDescriptor {
 
 	public String toJson() {
 		return gson.toJson(this);
+	}
+
+	public void addMonitoredResource(Set<String> metrics,
+			Resource resource) {
+		for (String metric : metrics) {
+			addMonitoredResource(metric, resource);
+		}
+	}
+
+	public void addMonitoredResources(Set<String> metrics,
+			Set<Resource> resources) {
+		for (String metric : metrics) {
+			addMonitoredResources(metric, resources);
+		}
 	}
 
 }

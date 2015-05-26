@@ -53,7 +53,7 @@ function jsonParser(json) {
 		strToPrint += "<div class='row'>";
 		strToPrint += "<input class='col-xs-5' type='text' placeholder='Observer URL' id='callbackUrl"
 				+ obj.metrics[i] + "' />";
-		strToPrint += "<input class='col-xs-4' type='text' placeholder='Format (RDF/JSON, GRAPHITE..)' id='format"
+		strToPrint += "<input class='col-xs-4' type='text' placeholder='Format (RDF/JSON, GRAPHITE, INFLUXDB)' id='format"
 				+ obj.metrics[i] + "' />";
 		strToPrint += "<input class='col-xs-3' type='text' placeholder='Protocol (HTTP, TCP, UDP)' id='protocol"
 				+ obj.metrics[i] + "' />";

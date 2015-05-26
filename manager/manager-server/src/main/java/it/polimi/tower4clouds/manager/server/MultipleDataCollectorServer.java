@@ -51,7 +51,7 @@ public class MultipleDataCollectorServer extends ServerResource {
 			JsonObject responseJson = new JsonObject();
 			responseJson.put("id", id);
 
-			this.getResponse().setStatus(Status.SUCCESS_OK);
+			this.getResponse().setStatus(Status.SUCCESS_CREATED);
 			this.getResponse().setEntity(responseJson.toString(),
 					MediaType.APPLICATION_JSON);
 

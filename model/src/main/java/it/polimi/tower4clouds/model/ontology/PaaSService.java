@@ -15,13 +15,20 @@
  */
 package it.polimi.tower4clouds.model.ontology;
 
-
 public class PaaSService extends ExternalComponent {
+	
+	public PaaSService(String type, String id) {
+		super(type, id);
+	}
+
+	public PaaSService() {
+	}
 
 	@Override
 	public String toString() {
-		return "PaaSService [getCloudProvider()=" + getCloudProvider()
-				+ ", getType()=" + getType() + ", getId()=" + getId() + "]";
+		return "PaaSService [cloudProvider=" + getCloudProvider()
+				+ ", location=" + getLocation() + ", clazz=" + getClazz()
+				+ ", type=" + getType() + ", id=" + getId() + "]";
 	}
 
 }

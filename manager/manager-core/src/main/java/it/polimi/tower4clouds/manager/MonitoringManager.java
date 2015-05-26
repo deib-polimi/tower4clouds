@@ -26,6 +26,9 @@ import it.polimi.modaclouds.monitoring.kb.api.RspKbAPI;
 import it.polimi.modaclouds.monitoring.kb.api.SerializationException;
 import it.polimi.modaclouds.qos_models.Problem;
 import it.polimi.tower4clouds.common.net.NetUtil;
+import it.polimi.tower4clouds.java_app_dc.Monitor;
+import it.polimi.tower4clouds.java_app_dc.Property;
+import it.polimi.tower4clouds.java_app_dc.Registry;
 import it.polimi.tower4clouds.manager.api.Observer;
 import it.polimi.tower4clouds.model.data_collectors.DCConfiguration;
 import it.polimi.tower4clouds.model.data_collectors.DCDescriptor;
@@ -75,16 +78,16 @@ public class MonitoringManager {
 
 	private QueryFactory queryFactory;
 
-	private Map<String, String> streamsByMetric;
-	private Map<String, DCConfiguration> dCConfigByMetric;
-	private Map<String, MonitoringRule> rulesByRuleId;
-	private Map<String, String> queryIdByRuleId;
-	private Map<String, Query> queryByQueryId;
-	private Map<String, String> ruleIdByObservableMetric;
-	private Map<String, Set<String>> inputMetricsByRuleId;
+	private Map<String, String> streamsByMetric = new HashMap<String, String>();
+	private Map<String, DCConfiguration> dCConfigByMetric = new HashMap<String, DCConfiguration>();
+	private Map<String, MonitoringRule> rulesByRuleId = new HashMap<String, MonitoringRule>();
+	private Map<String, String> queryIdByRuleId = new HashMap<String, String>();
+	private Map<String, Query> queryByQueryId = new HashMap<String, Query>();
+	private Map<String, String> ruleIdByObservableMetric = new HashMap<String, String>();
+	private Map<String, Set<String>> inputMetricsByRuleId = new HashMap<String, Set<String>>();
 
-	private Map<String, Set<String>> observersIdsByMetric;
-	private Map<String, Observer> observersById;
+	private Map<String, Set<String>> observersIdsByMetric = new HashMap<String, Set<String>>();
+	private Map<String, Observer> observersById = new HashMap<String, Observer>();
 
 	private final int keepAliveCheckPeriod = 60;
 
@@ -125,18 +128,6 @@ public class MonitoringManager {
 		logger.info("Resetting DA");
 		resetDA();
 
-		rulesByRuleId = new HashMap<String, MonitoringRule>();
-
-		queryIdByRuleId = new HashMap<String, String>();
-		queryByQueryId = new HashMap<String, Query>();
-		streamsByMetric = new HashMap<String, String>();
-		dCConfigByMetric = new HashMap<String, DCConfiguration>();
-		ruleIdByObservableMetric = new HashMap<String, String>();
-		inputMetricsByRuleId = new HashMap<String, Set<String>>();
-
-		observersIdsByMetric = new HashMap<String, Set<String>>();
-		observersById = new HashMap<String, Observer>();
-
 		registeredDCs = new ConcurrentHashMap<String, DCDescriptor>();
 		dcsKeepAlive = new ConcurrentHashMap<String, Integer>();
 		dcsKATimestamp = new ConcurrentHashMap<String, Long>();
@@ -159,6 +150,16 @@ public class MonitoringManager {
 					config.getRdfHistoryDbPort());
 			rdfHistoryDB.setAsync(true);
 		}
+		initSelfMonitoring();
+	}
+
+	private void initSelfMonitoring() {
+		Map<Property, String> applicationProperties = new HashMap<Property, String>();
+		applicationProperties.put(Property.ID, "Manager");
+		applicationProperties.put(Property.TYPE, "Tower4Clouds");
+		Registry.initialize("localhost", config.getMmPort(),
+				applicationProperties, getClass().getPackage().getName());
+		Registry.startMonitoring();
 	}
 
 	public synchronized void resetDA() {
@@ -578,12 +579,12 @@ public class MonitoringManager {
 		}
 		try {
 			String ruleId = ruleIdByObservableMetric.get(metric);
-			String queryId = queryIdByRuleId
-					.get(ruleId);
+			String queryId = queryIdByRuleId.get(ruleId);
 			String queryUri = prepareQueryURI(queryId);
 			dataAnalyzer.deleteObserver(queryUri + "/observers/" + observerId);
 			Observer observer = observersById.get(observerId);
-			Set<String> observerdQueriesUris = observer.getObserverdQueriesUris();
+			Set<String> observerdQueriesUris = observer
+					.getObserverdQueriesUris();
 			observerdQueriesUris.remove(queryUri);
 			if (observerdQueriesUris.isEmpty())
 				observersById.remove(observerId);
@@ -728,6 +729,7 @@ public class MonitoringManager {
 		}
 	}
 
+	@Monitor(type = "registerDataCollector")
 	public void registerDataCollector(String dcId, DCDescriptor dCDescriptor)
 			throws SerializationException, IOException {
 		Set<Resource> resources;
@@ -811,7 +813,8 @@ public class MonitoringManager {
 	// dcLock.unlock();
 	// }
 	// }
-
+	
+	@Monitor(type = "keepAlive")
 	public void keepAlive(String dcId) throws NotFoundException,
 			SerializationException, IOException {
 		synchronized (dcAndResourcesLock) {
@@ -867,6 +870,7 @@ public class MonitoringManager {
 		return dc;
 	}
 
+	@Monitor(type = "getDCConfigurationByMetric")
 	public Map<String, DCConfiguration> getDCConfigurationByMetric(String dcId)
 			throws NotFoundException, SerializationException, IOException {
 		Map<String, DCConfiguration> configs = new HashMap<String, DCConfiguration>();
@@ -1064,7 +1068,8 @@ public class MonitoringManager {
 			}
 		}
 	}
-
+	
+	@Monitor(type = "executeAction")
 	public void executeAction(String ruleId, String resourceId, String value,
 			String timestamp) {
 		logger.debug(

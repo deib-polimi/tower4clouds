@@ -114,12 +114,8 @@ public class SingleDataCollectorServer extends ServerResource {
 			DCDescriptor dcDescriptor = DCDescriptor.fromJson(payload);
 
 			manager.registerDataCollector(id, dcDescriptor);
-			JsonObject responseJson = new JsonObject();
-			responseJson.put("id", id);
 
-			this.getResponse().setStatus(Status.SUCCESS_OK);
-			this.getResponse().setEntity(responseJson.toString(),
-					MediaType.APPLICATION_JSON);
+			this.getResponse().setStatus(Status.SUCCESS_CREATED);
 		} catch (JsonSyntaxException e) {
 			logger.error("Error while registering data collector: {}",
 					e.getMessage());

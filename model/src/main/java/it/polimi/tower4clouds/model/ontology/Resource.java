@@ -37,11 +37,12 @@ public class Resource {
 	private String type;
 	private String id;
 
-	public Resource(String id) {
+	public Resource(String type, String id) {
 		this();
-		this.id = id;
+		setType(type);
+		setId(id);
 	}
-
+	
 	public Resource() {
 		this.clazz = getClass().getSimpleName();
 	}
@@ -136,7 +137,7 @@ public class Resource {
 	public String toJson() {
 		return gson.toJson(this);
 	}
-	
+
 	public String toJson(Set<Resource> resources) {
 		return gson.toJson(resources);
 	}

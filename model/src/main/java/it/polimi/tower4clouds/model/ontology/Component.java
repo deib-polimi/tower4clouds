@@ -15,22 +15,19 @@
  */
 package it.polimi.tower4clouds.model.ontology;
 
-
-public class Component extends Resource{
-
-	public Component(String id) {
-		super(id);
-	}
-
+public class Component extends Resource {
+	
 	public Component() {
-		super();
 	}
 
+	public Component(String type, String id) {
+		super(type,id);
+	}
+	
 	@Override
 	public String toString() {
-		return "Component [getType()=" + getType() + ", getId()=" + getId()
-				+ "]";
+		return "Component [clazz=" + getClazz() + ", type=" + getType()
+				+ ", id=" + getId() + "]";
 	}
 
-	
 }

@@ -17,17 +17,17 @@ package it.polimi.tower4clouds.model.ontology;
 
 public class Method extends Resource {
 
+	public Method(String type, String id) {
+		super(type, id);
+	}
+
 	public Method() {
 	}
-
-	public Method(String applicationId, String methodType) {
-		setId(applicationId + "-" + methodType);
-		setType(methodType);
-	}
-
+	
 	@Override
 	public String toString() {
-		return "Method [getType()=" + getType() + ", getId()=" + getId() + "]";
+		return "Method [clazz=" + getClazz() + ", type=" + getType() + ", id="
+				+ getId() + "]";
 	}
 
 }

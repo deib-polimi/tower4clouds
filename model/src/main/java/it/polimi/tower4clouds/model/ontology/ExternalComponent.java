@@ -15,15 +15,33 @@
  */
 package it.polimi.tower4clouds.model.ontology;
 
-
 public class ExternalComponent extends Component {
 
+	public ExternalComponent(String type, String id) {
+		super(type,id);
+	}
+	
+	public ExternalComponent() {
+	}
+	
+	
 	@Override
 	public String toString() {
-		return "ExternalComponent [cloudProvider=" + cloudProvider + "]";
+		return "ExternalComponent [cloudProvider=" + cloudProvider
+				+ ", location=" + location + ", clazz=" + getClazz()
+				+ ", type=" + getType() + ", id=" + getId() + "]";
 	}
 
 	private String cloudProvider;
+	private String location;
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
 
 	public String getCloudProvider() {
 		return cloudProvider;
@@ -39,6 +57,8 @@ public class ExternalComponent extends Component {
 		int result = super.hashCode();
 		result = prime * result
 				+ ((cloudProvider == null) ? 0 : cloudProvider.hashCode());
+		result = prime * result
+				+ ((location == null) ? 0 : location.hashCode());
 		return result;
 	}
 
@@ -56,10 +76,12 @@ public class ExternalComponent extends Component {
 				return false;
 		} else if (!cloudProvider.equals(other.cloudProvider))
 			return false;
+		if (location == null) {
+			if (other.location != null)
+				return false;
+		} else if (!location.equals(other.location))
+			return false;
 		return true;
 	}
 
-
-	
-	
 }

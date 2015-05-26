@@ -19,17 +19,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class InternalComponent extends Component {
-	
+
+	public InternalComponent(String type, String id) {
+		super(type, id);
+	}
+
+	public InternalComponent() {
+	}
+
+	// TODO required components is ambiguous,
 	private Set<String> requiredComponents = new HashSet<String>();
 	private Set<String> providedMethods = new HashSet<String>();
-	
-	public InternalComponent() {
-		super();
-	}
-	
-	public InternalComponent(String id) {
-		super(id);
-	}
 
 	public void addRequiredComponent(String component) {
 		requiredComponents.add(component);
@@ -93,11 +93,8 @@ public class InternalComponent extends Component {
 	@Override
 	public String toString() {
 		return "InternalComponent [requiredComponents=" + requiredComponents
-				+ ", providedMethods=" + providedMethods + ", getType()="
-				+ getType() + ", getId()=" + getId() + "]";
+				+ ", providedMethods=" + providedMethods + ", clazz="
+				+ getClazz() + ", type=" + getType() + ", id=" + getId() + "]";
 	}
-	
-	
 
-	
 }

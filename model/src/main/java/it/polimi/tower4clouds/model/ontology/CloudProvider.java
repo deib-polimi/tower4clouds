@@ -16,10 +16,17 @@
 package it.polimi.tower4clouds.model.ontology;
 
 public class CloudProvider extends Resource {
+	
+	public CloudProvider() {
+	}
+	
+	public CloudProvider(String type, String id) {
+		super(type,id);
+	}
 
 	@Override
 	public String toString() {
-		return "CloudProvider [getType()=" + getType() + ", getId()=" + getId()
+		return "CloudProvider [clazz=" + getClazz() + ", type=" + getType() + ", id=" + getId()
 				+ "]";
 	}
 

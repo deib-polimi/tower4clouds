@@ -15,50 +15,19 @@
  */
 package it.polimi.tower4clouds.model.ontology;
 
-
 public class Location extends Resource {
-	
-	private String location;
 
-	public String getLocation() {
-		return location;
+	public Location(String type, String id) {
+		super(type, id);
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result
-				+ ((location == null) ? 0 : location.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Location other = (Location) obj;
-		if (location == null) {
-			if (other.location != null)
-				return false;
-		} else if (!location.equals(other.location))
-			return false;
-		return true;
+	public Location() {
 	}
 
 	@Override
 	public String toString() {
-		return "Location [location=" + location + ", getType()=" + getType()
-				+ ", getId()=" + getId() + "]";
+		return "Location [clazz=" + getClazz() + ", type=" + getType()
+				+ ", id=" + getId() + "]";
 	}
-	
-	
+
 }
