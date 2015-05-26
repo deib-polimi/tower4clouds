@@ -16,6 +16,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Traffic Generator for testing and showcasing purposes in MockApplication module
 - Data2Stdout, a simple observer application that prints data to standard output
 - Useful scripts in folder scripts for starting and stopping the entire platform and one for destroying vms
+- java app dc implemented
 
 ### Changed
 - Data collector configuration is now deleted from the ServerFacade local memory when the server is down
