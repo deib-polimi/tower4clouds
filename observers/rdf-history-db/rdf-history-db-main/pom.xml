@@ -111,6 +111,7 @@
 				</executions>
 				<configuration>
 					<distribution>tower4clouds</distribution>
+					<name>${dist.file.name}</name>
 					<group>System Environment/Daemons</group>
 					<prefix>/usr/local</prefix>
 					<mappings>
