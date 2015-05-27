@@ -1,6 +1,7 @@
 #!/bin/sh
 
-export HDB_HOME="/usr/local/lib/tower4clouds-rdf-history-db"
+export HDB_HOME="/opt/tower4clouds-rdf-history-db"
+export JAVA_HOME="/opt/mosaic-rt-jre-7"
 
 if [ ! -e "$HDB_HOME" ]
 then
@@ -28,4 +29,4 @@ fi
 
 JVM_ARGS=${JVM_ARGS:--Xmx1200M}
 
-exec java  $JVM_ARGS -jar "$JAR" "$@"
+exec $JAVA_HOME/bin/java  $JVM_ARGS -jar "$JAR" "$@"
