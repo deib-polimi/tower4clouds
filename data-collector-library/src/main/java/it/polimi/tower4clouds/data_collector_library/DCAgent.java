@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
@@ -50,7 +51,7 @@ public class DCAgent extends Observable {
 
 	private DCDescriptor dCDescriptor;
 	private String dataCollectorId;
-	private Map<String, DCConfiguration> dCConfigs;
+	private Map<String, DCConfiguration> dCConfigsByMetric;
 	private boolean registered = false;
 
 	private final int connectionRetryPeriod = 5;
@@ -82,7 +83,7 @@ public class DCAgent extends Observable {
 
 	public DCAgent(ManagerAPI manager) {
 		this.manager = manager;
-		dCConfigs = new HashMap<String, DCConfiguration>();
+		dCConfigsByMetric = new HashMap<String, DCConfiguration>();
 		manager.setDefaultTimeout(timeout);
 	}
 	
@@ -160,16 +161,16 @@ public class DCAgent extends Observable {
 			public void run() {
 				try {
 					Map<String, DCConfiguration> newConfig = getRemoteDCConfiguration();
-					if (!newConfig.equals(dCConfigs)) {
-						dCConfigs = newConfig;
+					if (!newConfig.equals(dCConfigsByMetric)) {
+						dCConfigsByMetric = newConfig;
 						logger.debug("Downloaded new dc configuration: {}",
-								dCConfigs);
+								dCConfigsByMetric);
 						setChanged();
 						notifyObservers();
 					} else {
 						logger.debug(
 								"Downloaded dc configuration, nothing changed from previous config",
-								dCConfigs);
+								dCConfigsByMetric);
 					}
 				} catch (UnexpectedAnswerFromServerException e) {
 					logger.warn("DC does not seem to be registered anymore, re-registering DC");
@@ -178,7 +179,7 @@ public class DCAgent extends Observable {
 					logger.error(
 							"Could not download new DC configuration, the server may be down, cancelling any local dc configuration: {}",
 							e.getMessage());
-					dCConfigs = new HashMap<String, DCConfiguration>();
+					dCConfigsByMetric = new HashMap<String, DCConfiguration>();
 					setChanged();
 					notifyObservers();
 				}
@@ -227,27 +228,27 @@ public class DCAgent extends Observable {
 	}
 
 	public boolean shouldMonitor(Resource resource, String metric) {
-		if (!dCConfigs.containsKey(metric))
+		if (!dCConfigsByMetric.containsKey(metric))
 			return false;
-		if (dCConfigs.get(metric).getMonitoredResourcesIds()
+		if (dCConfigsByMetric.get(metric).getMonitoredResourcesIds()
 				.contains(resource.getId()))
 			return true;
-		if (dCConfigs.get(metric).getMonitoredResourcesIds().isEmpty()
-				&& dCConfigs.get(metric).getMonitoredResourcesTypes()
+		if (dCConfigsByMetric.get(metric).getMonitoredResourcesIds().isEmpty()
+				&& dCConfigsByMetric.get(metric).getMonitoredResourcesTypes()
 						.contains(resource.getType()))
 			return true;
-		if (dCConfigs.get(metric).getMonitoredResourcesTypes().isEmpty()
-				&& dCConfigs.get(metric).getMonitoredResourcesClasses()
+		if (dCConfigsByMetric.get(metric).getMonitoredResourcesTypes().isEmpty()
+				&& dCConfigsByMetric.get(metric).getMonitoredResourcesClasses()
 						.contains(resource.getClazz()))
 			return true;
 		return false;
 	}
 
 	public Map<String, String> getParameters(String metric) {
-		if (dCConfigs == null) {
+		if (dCConfigsByMetric == null) {
 			return null;
 		}
-		DCConfiguration dcconfig = dCConfigs.get(metric);
+		DCConfiguration dcconfig = dCConfigsByMetric.get(metric);
 		if (dcconfig == null) {
 			return null;
 		}
@@ -329,7 +330,7 @@ public class DCAgent extends Observable {
 		@Override
 		public void run() {
 
-			DCConfiguration dcConfiguration = dCConfigs.get(metric);
+			DCConfiguration dcConfiguration = dCConfigsByMetric.get(metric);
 			if (dcConfiguration == null) {
 				logger.info(
 						"Monitoring for metric {} no longer required, buffered data will be dropped",
@@ -394,5 +395,9 @@ public class DCAgent extends Observable {
 		stopSyncing();
 		stopKeepAlive();
 		started = false;
+	}
+
+	public Set<String> getRequiredMetrics() {
+		return dCConfigsByMetric.keySet();
 	}
 }
