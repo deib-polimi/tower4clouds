@@ -32,7 +32,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<github.global.server>github</github.global.server>
-		<license.header>APACHE-2-header.txt</license.header>
 		<slf4j.version>1.7.12</slf4j.version>
 	</properties>
 
@@ -406,7 +405,7 @@
 				<inherited>false</inherited>
 				<configuration>
 					<aggregate>true</aggregate>
-					<header>${license.header}</header>
+					<header>NOTICE</header>
 					<properties>
 						<owner>Politecnico di Milano</owner>
 						<email>marco.miglierina@polimi.it</email>
@@ -428,8 +427,10 @@
 				</configuration>
 				<executions>
 					<execution>
+						<id>check-headers</id>
+						<phase>initialize</phase>
 						<goals>
-							<goal>check</goal>
+							<goal>format</goal>
 						</goals>
 					</execution>
 				</executions>
