@@ -32,8 +32,7 @@ public class EffectiveResponseTime extends Metric {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(EffectiveResponseTime.class);
-
-	private double samplingProbability = 1;
+	private static final double DEFAULT_SAMPLING_PROBABILITY = 1;
 
 	@Override
 	protected void started(Method method) {
@@ -61,8 +60,21 @@ public class EffectiveResponseTime extends Metric {
 		logger.debug("Effective Response Time for method {}: {}",
 				method.getId(), effectiveResponseTime);
 
-		if (shouldMonitor(method) && samplingProbability > Math.random()) {
-			send(String.valueOf(effectiveResponseTime), method);
+		if (shouldMonitor(method) && getSamplingProbability() > Math.random()) {
+			send(effectiveResponseTime, method);
+		}
+	}
+	
+	private double getSamplingProbability() {
+		if (getParameters() == null
+				|| getParameters().get("samplingProbability") == null)
+			return DEFAULT_SAMPLING_PROBABILITY;
+		try {
+			return Double.parseDouble(getParameters()
+					.get("samplingProbability"));
+		} catch (Exception e) {
+			logger.error("Error while reading the sampling probability", e);
+			return DEFAULT_SAMPLING_PROBABILITY;
 		}
 	}
 
@@ -111,14 +123,7 @@ public class EffectiveResponseTime extends Metric {
 
 	@Override
 	protected void configurationUpdated() {
-		String value = getParameters().get("samplingProbability");
-		if (value != null) {
-			try {
-				samplingProbability = Double.parseDouble(value);
-			} catch (Exception e) {
-				logger.error("Error while reading the sampling probability", e);
-			}
-		}
+		// Nothing to do
 	}
 
 }

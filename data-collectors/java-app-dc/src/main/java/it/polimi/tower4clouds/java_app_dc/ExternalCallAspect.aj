@@ -30,7 +30,7 @@ public aspect ExternalCallAspect {
 	}
 
 	after(ExternalCall methodType): monitoredMethod(methodType){
-		Registry.notifyExternalCallStart();
+		Registry.notifyExternalCallEnd();
 	}
 
 }

@@ -15,19 +15,37 @@
  */
 package it.polimi.tower4clouds.model.data_collectors;
 
+import it.polimi.tower4clouds.model.ontology.Resource;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class DCConfiguration {
+	
+	private static final int CLASS = 0;
+	private static final int TYPE = 1;
+	private static final int ID = 2;
 
-	private Map<String, String> parameters = new HashMap<String, String>();
-	private Set<String> monitoredResourcesClasses = new HashSet<String>();
-	private Set<String> monitoredResourcesTypes = new HashSet<String>();
-	private Set<String> monitoredResourcesIds = new HashSet<String>();
+	private Map<String, String> parameters;
+	private Set<String[]> targetResources;
 	private String daUrl;
 	private String dataFormat;
+	
+	public void addTargetResource(String clazz, String type, String id) {
+		getTargetResources().add(new String[]{clazz, type, id});
+	}
+	
+	public Set<String[]> getTargetResources() {
+		if (targetResources == null) {
+			targetResources = new HashSet<String[]>();
+		}
+		return targetResources;
+	}
+	
+
+	
 
 	public Map<String, String> getParameters() {
 		if (parameters == null)
@@ -43,37 +61,21 @@ public class DCConfiguration {
 		getParameters().put(key, value);
 	}
 
-	public Set<String> getMonitoredResourcesIds() {
-		if (monitoredResourcesIds == null)
-			monitoredResourcesIds = new HashSet<String>();
-		return monitoredResourcesIds;
+	public String getDaUrl() {
+		return daUrl;
 	}
 
-	public void setMonitoredResourcesIds(Set<String> monitoredResourcesIds) {
-		this.monitoredResourcesIds = monitoredResourcesIds;
+	public void setDaUrl(String daUrl) {
+		this.daUrl = daUrl;
 	}
 
-	public void addMonitoredResourceId(String monitoredResourceId) {
-		getMonitoredResourcesIds().add(monitoredResourceId);
+	public void setDataFormat(String dataFormat) {
+		this.dataFormat = dataFormat;
 	}
 
-	public void addMonitoredResourceType(String monitoredResourceType) {
-		getMonitoredResourcesTypes().add(monitoredResourceType);
+	public String getDataFormat() {
+		return dataFormat;
 	}
-
-	public void addMonitoredResourceClass(String monitoredResourceClass) {
-		getMonitoredResourcesClasses().add(monitoredResourceClass);
-	}
-
-	@Override
-	public String toString() {
-		return "DCConfig [parameters=" + parameters
-				+ ", monitoredResourcesClasses=" + monitoredResourcesClasses
-				+ ", monitoredResourcesTypes=" + monitoredResourcesTypes
-				+ ", monitoredResourcesIds=" + monitoredResourcesIds + "]";
-	}
-	
-	
 
 	@Override
 	public int hashCode() {
@@ -84,16 +86,8 @@ public class DCConfiguration {
 				+ ((dataFormat == null) ? 0 : dataFormat.hashCode());
 		result = prime
 				* result
-				+ ((monitoredResourcesClasses == null) ? 0
-						: monitoredResourcesClasses.hashCode());
-		result = prime
-				* result
-				+ ((monitoredResourcesIds == null) ? 0 : monitoredResourcesIds
+				+ ((targetResources == null) ? 0 : targetResources
 						.hashCode());
-		result = prime
-				* result
-				+ ((monitoredResourcesTypes == null) ? 0
-						: monitoredResourcesTypes.hashCode());
 		result = prime * result
 				+ ((parameters == null) ? 0 : parameters.hashCode());
 		return result;
@@ -118,22 +112,10 @@ public class DCConfiguration {
 				return false;
 		} else if (!dataFormat.equals(other.dataFormat))
 			return false;
-		if (monitoredResourcesClasses == null) {
-			if (other.monitoredResourcesClasses != null)
+		if (targetResources == null) {
+			if (other.targetResources != null)
 				return false;
-		} else if (!monitoredResourcesClasses
-				.equals(other.monitoredResourcesClasses))
-			return false;
-		if (monitoredResourcesIds == null) {
-			if (other.monitoredResourcesIds != null)
-				return false;
-		} else if (!monitoredResourcesIds.equals(other.monitoredResourcesIds))
-			return false;
-		if (monitoredResourcesTypes == null) {
-			if (other.monitoredResourcesTypes != null)
-				return false;
-		} else if (!monitoredResourcesTypes
-				.equals(other.monitoredResourcesTypes))
+		} else if (!targetResources.equals(other.targetResources))
 			return false;
 		if (parameters == null) {
 			if (other.parameters != null)
@@ -143,40 +125,89 @@ public class DCConfiguration {
 		return true;
 	}
 
-	public Set<String> getMonitoredResourcesClasses() {
-		if (monitoredResourcesClasses == null)
-			monitoredResourcesClasses = new HashSet<String>();
-		return monitoredResourcesClasses;
+	@Override
+	public String toString() {
+		return "DCConfiguration [parameters=" + parameters
+				+ ", targetResources=" + targetResources + ", daUrl="
+				+ daUrl + ", dataFormat=" + dataFormat + "]";
 	}
-
-	public void setMonitoredResourcesClasses(
-			Set<String> monitoredResourcesClasses) {
-		this.monitoredResourcesClasses = monitoredResourcesClasses;
+	
+	public boolean isAboutResource(Resource resource) {
+		try {
+			for (String[] targetResource : getTargetResources()) {
+				if (targetResource[CLASS] != null) {
+					if (!resource.getClass().isAssignableFrom(
+							Class.forName(Resource.class.getPackage()
+									.getName()
+									+ "."
+									+ targetResource[CLASS])))
+						continue;
+				}
+				if (targetResource[TYPE] != null) {
+					if (resource.getType() != null) {
+						if (!resource.getType().equals(targetResource[TYPE]))
+							continue;
+					}
+				}
+				if (resource.getId() != null) {
+					if (targetResource[ID] != null) {
+						if (resource.getId().equals(targetResource[ID]))
+							return true;
+					} else if (targetResource[TYPE] != null) {
+						if (resource.getType() != null) {
+							if (resource.getType().equals(targetResource[TYPE]))
+								return true;
+						} else {
+							if (targetResource[CLASS] != null) {
+								if (resource.getClass().isAssignableFrom(
+										Class.forName(Resource.class
+												.getPackage().getName()
+												+ "."
+												+ targetResource[CLASS])))
+									return true;
+							}
+						}
+					} else {
+						if (targetResource[CLASS] != null) {
+							if (resource.getClass().isAssignableFrom(
+									Class.forName(Resource.class
+											.getPackage().getName()
+											+ "."
+											+ targetResource[CLASS])))
+								return true;
+						}
+					}
+				} else if (resource.getType() != null) {
+					if (targetResource[TYPE] != null) {
+						if (resource.getType() != null) {
+							if (resource.getType().equals(targetResource[TYPE]))
+								return true;
+						} else {
+							if (targetResource[CLASS] != null) {
+								if (resource.getClass().isAssignableFrom(
+										Class.forName(Resource.class
+												.getPackage().getName()
+												+ "."
+												+ targetResource[CLASS])))
+									return true;
+							}
+						}
+					}
+				} else {
+					if (targetResource[CLASS] != null) {
+						if (resource.getClass().isAssignableFrom(
+								Class.forName(Resource.class.getPackage()
+										.getName()
+										+ "."
+										+ targetResource[CLASS])))
+							return true;
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return false;
 	}
-
-	public Set<String> getMonitoredResourcesTypes() {
-		if (monitoredResourcesTypes == null)
-			monitoredResourcesTypes = new HashSet<String>();
-		return monitoredResourcesTypes;
-	}
-
-	public void setMonitoredResourcesTypes(Set<String> monitoredResourcesTypes) {
-		this.monitoredResourcesTypes = monitoredResourcesTypes;
-	}
-
-	public String getDaUrl() {
-		return daUrl;
-	}
-
-	public void setDaUrl(String daUrl) {
-		this.daUrl = daUrl;
-	}
-
-	public void setDataFormat(String dataFormat) {
-		this.dataFormat = dataFormat;
-	}
-
-	public String getDataFormat() {
-		return dataFormat;
-	}
+	
 }

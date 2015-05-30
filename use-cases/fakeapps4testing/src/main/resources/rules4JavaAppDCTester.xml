@@ -1,0 +1,53 @@
+<monitoringRules xmlns="http://www.modaclouds.eu/xsd/1.0/monitoring_rules_schema">
+	<monitoringRule id="ResponseTimeRule"
+        startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Method" type="Login"/>
+        </monitoredTargets>
+        <collectedMetric metricName="ResponseTime">
+            <parameter name="samplingProbability">1</parameter>
+        </collectedMetric>
+        <metricAggregation aggregateFunction="Average" groupingClass="Method"/>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="resourceId">ID</parameter>
+                <parameter name="metric">AverageResponseTime</parameter>
+                <parameter name="value">METRIC</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+    <monitoringRule id="EffectiveResponseTimeRule"
+        startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Method"/>
+        </monitoredTargets>
+        <collectedMetric metricName="EffectiveResponseTime">
+            <parameter name="samplingProbability">0.5</parameter>
+        </collectedMetric>
+        <metricAggregation aggregateFunction="Average" groupingClass="VM"/>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="resourceId">ID</parameter>
+                <parameter name="metric">AverageEffectiveResponseTime</parameter>
+                <parameter name="value">METRIC</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+    <monitoringRule id="ThroughputRule"
+        startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="InternalComponent" type="App" id="App1"/>
+        </monitoredTargets>
+        <collectedMetric metricName="Throughput">
+            <parameter name="samplingTime">20</parameter>
+        </collectedMetric>
+        <metricAggregation aggregateFunction="Average" groupingClass="CloudProvider"/>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="resourceId">ID</parameter>
+                <parameter name="metric">AverageThroughput</parameter>
+                <parameter name="value">METRIC</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+</monitoringRules>

@@ -43,11 +43,11 @@ public class DCConfigurationServer extends ServerResource {
 			MonitoringManager manager = (MonitoringManager) getContext()
 					.getAttributes().get("manager");
 
-			Map<String, DCConfiguration> dcconfigs = manager
+			Map<String, DCConfiguration> dcconfig = manager
 					.getDCConfigurationByMetric(id);
 			this.getResponse().setStatus(Status.SUCCESS_OK,
 					"DC configuration successfully retrieved");
-			this.getResponse().setEntity(gson.toJson(dcconfigs),
+			this.getResponse().setEntity(gson.toJson(dcconfig),
 					MediaType.APPLICATION_JSON);
 		} catch (NotFoundException e) {
 			logger.error("DC {} is not register", id);

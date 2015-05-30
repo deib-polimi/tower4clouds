@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.polimi.modaclouds.monitoring.monitoring_manager.configuration;
+package it.polimi.tower4clouds.manager;
 
 import static org.junit.Assert.assertEquals;
 import it.polimi.tower4clouds.manager.ConfigurationException;

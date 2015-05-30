@@ -26,6 +26,7 @@ import it.polimi.tower4clouds.model.ontology.Resource;
 import it.polimi.tower4clouds.rules.MonitoringRules;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -174,9 +175,13 @@ public class ManagerAPI {
 		String json = client.execute(RestMethod.GET, managerUrl
 				+ DATA_COLLECTORS_PATH + "/" + dataCollectorId
 				+ "/configuration", null, 200, timeout);
-		return new Gson().fromJson(json,
-				new TypeToken<Map<String, DCConfiguration>>() {
-				}.getType());
+		try {
+			return new Gson().fromJson(json,
+					new TypeToken<Map<String, DCConfiguration>>() {
+					}.getType());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new HashMap<String, DCConfiguration>();
+		}
 	}
-
 }

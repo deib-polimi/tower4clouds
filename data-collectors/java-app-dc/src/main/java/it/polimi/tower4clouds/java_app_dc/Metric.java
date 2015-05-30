@@ -16,7 +16,9 @@
 package it.polimi.tower4clouds.java_app_dc;
 
 import it.polimi.tower4clouds.data_collector_library.DCAgent;
+import it.polimi.tower4clouds.model.ontology.InternalComponent;
 import it.polimi.tower4clouds.model.ontology.Method;
+import it.polimi.tower4clouds.model.ontology.Resource;
 
 import java.util.Map;
 import java.util.Observable;
@@ -48,9 +50,9 @@ public abstract class Metric implements Observer {
 		return getClass().getSimpleName();
 	}
 
-	protected void send(String value, Method method) {
+	protected void send(Number value, Resource resource) {
 		if (dcAgent != null) {
-			dcAgent.send(method, getName(), value);
+			dcAgent.send(resource, getName(), value);
 		} else {
 			logger.warn("Monitoring is not required, data won't be sent");
 		}
@@ -58,26 +60,34 @@ public abstract class Metric implements Observer {
 
 	protected abstract void configurationUpdated();
 
-	protected boolean shouldMonitor(Method method) {
-		if (dcAgent == null)
+	protected boolean shouldMonitor(Resource resource) {
+		if (dcAgent == null) {
+			logger.error("{}: DCAgent was null", this.toString());
 			return false;
-		return dcAgent.shouldMonitor(method, getName());
+		}
+		return dcAgent.shouldMonitor(resource, getName());
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
+		logger.debug("Sync update called");
 		this.dcAgent = (DCAgent) o;
+		logger.debug("{}: DCAgent set: {}", this.toString(), dcAgent != null);
 		configurationUpdated();
 	}
 
 	protected Map<String, String> getParameters() {
-		if (dcAgent != null)
-			return dcAgent.getParameters(getName());
+		if (this.dcAgent != null)
+			return this.dcAgent.getParameters(getName());
 		return null;
 	}
-	
+
 	protected Set<Method> getMonitoredMethods() {
 		return Registry._INSTANCE.getMethods();
+	}
+
+	protected InternalComponent getMonitoredApplication() {
+		return Registry._INSTANCE.getApplication();
 	}
 
 }

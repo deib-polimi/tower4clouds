@@ -59,9 +59,10 @@ public class Registry implements Observer {
 
 	protected static final Registry _INSTANCE = new Registry();
 
-	private static final int CONFIG_SYNC_PERIOD = 30;
-	private static final int KEEP_ALIVE = 60;
-	
+	public static Integer CONFIG_SYNC_PERIOD = null;
+	public static Integer KEEP_ALIVE = null;
+	private static final int DEFAULT_CONFIG_SYNC_PERIOD = 30;
+
 	protected Registry() {
 	}
 
@@ -127,12 +128,16 @@ public class Registry implements Observer {
 		this.application = buildInternalComponent(methodsById,
 				applicationProperties);
 		Set<Resource> relatedResources = buildRelatedResources(applicationProperties);
+		relatedResources.add(application);
+		relatedResources.addAll(getMethods());
 		this.metrics = parseMetrics();
 		if (dcAgent != null)
 			dcAgent.stop();
 		dcAgent = new DCAgent(new ManagerAPI(managerIP, managerPort));
 		dcAgent.addObserver(this);
 		for (Metric metric : metrics) {
+			logger.debug("Added metric {} as observer of dcagent",
+					metric.getName());
 			dcAgent.addObserver(metric);
 		}
 		dcAgent.setDCDescriptor(buildDCDescriptor(methodsById, application,
@@ -199,8 +204,12 @@ public class Registry implements Observer {
 				new HashSet<Resource>(methods.values()));
 		dcDescriptor.addMonitoredResource(getApplicationMetrics(metrics),
 				application);
-		dcDescriptor.setConfigSyncPeriod(CONFIG_SYNC_PERIOD);
-		dcDescriptor.setKeepAlive(KEEP_ALIVE);
+		dcDescriptor.addResources(relatedResources);
+		dcDescriptor
+				.setConfigSyncPeriod(CONFIG_SYNC_PERIOD != null ? CONFIG_SYNC_PERIOD
+						: DEFAULT_CONFIG_SYNC_PERIOD);
+		dcDescriptor.setKeepAlive(KEEP_ALIVE != null ? KEEP_ALIVE
+				: (DEFAULT_CONFIG_SYNC_PERIOD + 15));
 		return dcDescriptor;
 	}
 
@@ -268,7 +277,8 @@ public class Registry implements Observer {
 		InternalComponent internalComponent = new InternalComponent(
 				internalComponentType, internalComponentId);
 		internalComponent.setProvidedMethods(methods.keySet());
-		internalComponent.addRequiredComponent(requiredComponentId);
+		if (requiredComponentId != null)
+			internalComponent.addRequiredComponent(requiredComponentId);
 		return internalComponent;
 	}
 
@@ -346,5 +356,9 @@ public class Registry implements Observer {
 
 	Set<Method> getMethods() {
 		return new HashSet<Method>(methodsById.values());
+	}
+
+	InternalComponent getApplication() {
+		return application;
 	}
 }

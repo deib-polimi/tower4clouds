@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.polimi.modaclouds.monitoring.monitoring_manager;
+package it.polimi.tower4clouds.manager;
 
 import static org.junit.Assert.fail;
 import it.polimi.modaclouds.qos_models.Problem;

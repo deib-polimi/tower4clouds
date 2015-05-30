@@ -35,7 +35,7 @@ public class DCDescriptor {
 	private static final JsonParser jsonParser = new JsonParser();
 
 	private Map<String, Set<Resource>> monitoredResourcesByMetric;
-	private Set<Resource> relatedResources;
+	private Set<Resource> resources;
 
 	private int keepAlive;
 	private int configSyncPeriod;
@@ -52,22 +52,16 @@ public class DCDescriptor {
 			dcDescriptor.getMonitoredResourcesByMetric().put(entry.getKey(),
 					resources);
 		}
-		JsonElement relatedResourcesJson = jsonDcDescriptor.get("relatedResources");
-		if (relatedResourcesJson != null){
-			JsonArray relatedResources = relatedResourcesJson.getAsJsonArray();
-			dcDescriptor.setRelatedResources(Resource.fromJsonResources(relatedResources.toString()));
+		JsonElement resourcesJson = jsonDcDescriptor.get("resources");
+		if (resourcesJson != null){
+			JsonArray resources = resourcesJson.getAsJsonArray();
+			dcDescriptor.setResources(Resource.fromJsonResources(resources.toString()));
 		}
 		return dcDescriptor;
 	}
 
-	public void setRelatedResources(Set<Resource> relatedResources) {
-		this.relatedResources = relatedResources;
-	}
-
-	public Set<Resource> getRelatedResources() {
-		if (relatedResources == null)
-			relatedResources = new HashSet<Resource>();
-		return relatedResources;
+	public void setResources(Set<Resource> resources) {
+		this.resources = resources;
 	}
 
 	public int getKeepAlive() {
@@ -86,13 +80,8 @@ public class DCDescriptor {
 		this.configSyncPeriod = configSyncPeriod;
 	}
 
-	public Set<Resource> getAllResources() {
-		HashSet<Resource> resources = new HashSet<Resource>();
-		for (Set<? extends Resource> monResources : getMonitoredResourcesByMetric()
-				.values()) {
-			resources.addAll(monResources);
-		}
-		resources.addAll(getRelatedResources());
+	public Set<Resource> getResources() {
+		if (resources == null) resources = new HashSet<Resource>();
 		return resources;
 	}
 
@@ -111,8 +100,8 @@ public class DCDescriptor {
 	@Override
 	public String toString() {
 		return "DCDescriptor [monitoredResourcesByMetric="
-				+ monitoredResourcesByMetric + ", relatedResources="
-				+ relatedResources + ", keepAlive=" + keepAlive
+				+ monitoredResourcesByMetric + ", resources="
+				+ resources + ", keepAlive=" + keepAlive
 				+ ", configSyncPeriod=" + configSyncPeriod + "]";
 	}
 
@@ -136,12 +125,12 @@ public class DCDescriptor {
 		currentResources.add(resource);
 	}
 	
-	public void addRelatedResources(Set<Resource> resources) {
-		getRelatedResources().addAll(resources);
+	public void addResources(Set<Resource> resources) {
+		getResources().addAll(resources);
 	}
 
-	public void addRelatedResource(Resource resource) {
-		getRelatedResources().add(resource);
+	public void addResource(Resource resource) {
+		getResources().add(resource);
 	}
 
 	public String toJson() {

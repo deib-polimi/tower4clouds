@@ -27,8 +27,6 @@ import it.polimi.modaclouds.monitoring.kb.api.SerializationException;
 import it.polimi.modaclouds.qos_models.Problem;
 import it.polimi.tower4clouds.common.net.NetUtil;
 import it.polimi.tower4clouds.java_app_dc.Monitor;
-import it.polimi.tower4clouds.java_app_dc.Property;
-import it.polimi.tower4clouds.java_app_dc.Registry;
 import it.polimi.tower4clouds.manager.api.Observer;
 import it.polimi.tower4clouds.model.data_collectors.DCConfiguration;
 import it.polimi.tower4clouds.model.data_collectors.DCDescriptor;
@@ -150,17 +148,18 @@ public class MonitoringManager {
 					config.getRdfHistoryDbPort());
 			rdfHistoryDB.setAsync(true);
 		}
-		initSelfMonitoring();
+		// initSelfMonitoring();
 	}
 
-	private void initSelfMonitoring() {
-		Map<Property, String> applicationProperties = new HashMap<Property, String>();
-		applicationProperties.put(Property.ID, "Manager");
-		applicationProperties.put(Property.TYPE, "Tower4Clouds");
-		Registry.initialize("localhost", config.getMmPort(),
-				applicationProperties, getClass().getPackage().getName());
-		Registry.startMonitoring();
-	}
+	// private void initSelfMonitoring() {
+	// Map<Property, String> applicationProperties = new HashMap<Property,
+	// String>();
+	// applicationProperties.put(Property.ID, "Manager");
+	// applicationProperties.put(Property.TYPE, "Tower4Clouds");
+	// Registry.initialize("localhost", config.getMmPort(),
+	// applicationProperties, getClass().getPackage().getName());
+	// Registry.startMonitoring();
+	// }
 
 	public synchronized void resetDA() {
 		try {
@@ -323,17 +322,13 @@ public class MonitoringManager {
 		}
 		for (MonitoredTarget target : rule.getMonitoredTargets()
 				.getMonitoredTargets()) {
-			if (target.getId() != null)
-				dc.addMonitoredResourceId(target.getId());
-			if (target.getType() != null)
-				dc.addMonitoredResourceType(target.getType());
-			if (target.getClazz() != null)
-				dc.addMonitoredResourceClass(target.getClazz());
+			dc.addTargetResource(target.getClazz(), target.getType(),
+					target.getId());
 		}
 		try {
 			dc.setDaUrl(config.getDaUrl() + "/streams/"
 					+ URLEncoder.encode(prepareStreamURI(metric), "UTF-8"));
-			dc.setDataFormat("JSON");
+			dc.setDataFormat("TOWER/JSON");
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
@@ -736,7 +731,7 @@ public class MonitoringManager {
 		synchronized (dcAndResourcesLock) {
 			long timestamp = System.currentTimeMillis();
 			logger.debug("Registering DC: {}", dCDescriptor);
-			resources = dCDescriptor.getAllResources();
+			resources = dCDescriptor.getResources();
 			updateExistingRelations(resources);
 			knowledgeBase.addMany(resources, MOVocabulary.idParameterName,
 					ManagerConfig.MODEL_GRAPH_NAME);
@@ -813,7 +808,7 @@ public class MonitoringManager {
 	// dcLock.unlock();
 	// }
 	// }
-	
+
 	@Monitor(type = "keepAlive")
 	public void keepAlive(String dcId) throws NotFoundException,
 			SerializationException, IOException {
@@ -824,7 +819,7 @@ public class MonitoringManager {
 				throw new NotFoundException(dcId);
 			}
 			logger.debug("Keep alive requested by DC {}", dcId);
-			Set<Resource> resources = dCDescriptor.getAllResources();
+			Set<Resource> resources = dCDescriptor.getResources();
 			int keepAlive = dCDescriptor.getKeepAlive();
 			if (keepAlive <= 0) {
 				keepAlive = Integer.MAX_VALUE;
@@ -893,7 +888,7 @@ public class MonitoringManager {
 				conf = dCConfigByMetric.get(metric);
 				if (conf != null) {
 					for (Resource resource : resources) {
-						if (configurationIsAboutResource(conf, resource)) {
+						if (conf.isAboutResource(resource)) {
 							configs.put(metric, conf);
 							break;
 						}
@@ -902,17 +897,6 @@ public class MonitoringManager {
 			}
 		}
 		return configs;
-	}
-
-	private boolean configurationIsAboutResource(DCConfiguration conf,
-			Resource resource) {
-		return conf.getMonitoredResourcesIds().contains(resource.getId())
-				|| (conf.getMonitoredResourcesIds().isEmpty()
-						&& conf.getMonitoredResourcesTypes().contains(
-								resource.getType()) || (conf
-						.getMonitoredResourcesTypes().isEmpty() && conf
-						.getMonitoredResourcesClasses().contains(
-								resource.getClazz())));
 	}
 
 	// public class keepAliveChecker implements Runnable {
@@ -1004,7 +988,7 @@ public class MonitoringManager {
 						registeredDCs.remove(dcId);
 					} else {
 						for (Resource resource : registeredDCs.get(dcId)
-								.getAllResources()) {
+								.getResources()) {
 							if (!registeredResources.containsKey(resource
 									.getId())) {
 								try {
@@ -1068,7 +1052,7 @@ public class MonitoringManager {
 			}
 		}
 	}
-	
+
 	@Monitor(type = "executeAction")
 	public void executeAction(String ruleId, String resourceId, String value,
 			String timestamp) {

@@ -1,0 +1,59 @@
+package it.polimi.tower4clouds.use_cases.fakeapps4testing.javaappdc;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.xml.bind.JAXBException;
+
+import it.polimi.modaclouds.qos_models.util.XMLHelper;
+import it.polimi.tower4clouds.common.net.UnexpectedAnswerFromServerException;
+import it.polimi.tower4clouds.java_app_dc.ExternalCall;
+import it.polimi.tower4clouds.java_app_dc.Monitor;
+import it.polimi.tower4clouds.java_app_dc.Property;
+import it.polimi.tower4clouds.java_app_dc.Registry;
+import it.polimi.tower4clouds.manager.api.ManagerAPI;
+import it.polimi.tower4clouds.rules.MonitoringRules;
+
+public class JavaAppDCTester {
+
+	private static String managerIP = "localhost";
+	private static int managerPort = 8170;
+
+	public static void main(String[] args) throws InterruptedException,
+			UnexpectedAnswerFromServerException, IOException, JAXBException {
+		ManagerAPI manager = new ManagerAPI(managerIP, managerPort);
+		manager.registerRules(XMLHelper.deserialize(JavaAppDCTester.class
+				.getResourceAsStream("/rules4JavaAppDCTester.xml"),
+				MonitoringRules.class));
+		manager.registerHttpObserver("AverageResponseTime", "http://localhost:8000/data", "GRAPHITE");
+		manager.registerHttpObserver("AverageEffectiveResponseTime", "http://localhost:8000/data", "GRAPHITE");
+		manager.registerHttpObserver("AverageThroughput", "http://localhost:8000/data", "GRAPHITE");
+		Map<Property, String> applicationProperties = new HashMap<Property, String>();
+		applicationProperties.put(Property.ID, "App1");
+		applicationProperties.put(Property.TYPE, "App");
+		applicationProperties.put(Property.VM_ID, "Frontend1");
+		applicationProperties.put(Property.VM_TYPE, "Frontend");
+		applicationProperties.put(Property.CLOUD_PROVIDER_ID, "AWS");
+		applicationProperties.put(Property.CLOUD_PROVIDER_TYPE, "IaaS");
+		Registry.initialize(managerIP, managerPort, applicationProperties,
+				JavaAppDCTester.class.getPackage().getName());
+		Registry.CONFIG_SYNC_PERIOD = 1000;
+		Registry.startMonitoring();
+		for (int i = 0; i < 100000; i++) {
+			login();
+		}
+	}
+
+	@Monitor(type = "Login")
+	private static void login() throws InterruptedException {
+		Thread.sleep((long) (Math.random() * 100));
+		retrieveCredentials();
+		Thread.sleep((long) (Math.random() * 1000));
+	}
+
+	@ExternalCall
+	private static void retrieveCredentials() throws InterruptedException {
+		Thread.sleep((long) (Math.random() * 2000));
+	}
+}

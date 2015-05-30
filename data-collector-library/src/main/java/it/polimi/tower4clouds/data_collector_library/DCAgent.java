@@ -71,12 +71,14 @@ public class DCAgent extends Observable {
 	private final ExecutorService registrationExecService = Executors
 			.newFixedThreadPool(1);
 
+	private Object asyncSenderLock = new Object();
+
 	private boolean timerRunning = false;
 
 	private ManagerAPI manager;
 
 	private Future<?> registrationJob;
-	
+
 	private RestClient restClient = new DefaultRestClient();
 
 	private boolean started = false;
@@ -86,11 +88,11 @@ public class DCAgent extends Observable {
 		dCConfigsByMetric = new HashMap<String, DCConfiguration>();
 		manager.setDefaultTimeout(timeout);
 	}
-	
-	public boolean isStarted() {
+
+	public synchronized boolean isStarted() {
 		return started;
 	}
-	
+
 	public void setDefaultRestClient(RestClient restClient) {
 		this.restClient = restClient;
 	}
@@ -111,7 +113,8 @@ public class DCAgent extends Observable {
 				if (dataCollectorId != null) {
 					manager.registerDataCollector(dataCollectorId, dCDescriptor);
 				} else {
-					dataCollectorId = manager.registerDataCollector(dCDescriptor);
+					dataCollectorId = manager
+							.registerDataCollector(dCDescriptor);
 				}
 				registered = true;
 			} catch (IOException e) {
@@ -182,6 +185,8 @@ public class DCAgent extends Observable {
 					dCConfigsByMetric = new HashMap<String, DCConfiguration>();
 					setChanged();
 					notifyObservers();
+				} catch (Exception e) {
+					logger.error("Unknown Error", e);
 				}
 			}
 
@@ -214,6 +219,8 @@ public class DCAgent extends Observable {
 					logger.error(
 							"Error while trying to keeping alive, the server may be down: {}",
 							e.getMessage());
+				} catch (Exception e) {
+					logger.error("Unknown Error", e);
 				}
 			}
 
@@ -230,16 +237,7 @@ public class DCAgent extends Observable {
 	public boolean shouldMonitor(Resource resource, String metric) {
 		if (!dCConfigsByMetric.containsKey(metric))
 			return false;
-		if (dCConfigsByMetric.get(metric).getMonitoredResourcesIds()
-				.contains(resource.getId()))
-			return true;
-		if (dCConfigsByMetric.get(metric).getMonitoredResourcesIds().isEmpty()
-				&& dCConfigsByMetric.get(metric).getMonitoredResourcesTypes()
-						.contains(resource.getType()))
-			return true;
-		if (dCConfigsByMetric.get(metric).getMonitoredResourcesTypes().isEmpty()
-				&& dCConfigsByMetric.get(metric).getMonitoredResourcesClasses()
-						.contains(resource.getClazz()))
+		if (dCConfigsByMetric.get(metric).isAboutResource(resource))
 			return true;
 		return false;
 	}
@@ -287,34 +285,44 @@ public class DCAgent extends Observable {
 		startTimerIfNotStarted();
 	}
 
-	private synchronized void startTimerIfNotStarted() {
-		if (!timerRunning) {
-			timerRunning = true;
-			timer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					timeToSend();
-				}
-			}, delay);
+	private void startTimerIfNotStarted() {
+		synchronized (asyncSenderLock) {
+			if (!timerRunning) {
+				timerRunning = true;
+				timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						try {
+							timeToSend();
+						} catch (Exception e) {
+							logger.error("Unknown Error", e);
+						}
+					}
+				}, delay);
+			}
 		}
 	}
 
-	private synchronized void addToBuffer(String metric, JsonObject jsonDatum) {
-		JsonArray data = dataByMetric.get(metric);
-		if (data == null) {
-			data = new JsonArray();
-			dataByMetric.put(metric, data);
+	private void addToBuffer(String metric, JsonObject jsonDatum) {
+		synchronized (asyncSenderLock) {
+			JsonArray data = dataByMetric.get(metric);
+			if (data == null) {
+				data = new JsonArray();
+				dataByMetric.put(metric, data);
+			}
+			data.add(jsonDatum);
 		}
-		data.add(jsonDatum);
 	}
 
-	private synchronized void timeToSend() {
-		for (final String metric : dataByMetric.keySet()) {
-			sendDataExecService.execute(new SenderTask(
-					dataByMetric.get(metric), metric));
+	private void timeToSend() {
+		synchronized (asyncSenderLock) {
+			for (String metric : dataByMetric.keySet()) {
+				sendDataExecService.execute(new SenderTask(metric, dataByMetric
+						.get(metric)));
+			}
+			dataByMetric.clear();
+			timerRunning = false;
 		}
-		dataByMetric.clear();
-		timerRunning = false;
 	}
 
 	private class SenderTask implements Runnable {
@@ -322,7 +330,7 @@ public class DCAgent extends Observable {
 		private JsonArray data;
 		private String metric;
 
-		public SenderTask(JsonArray data, String metric) {
+		public SenderTask(String metric, JsonArray data) {
 			this.data = data;
 			this.metric = metric;
 		}
@@ -330,19 +338,20 @@ public class DCAgent extends Observable {
 		@Override
 		public void run() {
 
-			DCConfiguration dcConfiguration = dCConfigsByMetric.get(metric);
-			if (dcConfiguration == null) {
-				logger.info(
+			if (!dCConfigsByMetric.containsKey(metric)) {
+				logger.debug(
 						"Monitoring for metric {} no longer required, buffered data will be dropped",
 						metric);
 				return;
 			}
+			DCConfiguration dcConfiguration = dCConfigsByMetric.get(metric);
+
 			long ts = System.currentTimeMillis();
 			logger.debug("Sending {} monitoring data", data.size());
 			try {
 
 				restClient.execute(RestMethod.POST, dcConfiguration.getDaUrl(),
-						data.toString(), 200, timeout );
+						data.toString(), 200, timeout);
 				logger.debug("Data sent in {} seconds",
 						((double) (System.currentTimeMillis() - ts)) / 1000);
 			} catch (UnexpectedAnswerFromServerException e) {

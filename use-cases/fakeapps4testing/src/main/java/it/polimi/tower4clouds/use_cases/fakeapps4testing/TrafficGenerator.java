@@ -71,7 +71,7 @@ public class TrafficGenerator {
 			CloudProvider amazon = new CloudProvider();
 			amazon.setId("amazon");
 			amazon.setType("IaaS");
-			dCDescriptor.addRelatedResource(amazon);
+			dCDescriptor.addResource(amazon);
 
 			Method method1 = new Method();
 			method1.setId("register1");
@@ -82,14 +82,14 @@ public class TrafficGenerator {
 			ic1.addProvidedMethod(method1.getId());
 			ic1.setId("app1");
 			ic1.setType("app");
-			dCDescriptor.addRelatedResource(ic1);
+			dCDescriptor.addResource(ic1);
 
 			VM vm1 = new VM();
 			vm1.setId("vm1");
 			vm1.setType("vm");
 			vm1.setCloudProvider(amazon.getId());
 			ic1.addRequiredComponent(vm1.getId());
-			dCDescriptor.addRelatedResource(vm1);
+			dCDescriptor.addResource(vm1);
 
 			Method method2 = new Method();
 			method2.setId("register2");
@@ -100,16 +100,16 @@ public class TrafficGenerator {
 			ic2.addProvidedMethod(method2.getId());
 			ic2.setId("app2");
 			ic2.setType("app");
-			dCDescriptor.addRelatedResource(ic2);
+			dCDescriptor.addResource(ic2);
 
 			VM vm2 = new VM();
 			vm2.setId("vm2");
 			vm2.setType("vm");
 			vm2.setCloudProvider(amazon.getId());
 			ic2.addRequiredComponent(vm2.getId());
-			dCDescriptor.addRelatedResource(vm2);
+			dCDescriptor.addResource(vm2);
 
-			dCDescriptor.addRelatedResource(amazon);
+			dCDescriptor.addResource(amazon);
 
 			DCAgent dcAgent = new DCAgent(new ManagerAPI(MANAGER_HOST, MANAGER_PORT));
 			dcAgent.setDCDescriptor(dCDescriptor);

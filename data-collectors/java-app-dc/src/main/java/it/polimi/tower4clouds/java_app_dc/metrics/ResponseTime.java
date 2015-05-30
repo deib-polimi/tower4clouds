@@ -31,7 +31,7 @@ public class ResponseTime extends Metric {
 
 	private Map<Long, Map<String, Long>> startTimesPerMethodIdPerThreadId = new ConcurrentHashMap<Long, Map<String, Long>>();
 
-	private double samplingProbability = 1;
+	private static final double DEFAULT_SAMPLING_PROBABILITY = 1;
 
 	@Override
 	protected void started(Method method) {
@@ -45,7 +45,7 @@ public class ResponseTime extends Metric {
 		}
 		startTimePerMethodId.put(method.getId(), System.currentTimeMillis());
 	}
-	
+
 	@Override
 	protected void ended(Method method) {
 		long endTime = System.currentTimeMillis();
@@ -59,8 +59,21 @@ public class ResponseTime extends Metric {
 
 		logger.debug("Response Time for method {}: {}", method.getId(),
 				responseTime);
-		if (shouldMonitor(method) && samplingProbability > Math.random()) {
-			send(String.valueOf(responseTime), method);
+		if (shouldMonitor(method) && getSamplingProbability() > Math.random()) {
+			send(responseTime, method);
+		}
+	}
+
+	private double getSamplingProbability() {
+		if (getParameters() == null
+				|| getParameters().get("samplingProbability") == null)
+			return DEFAULT_SAMPLING_PROBABILITY;
+		try {
+			return Double.parseDouble(getParameters()
+					.get("samplingProbability"));
+		} catch (Exception e) {
+			logger.error("Error while reading the sampling probability", e);
+			return DEFAULT_SAMPLING_PROBABILITY;
 		}
 	}
 
@@ -86,14 +99,7 @@ public class ResponseTime extends Metric {
 
 	@Override
 	protected void configurationUpdated() {
-		String value = getParameters().get("samplingProbability");
-		if (value != null) {
-			try {
-				samplingProbability = Double.parseDouble(value);
-			} catch (Exception e) {
-				logger.error("Error while reading the sampling probability", e);
-			}
-		}
+		// Nothing to do
 	}
 
 }
