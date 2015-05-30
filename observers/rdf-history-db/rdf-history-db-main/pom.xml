@@ -130,10 +130,11 @@
 							<distribution>tower4clouds</distribution>
 							<name>${dist.file.name}</name>
 							<group>System Environment/Daemons</group>
-							<prefix>/usr/local</prefix>
+							<prefix>/opt/${dist.file.name}</prefix>
+			                <targetOS>linux</targetOS>
 							<mappings>
 								<mapping>
-									<directory>/usr/local/lib/${dist.file.name}</directory>
+									<directory>/opt/${dist.file.name}</directory>
 									<filemode>644</filemode>
 									<username>root</username>
 									<groupname>root</groupname>
@@ -145,7 +146,7 @@
 									</sources>
 								</mapping>
 								<mapping>
-									<directory>/usr/local/bin</directory>
+									<directory>/opt/${dist.file.name}</directory>
 									<filemode>755</filemode>
 									<username>root</username>
 									<groupname>root</groupname>
