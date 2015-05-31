@@ -33,6 +33,7 @@ public class DCDescriptorTest {
 		((InternalComponent)ic).addProvidedMethod(method.getId());
 		DCDescriptor dc = new DCDescriptor();
 		dc.addMonitoredResource("ResponseTime", method);
+		dc.addResource(method);
 		dc.addResource(ic);
 		DCDescriptor fromJsonDC = DCDescriptor.fromJson(dc.toJson());
 		assertTrue(fromJsonDC instanceof DCDescriptor);
