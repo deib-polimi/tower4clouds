@@ -41,32 +41,32 @@ function getter() {
 }
 
 function jsonParser(json) {
-	var obj = $.parseJSON(json);
-	var length = obj.metrics.length;
+	var metrics = $.parseJSON(json);
+	var length = metrics.length;
 	var strToPrint = "";
 	for (var i = 0; i < length; i++) {
 		strToPrint += "<div class='panel panel-default'>";
 		strToPrint += "<div class='panel-heading' id='panelHeader'>";
 		strToPrint += "<span class='glyphicon glyphicon-sort' aria-hidden='true' onclick=toggle('"
-				+ obj.metrics[i] + "')></span>";
-		strToPrint += "  " + obj.metrics[i];
+				+ metrics[i] + "')></span>";
+		strToPrint += "  " + metrics[i];
 		strToPrint += "<div class='row'>";
 		strToPrint += "<input class='col-xs-5' type='text' placeholder='Observer URL' id='callbackUrl"
-				+ obj.metrics[i] + "' />";
+				+ metrics[i] + "' />";
 		strToPrint += "<input class='col-xs-4' type='text' placeholder='Format (RDF/JSON, GRAPHITE, INFLUXDB)' id='format"
-				+ obj.metrics[i] + "' />";
+				+ metrics[i] + "' />";
 		strToPrint += "<input class='col-xs-3' type='text' placeholder='Protocol (HTTP, TCP, UDP)' id='protocol"
-				+ obj.metrics[i] + "' />";
+				+ metrics[i] + "' />";
 		strToPrint += "</div>";
 
 		strToPrint += "<div class='row'>";
 		strToPrint += "<input class='col-xs-5' type='text' placeholder='Observer Host' id='observerHost"
-				+ obj.metrics[i] + "' />";
+				+ metrics[i] + "' />";
 		strToPrint += "<input class='col-xs-4' type='text' placeholder='Observer Port' id='observerPort"
-				+ obj.metrics[i] + "' />";
+				+ metrics[i] + "' />";
 		strToPrint += "<input type='button' value='Add Observer' onclick=sendFetching('"
-				+ obj.metrics[i] + "') class='col-xs-3' />";
-		+obj.metrics[i] + "' />";
+				+ metrics[i] + "') class='col-xs-3' />";
+		+metrics[i] + "' />";
 
 		strToPrint += "</div>";
 
@@ -74,7 +74,7 @@ function jsonParser(json) {
 
 		$("#metricsKeeper").append(strToPrint);
 
-		observersGetter(obj.metrics[i]);
+		observersGetter(metrics[i]);
 		strToPrint = "";
 	}
 
