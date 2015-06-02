@@ -41,9 +41,7 @@ public class MultipleMetricsDataServer extends ServerResource {
 					.getAttributes().get("manager");
 			Set<String> metrics = manager.getObservableMetrics();
 			this.getResponse().setStatus(Status.SUCCESS_OK);
-			JsonObject json = new JsonObject();
-			json.add("metrics", new Gson().toJsonTree(metrics));
-			this.getResponse().setEntity(json.toString(),
+			this.getResponse().setEntity(new Gson().toJson(metrics).toString(),
 					MediaType.APPLICATION_JSON);
 		} catch (Exception e) {
 			logger.error("Error while getting metrics", e);

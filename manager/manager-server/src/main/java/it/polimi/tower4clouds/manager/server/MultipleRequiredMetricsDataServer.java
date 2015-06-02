@@ -16,10 +16,8 @@
 package it.polimi.tower4clouds.manager.server;
 
 import it.polimi.tower4clouds.manager.MonitoringManager;
-import it.polimi.tower4clouds.manager.NotFoundException;
-import it.polimi.tower4clouds.model.data_collectors.DCConfiguration;
 
-import java.util.Map;
+import java.util.Set;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -29,44 +27,33 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
-public class DCConfigurationServer extends ServerResource {
+public class MultipleRequiredMetricsDataServer extends ServerResource {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(DCConfigurationServer.class);
+	private Logger logger = LoggerFactory
+			.getLogger(MultipleRequiredMetricsDataServer.class.getName());
 
 	@Get
-	public void getDCConfiguration() {
-		String id = (String) this.getRequest().getAttributes().get("id");
+	public void getRequiredMetrics() {
 		try {
-			Gson gson = new Gson();
 			MonitoringManager manager = (MonitoringManager) getContext()
 					.getAttributes().get("manager");
-
-			Map<String, DCConfiguration> dcconfig = manager
-					.getDCConfigurationByMetric(id);
-			this.getResponse().setStatus(Status.SUCCESS_OK,
-					"DC configuration successfully retrieved");
-			this.getResponse().setEntity(gson.toJson(dcconfig),
+			Set<String> requiredMetrics = manager.getRequiredeMetrics();
+			this.getResponse().setStatus(Status.SUCCESS_OK);
+			this.getResponse().setEntity(new Gson().toJson(requiredMetrics).toString(),
 					MediaType.APPLICATION_JSON);
-		} catch (NotFoundException e) {
-			logger.error("DC {} is not registered", id);
-			this.getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND,
-					"DC " + id + " is not register");
-			this.getResponse().setEntity("DC " + id + " is not register",
-					MediaType.TEXT_PLAIN);
 		} catch (Exception e) {
-			logger.error("Error while getting the dc configuration", e);
+			logger.error("Error while getting required metrics", e);
 			this.getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,
 					e.getMessage());
 			this.getResponse().setEntity(
-					"Error while getting the dc configuration: "
-							+ e.getMessage(), MediaType.TEXT_PLAIN);
+					"Error while getting metrics: " + e.toString(),
+					MediaType.TEXT_PLAIN);
 		} finally {
 			this.getResponse().commit();
 			this.commit();
 			this.release();
 		}
 	}
-
 }

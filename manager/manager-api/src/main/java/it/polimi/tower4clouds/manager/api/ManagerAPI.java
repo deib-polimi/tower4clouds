@@ -46,6 +46,7 @@ public class ManagerAPI {
 	private static final String RESOURCES_PATH = "/resources";
 	private static final String METRICS_PATH = "/metrics";
 	private static final String OBSERVERS_PATH = "/observers";
+	private static final String REQUIRED_METRICS_PATH = "/required-metrics";
 
 	private final RestClient client;
 	private final String managerUrl;
@@ -183,5 +184,21 @@ public class ManagerAPI {
 			e.printStackTrace();
 			return new HashMap<String, DCConfiguration>();
 		}
+	}
+
+	public Set<String> getRequiredMetrics()
+			throws UnexpectedAnswerFromServerException, IOException {
+		String jsonRequiredMetrics = client.execute(RestMethod.GET, managerUrl
+				+ REQUIRED_METRICS_PATH, null, 200, timeout);
+		return gson.fromJson(jsonRequiredMetrics, new TypeToken<Set<String>>() {
+		}.getType());
+	}
+
+	public Set<String> getObservableMetrics()
+			throws UnexpectedAnswerFromServerException, IOException {
+		String jsonRequiredMetrics = client.execute(RestMethod.GET, managerUrl
+				+ METRICS_PATH, null, 200, timeout);
+		return gson.fromJson(jsonRequiredMetrics, new TypeToken<Set<String>>() {
+		}.getType());
 	}
 }

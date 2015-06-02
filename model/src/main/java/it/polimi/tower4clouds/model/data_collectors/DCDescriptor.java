@@ -43,19 +43,22 @@ public class DCDescriptor {
 	public static DCDescriptor fromJson(String json) {
 		DCDescriptor dcDescriptor = gson.fromJson(json, DCDescriptor.class);
 		JsonObject jsonDcDescriptor = jsonParser.parse(json).getAsJsonObject();
-		JsonObject monitoredResourcesByMetricJson = jsonDcDescriptor.get(
-				"monitoredResourcesByMetric").getAsJsonObject();
-		for (Entry<String, JsonElement> entry : monitoredResourcesByMetricJson
-				.entrySet()) {
-			Set<Resource> resources = Resource.fromJsonResources(entry
-					.getValue().toString());
-			dcDescriptor.getMonitoredResourcesByMetric().put(entry.getKey(),
-					resources);
+		JsonElement monitoredResourcesByMetricJson = jsonDcDescriptor
+				.get("monitoredResourcesByMetric");
+		if (monitoredResourcesByMetricJson != null) {
+			for (Entry<String, JsonElement> entry : monitoredResourcesByMetricJson
+					.getAsJsonObject().entrySet()) {
+				Set<Resource> resources = Resource.fromJsonResources(entry
+						.getValue().toString());
+				dcDescriptor.getMonitoredResourcesByMetric().put(
+						entry.getKey(), resources);
+			}
 		}
 		JsonElement resourcesJson = jsonDcDescriptor.get("resources");
-		if (resourcesJson != null){
+		if (resourcesJson != null) {
 			JsonArray resources = resourcesJson.getAsJsonArray();
-			dcDescriptor.setResources(Resource.fromJsonResources(resources.toString()));
+			dcDescriptor.setResources(Resource.fromJsonResources(resources
+					.toString()));
 		}
 		return dcDescriptor;
 	}
@@ -81,7 +84,8 @@ public class DCDescriptor {
 	}
 
 	public Set<Resource> getResources() {
-		if (resources == null) resources = new HashSet<Resource>();
+		if (resources == null)
+			resources = new HashSet<Resource>();
 		return resources;
 	}
 
@@ -96,18 +100,17 @@ public class DCDescriptor {
 		this.monitoredResourcesByMetric = monitoredResourcesByMetric;
 	}
 
-
 	@Override
 	public String toString() {
 		return "DCDescriptor [monitoredResourcesByMetric="
-				+ monitoredResourcesByMetric + ", resources="
-				+ resources + ", keepAlive=" + keepAlive
-				+ ", configSyncPeriod=" + configSyncPeriod + "]";
+				+ monitoredResourcesByMetric + ", resources=" + resources
+				+ ", keepAlive=" + keepAlive + ", configSyncPeriod="
+				+ configSyncPeriod + "]";
 	}
 
 	public void addMonitoredResources(String metric, Set<Resource> resources) {
-		Set<Resource> monResources = getMonitoredResourcesByMetric().get(
-				metric);
+		Set<Resource> monResources = getMonitoredResourcesByMetric()
+				.get(metric);
 		if (monResources == null) {
 			getMonitoredResourcesByMetric().put(metric, resources);
 		} else {
@@ -124,7 +127,7 @@ public class DCDescriptor {
 		}
 		currentResources.add(resource);
 	}
-	
+
 	public void addResources(Set<Resource> resources) {
 		getResources().addAll(resources);
 	}
@@ -137,8 +140,7 @@ public class DCDescriptor {
 		return gson.toJson(this);
 	}
 
-	public void addMonitoredResource(Set<String> metrics,
-			Resource resource) {
+	public void addMonitoredResource(Set<String> metrics, Resource resource) {
 		for (String metric : metrics) {
 			addMonitoredResource(metric, resource);
 		}

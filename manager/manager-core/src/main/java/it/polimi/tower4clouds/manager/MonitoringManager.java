@@ -71,6 +71,7 @@ import com.google.gson.JsonParser;
 
 public class MonitoringManager {
 
+	private static final int MAX_KEEP_ALIVE = Integer.MAX_VALUE / 1000;
 	private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	private final ScheduledExecutorService keepAliveScheduler;
 
@@ -120,7 +121,7 @@ public class MonitoringManager {
 
 		logger.info("Checking if Data Analyzer is reachable");
 		NetUtil.waitForResponseCode(config.getDaUrl() + "/queries", 200,
-				Integer.MAX_VALUE, 5000);
+				MAX_KEEP_ALIVE, 5000);
 		logger.info("Resetting KB");
 		knowledgeBase.clearAll();
 		logger.info("Resetting DA");
@@ -637,7 +638,7 @@ public class MonitoringManager {
 			for (Resource resource : resources) {
 				registeredResources.put(resource.getId(), resource);
 				resourcesKATimestamp.put(resource.getId(), timestamp);
-				resourcesKeepAlive.put(resource.getId(), Integer.MAX_VALUE);
+				resourcesKeepAlive.put(resource.getId(), MAX_KEEP_ALIVE);
 			}
 		}
 		if (rdfHistoryDB != null) {
@@ -685,7 +686,7 @@ public class MonitoringManager {
 			for (Resource resource : resources) {
 				registeredResources.put(resource.getId(), resource);
 				resourcesKATimestamp.put(resource.getId(), timestamp);
-				resourcesKeepAlive.put(resource.getId(), Integer.MAX_VALUE);
+				resourcesKeepAlive.put(resource.getId(), MAX_KEEP_ALIVE);
 			}
 		}
 		if (rdfHistoryDB != null) {
@@ -724,7 +725,7 @@ public class MonitoringManager {
 		}
 	}
 
-	@Monitor(type = "registerDataCollector")
+	// @Monitor(type = "registerDataCollector")
 	public void registerDataCollector(String dcId, DCDescriptor dCDescriptor)
 			throws SerializationException, IOException {
 		Set<Resource> resources;
@@ -732,13 +733,15 @@ public class MonitoringManager {
 			long timestamp = System.currentTimeMillis();
 			logger.debug("Registering DC: {}", dCDescriptor);
 			resources = dCDescriptor.getResources();
-			updateExistingRelations(resources);
-			knowledgeBase.addMany(resources, MOVocabulary.idParameterName,
-					ManagerConfig.MODEL_GRAPH_NAME);
+			if (resources != null && !resources.isEmpty()) {
+				updateExistingRelations(resources);
+				knowledgeBase.addMany(resources, MOVocabulary.idParameterName,
+						ManagerConfig.MODEL_GRAPH_NAME);
+			}
 			registeredDCs.put(dcId, dCDescriptor);
 			int keepAlive = dCDescriptor.getKeepAlive();
 			if (keepAlive <= 0) {
-				keepAlive = Integer.MAX_VALUE;
+				keepAlive = MAX_KEEP_ALIVE;
 			}
 			dcsKeepAlive.put(dcId, keepAlive);
 			dcsKATimestamp.put(dcId, timestamp);
@@ -809,7 +812,7 @@ public class MonitoringManager {
 	// }
 	// }
 
-	@Monitor(type = "keepAlive")
+	// @Monitor(type = "keepAlive")
 	public void keepAlive(String dcId) throws NotFoundException,
 			SerializationException, IOException {
 		synchronized (dcAndResourcesLock) {
@@ -822,7 +825,7 @@ public class MonitoringManager {
 			Set<Resource> resources = dCDescriptor.getResources();
 			int keepAlive = dCDescriptor.getKeepAlive();
 			if (keepAlive <= 0) {
-				keepAlive = Integer.MAX_VALUE;
+				keepAlive = MAX_KEEP_ALIVE;
 			}
 			for (Resource resource : resources) {
 				if (!registeredResources.containsKey(resource.getId())) {
@@ -865,7 +868,7 @@ public class MonitoringManager {
 		return dc;
 	}
 
-	@Monitor(type = "getDCConfigurationByMetric")
+	// @Monitor(type = "getDCConfigurationByMetric")
 	public Map<String, DCConfiguration> getDCConfigurationByMetric(String dcId)
 			throws NotFoundException, SerializationException, IOException {
 		Map<String, DCConfiguration> configs = new HashMap<String, DCConfiguration>();
@@ -1053,7 +1056,7 @@ public class MonitoringManager {
 		}
 	}
 
-	@Monitor(type = "executeAction")
+	// @Monitor(type = "executeAction")
 	public void executeAction(String ruleId, String resourceId, String value,
 			String timestamp) {
 		logger.debug(
@@ -1097,6 +1100,18 @@ public class MonitoringManager {
 		public void run() {
 			action.execute(resourceId, value, timestamp);
 		}
+	}
+
+	/**
+	 * 
+	 * @return the metrics required by one or more installed rule that are not
+	 *         provided as output metric of other rules
+	 */
+	public Set<String> getRequiredeMetrics() {
+		HashSet<String> requiredMetrics = new HashSet<String>(
+				streamsByMetric.keySet());
+		requiredMetrics.removeAll(ruleIdByObservableMetric.keySet());
+		return requiredMetrics;
 	}
 
 }

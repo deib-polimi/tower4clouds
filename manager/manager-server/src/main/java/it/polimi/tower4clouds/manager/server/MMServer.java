@@ -145,6 +145,8 @@ public class MMServer extends Application {
 		router.attach(
 				"/" + apiVersion + "/metrics/{metricname}/observers/{id}",
 				SingleObserverDataServer.class);
+		router.attach("/" + apiVersion + "/required-metrics",
+				MultipleRequiredMetricsDataServer.class);
 		router.attach("/" + apiVersion + "/resources",
 				MultipleResourcesDataServer.class);
 		router.attach("/" + apiVersion + "/resources/{id}",

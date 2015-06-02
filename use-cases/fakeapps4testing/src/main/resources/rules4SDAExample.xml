@@ -1,0 +1,34 @@
+<monitoringRules xmlns="http://www.modaclouds.eu/xsd/1.0/monitoring_rules_schema">
+	<monitoringRule id="CPUUtilizationRule"
+        startEnabled="true" timeStep="30" timeWindow="30">
+        <monitoredTargets>
+            <monitoredTarget class="VM" type="Frontend"/>
+        </monitoredTargets>
+        <collectedMetric metricName="CPUUtilization">
+            <parameter name="samplingTime">30</parameter>
+        </collectedMetric>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="resourceId">ID</parameter>
+                <parameter name="metric">AverageFrontendCPU</parameter>
+                <parameter name="value">METRIC</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+    <monitoringRule id="CPUForecastRule"
+        startEnabled="true" timeStep="30" timeWindow="30">
+        <monitoredTargets>
+            <monitoredTarget class="VM" type="Frontend"/>
+        </monitoredTargets>
+        <collectedMetric metricName="Forecast_AverageFrontendCPU">
+            <parameter name="step">600</parameter>
+        </collectedMetric>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="resourceId">ID</parameter>
+                <parameter name="metric">ForecastFrontendCPU</parameter>
+                <parameter name="value">METRIC</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+</monitoringRules>

@@ -196,9 +196,11 @@ public class DCAgent extends Observable {
 	private void startKeepAlive() {
 		long maxKeepAlivePeriod = Math
 				.max(dCDescriptor.getKeepAlive() - 10, 10);
-		if (dCDescriptor.getKeepAlive() <= 0
-				|| maxKeepAlivePeriod >= dCDescriptor.getConfigSyncPeriod()) {
+		if (maxKeepAlivePeriod >= dCDescriptor.getConfigSyncPeriod()) {
 			logger.info("Keep alive is not required, config sync period is short enough for keeping the resources alive");
+			return;
+		} else if (dCDescriptor.getKeepAlive() <= 0){
+			logger.info("Keep alive is not required");
 			return;
 		}
 		stopKeepAlive();
@@ -391,6 +393,18 @@ public class DCAgent extends Observable {
 			}
 		});
 		started = true;
+	}
+	
+	/**
+	 * To be called when the DCDescriptor is updated to make changes happen
+	 */
+	public synchronized void refresh() {
+		logger.info("Refreshing DCAgent based on new DCDescriptor");
+		if (!started) {
+			logger.warn("DCAgent was not started yet");
+		} else {
+			start();
+		}
 	}
 
 	private void stopDCRegistration() {

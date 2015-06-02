@@ -20,6 +20,8 @@ import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.client.config.RequestConfig;
@@ -51,7 +53,7 @@ public class DefaultRestClient implements RestClient {
 	private String response = null;
 	private UnexpectedAnswerFromServerException unexpectedExc = null;
 	private IOException ioExc = null;
-	
+
 	private final Object responseLock = new Object();
 
 	private final int maxThreads = 500;
@@ -62,7 +64,6 @@ public class DefaultRestClient implements RestClient {
 		connManager.setMaxTotal(maxThreads);
 		client = HttpClients.custom().setConnectionManager(connManager).build();
 	}
-
 
 	@Override
 	public String execute(RestMethod method, String url, String jsonEntity,
@@ -149,7 +150,9 @@ public class DefaultRestClient implements RestClient {
 				if (response.getStatusLine().getStatusCode() != expectedCode) {
 					synchronized (responseLock) {
 						unexpectedExc = new UnexpectedAnswerFromServerException(
-								response.getStatusLine().getStatusCode());
+								response.getStatusLine().getStatusCode(),
+								IOUtils.toString(response.getEntity()
+										.getContent()));
 						logger.error(unexpectedExc.getMessage());
 					}
 					return;
