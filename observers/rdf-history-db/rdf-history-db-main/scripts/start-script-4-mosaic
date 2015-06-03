@@ -41,9 +41,9 @@ _variable_defaults=(
 		# NOTE:  Add other definitions that could come from the packaging descriptor, and are needed at runtime.
 		#   It enables hard-coding some definitions, which could later be overriden with environment variables.
 		
-		_${dist.file.name.cap}_DISTRIBUTION='/opt/modaclouds-services-${dist.file.name}-${project.version}/lib/distribution'
+		_TOWER4CLOUDS_RDF_HISTORY_DB_DISTRIBUTION='/opt/modaclouds-services-${dist.file.name}-${project.version}/lib/distribution'
 		
-		_${dist.file.name.cap}_ENDPOINT_PORT=31337
+		_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_PORT=31337
 		_RABBITMQ_ENDPOINT_IP=127.0.0.1
 		_RABBITMQ_ENDPOINT_PORT=5672
 		_FUSEKI_ENDPOINT_IP=127.0.0.1
@@ -51,7 +51,7 @@ _variable_defaults=(
 		_FUSEKI_DB_PATH='/ds'
 
 		_JAVA_HOME='/opt/mosaic-rt-jre-7-32bit'
-		_PATH="${_JAVA_HOME}/bin:/usr/bin:/bin"
+		_PATH="/opt/mosaic-rt-jre-7-32bit/bin:/usr/bin:/bin"
 		_TMPDIR='/tmp/modaclouds/${dist.file.name}'
 )
 declare "${_variable_defaults[@]}"
@@ -75,18 +75,18 @@ _variable_overrides=(
 		# NOTE:  Add the same definitions as in the previous case, but keep the pattern as bellow.
 		#   It enables overriding some definitions with environment variables, or fallbacks to the hard-coded ones.
 		
-		_${dist.file.name.cap}_DISTRIBUTION="${MODACLOUDS_${dist.file.name.cap}_DISTRIBUTION:-${_${dist.file.name.cap}_DISTRIBUTION}}"
+		_TOWER4CLOUDS_RDF_HISTORY_DB_DISTRIBUTION="${MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_DISTRIBUTION:-${_TOWER4CLOUDS_RDF_HISTORY_DB_DISTRIBUTION}}"
 		
-		_${dist.file.name.cap}_ENDPOINT_PORT="${MODACLOUDS_${dist.file.name.cap}_ENDPOINT_PORT:-${_${dist.file.name.cap}_ENDPOINT_PORT}}"
+		_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_PORT="${MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_PORT:-${_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_PORT}}"
 		_RABBITMQ_ENDPOINT_IP="${MODACLOUDS_RABBITMQ_ENDPOINT_IP:-${_RABBITMQ_ENDPOINT_IP}}"
 		_RABBITMQ_ENDPOINT_PORT="${MODACLOUDS_RABBITMQ_ENDPOINT_PORT:-${_RABBITMQ_ENDPOINT_PORT}}"
 		_FUSEKI_ENDPOINT_IP="${MODACLOUDS_FUSEKI_ENDPOINT_IP:-${_FUSEKI_ENDPOINT_IP}}"
 		_FUSEKI_ENDPOINT_PORT="${MODACLOUDS_FUSEKI_ENDPOINT_PORT:-${_FUSEKI_ENDPOINT_PORT}}"
 		_FUSEKI_DB_PATH="${MODACLOUDS_FUSEKI_DB_PATH:-${_FUSEKI_DB_PATH}}"
 
-		_JAVA_HOME="${MODACLOUDS_${dist.file.name.cap}_JAVA_HOME:-${_JAVA_HOME}}"
-		_PATH="${MODACLOUDS_${dist.file.name.cap}_PATH:-${_PATH}}"
-		_TMPDIR="${MODACLOUDS_${dist.file.name.cap}_TMPDIR:-${_TMPDIR}}"
+		_JAVA_HOME="${MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_JAVA_HOME:-${_JAVA_HOME}}"
+		_PATH="${MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_PATH:-${_PATH}}"
+		_TMPDIR="${MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_TMPDIR:-${_TMPDIR}}"
 )
 declare "${_variable_overrides[@]}"
 
@@ -135,7 +135,7 @@ _environment+=(
 		# NOTE:  No other variables, except the ones present in the `_environment` array are exported to the service.
 		#   (I.e. the service starts with a clean environment.)
 		
-		MODACLOUDS_HDB_LISTENER_PORT="{_${dist.file.name.cap}_ENDPOINT_PORT}"
+		MODACLOUDS_HDB_LISTENER_PORT="${_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_PORT}"
 		MODACLOUDS_HDB_QUEUE_ENDPOINT_IP="${_RABBITMQ_ENDPOINT_IP}"
 		MODACLOUDS_HDB_QUEUE_ENDPOINT_PORT="${_RABBITMQ_ENDPOINT_PORT}"
 		MODACLOUDS_HDB_DB_ENDPOINT_IP="${_FUSEKI_ENDPOINT_IP}"
@@ -162,7 +162,7 @@ exec \
 	env \
 			-i "${_environment[@]}" \
 	"${_JAVA_HOME}/bin/java" \
-			-jar "${_${dist.file.name.cap}_DISTRIBUTION}/service.jar"
+			-jar "${_TOWER4CLOUDS_RDF_HISTORY_DB_DISTRIBUTION}/service.jar"
 
 
 exit 1

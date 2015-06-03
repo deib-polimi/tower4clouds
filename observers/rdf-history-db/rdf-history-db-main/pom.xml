@@ -30,7 +30,6 @@
 
 	<properties>
 		<dist.file.name>tower4clouds-rdf-history-db</dist.file.name>
-		<dist.file.name.cap>TOWER4CLOUDS_RDF_HISTORY_DB</dist.file.name.cap>
 		<main.class>it.polimi.tower4clouds.rdf_history_db.Main</main.class>
 	</properties>
 
