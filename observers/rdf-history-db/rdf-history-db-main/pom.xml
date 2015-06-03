@@ -165,7 +165,7 @@
 								</mapping>
 							</mappings>
 							<requires>
-								<require>mosaic-rt-jre-7-32bit</require>
+								<require>mosaic-rt-jre-7</require>
 							</requires>
 						</configuration>
 					</plugin>

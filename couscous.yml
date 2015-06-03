@@ -45,6 +45,9 @@ menu:
         getting-started:
             text: Get started
             relativeUrl: docs/get-started.html
+        mosaic-installation:
+            text: Installation on mOSAIC
+            relativeUrl: docs/mosaic-installation.html
         changelog:
             text: Change log
             relativeUrl: changelog.html

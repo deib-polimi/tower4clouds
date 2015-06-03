@@ -26,7 +26,6 @@ import it.polimi.modaclouds.monitoring.kb.api.RspKbAPI;
 import it.polimi.modaclouds.monitoring.kb.api.SerializationException;
 import it.polimi.modaclouds.qos_models.Problem;
 import it.polimi.tower4clouds.common.net.NetUtil;
-import it.polimi.tower4clouds.java_app_dc.Monitor;
 import it.polimi.tower4clouds.manager.api.Observer;
 import it.polimi.tower4clouds.model.data_collectors.DCConfiguration;
 import it.polimi.tower4clouds.model.data_collectors.DCDescriptor;
