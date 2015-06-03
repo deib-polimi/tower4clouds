@@ -34,16 +34,14 @@
 			<source>${project.build.directory}/${project.artifactId}-${project.version}-jar-with-dependencies.jar</source>
 			<destName>${dist.file.name}.jar</destName>
 		</file>
+		<file>
+			<source>scripts/start-script</source>
+			<destName>${dist.file.name}</destName>
+			<fileMode>0755</fileMode>
+		</file>
 	</files>
 
 	<fileSets>
-		<fileSet>
-			<outputDirectory></outputDirectory>
-			<includes>
-				<include>${dist.file.name}</include>
-			</includes>
-			<fileMode>0755</fileMode>
-		</fileSet>
 		<fileSet>
 			<outputDirectory></outputDirectory>
 			<includes>

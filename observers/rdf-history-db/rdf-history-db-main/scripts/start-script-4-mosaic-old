@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export HDB_HOME="/opt/tower4clouds-rdf-history-db"
+export HDB_HOME="/opt/modaclouds-services-${dist.file.name}-${project.version}"
 export JAVA_HOME="/opt/mosaic-rt-jre-7"
 
 if [ ! -e "$HDB_HOME" ]
@@ -9,7 +9,7 @@ then
     exit 1
 fi
 
-JAR="$HDB_HOME/tower4clouds-rdf-history-db.jar"
+JAR="$HDB_HOME/lib/distribution/lib/${dist.file.name}.jar"
 if [ ! -e "$JAR" ]
 then
     echo "Can't find jarfile to run"

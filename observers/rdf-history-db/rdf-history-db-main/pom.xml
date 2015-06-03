@@ -30,6 +30,7 @@
 
 	<properties>
 		<dist.file.name>tower4clouds-rdf-history-db</dist.file.name>
+		<dist.file.name.cap>TOWER4CLOUDS_RDF_HISTORY_DB</dist.file.name.cap>
 		<main.class>it.polimi.tower4clouds.rdf_history_db.Main</main.class>
 	</properties>
 
@@ -111,8 +112,14 @@
 
 	<profiles>
 		<profile>
-			<id>rpm</id>
+			<id>mosaic-rpm</id>
 			<build>
+				<resources>
+					<resource>
+						<directory>scripts</directory>
+						<filtering>true</filtering>
+					</resource>
+				</resources>
 				<plugins>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
@@ -128,38 +135,38 @@
 						</executions>
 						<configuration>
 							<distribution>tower4clouds</distribution>
-							<name>${dist.file.name}</name>
+							<name>modaclouds-services-${dist.file.name}-${project.version}</name>
 							<group>System Environment/Daemons</group>
-							<prefix>/opt/${dist.file.name}</prefix>
-			                <targetOS>linux</targetOS>
+							<prefix>/opt/modaclouds-services-${dist.file.name}-${project.version}</prefix>
+							<targetOS>linux</targetOS>
 							<mappings>
 								<mapping>
-									<directory>/opt/${dist.file.name}</directory>
+									<directory>/opt/modaclouds-services-${dist.file.name}-${project.version}/lib/distribution</directory>
 									<filemode>644</filemode>
 									<username>root</username>
 									<groupname>root</groupname>
 									<sources>
 										<source>
 											<location>target/${project.artifactId}-${project.version}-jar-with-dependencies.jar</location>
-											<destination>${dist.file.name}.jar</destination>
+											<destination>service.jar</destination>
 										</source>
 									</sources>
 								</mapping>
 								<mapping>
-									<directory>/opt/${dist.file.name}</directory>
+									<directory>/opt/modaclouds-services-${dist.file.name}-${project.version}/bin</directory>
 									<filemode>755</filemode>
 									<username>root</username>
 									<groupname>root</groupname>
 									<sources>
 										<source>
-											<location>${dist.file.name}-rpm</location>
-											<destination>${dist.file.name}</destination>
+											<location>target/classes/start-script-4-mosaic</location>
+											<destination>service-run.bash</destination>
 										</source>
 									</sources>
 								</mapping>
 							</mappings>
 							<requires>
-								<require>mosaic-rt-jre-7</require>
+								<require>mosaic-rt-jre-7-32bit</require>
 							</requires>
 						</configuration>
 					</plugin>
