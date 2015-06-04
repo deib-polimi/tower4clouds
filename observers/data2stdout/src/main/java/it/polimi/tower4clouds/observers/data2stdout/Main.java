@@ -64,7 +64,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-    	String port = (args.length > 0) ? args[0] : "8000";
+    	String port = (args.length > 0) ? args[0] : "8001";
         startServer(port);
     }
 }

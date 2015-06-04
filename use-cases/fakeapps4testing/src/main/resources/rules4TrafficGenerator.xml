@@ -16,7 +16,24 @@
             </action>
         </actions>
     </monitoringRule>
-     <monitoringRule id="ViolationRule"
+    <monitoringRule id="CounterRule"
+        startEnabled="true" timeStep="60" timeWindow="60">
+        <monitoredTargets>
+            <monitoredTarget class="Method" type="register"/>
+        </monitoredTargets>
+        <collectedMetric metricName="ResponseTime">
+            <parameter name="samplingProbability">1</parameter>
+        </collectedMetric>
+        <metricAggregation aggregateFunction="Count" groupingClass="CloudProvider"/>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="resourceId">ID</parameter>
+                <parameter name="metric">RequestPerMinute</parameter>
+                <parameter name="value">METRIC</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+    <monitoringRule id="ViolationRule"
         startEnabled="true" timeStep="10" timeWindow="10">
         <monitoredTargets>
             <monitoredTarget class="Method" type="register"/>

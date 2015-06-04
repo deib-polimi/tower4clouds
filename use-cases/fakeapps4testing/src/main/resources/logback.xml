@@ -25,7 +25,7 @@
 		</encoder>
 	</appender>
 
-	<logger name="it.polimi" level="DEBUG" />
+	<logger name="it.polimi" level="INFO" />
 
 	<root level="WARN">
 		<appender-ref ref="STDERR" />

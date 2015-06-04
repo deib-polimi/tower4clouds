@@ -34,12 +34,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class TrafficGenerator {
 
-	private static final String MANAGER_HOST = "localhost";
+	private static final String MANAGER_HOST = "52.17.23.51";
 	private static final int MANAGER_PORT = 8170;
-	private static final String GRAPHITE_HOST = "localhost";
+	private static final String GRAPHITE_HOST = "52.17.23.51";
 	private static final int GRAPHITE_PORT = 2003;
 	private static final String INFLUXDB_HOST = "localhost";
 	private static final int INFLUXDB_PORT = 8086;
@@ -47,16 +49,19 @@ public class TrafficGenerator {
 	private static final String INFLUXDB_PASSWORD = "root";
 	private static final String INFLUXDB_USERNAME = "root";
 	private static final String DATA2STDOUT_HOST = "localhost";
-	private static final int DATA2STDOUT_PORT = 8000;
+	private static final int DATA2STDOUT_PORT = 8001;
 
-	public static final boolean RESET_PLATFORM_FIRST = false;
+	public static final boolean RESET_PLATFORM_FIRST = true;
 	private static final boolean ATTACH_GRAPHITE = true;
 	private static final boolean ATTACH_INFLUXDB = false;
-	private static final boolean ATTACH_DATA2STDOUT_SENDING_NEW_FORMAT = false;
+	private static final boolean ATTACH_DATA2STDOUT_SENDING_GRAPHITE_FORMAT = false;
 	private static final boolean ATTACH_DATA2STDOUT_SENDING_OLD_RDF_JSON = false;
+	
+	private static final Object lock = new Object();
 
 	private static ManagerAPI managerServer = new ManagerAPI(MANAGER_HOST,
 			MANAGER_PORT);
+	private static int counter = 0;
 
 	public static void main(String[] args) {
 		try {
@@ -76,6 +81,7 @@ public class TrafficGenerator {
 			Method method1 = new Method();
 			method1.setId("register1");
 			method1.setType("register");
+			dCDescriptor.addResource(method1);
 			dCDescriptor.addMonitoredResource("ResponseTime", method1);
 
 			InternalComponent ic1 = new InternalComponent();
@@ -94,6 +100,7 @@ public class TrafficGenerator {
 			Method method2 = new Method();
 			method2.setId("register2");
 			method2.setType("register");
+			dCDescriptor.addResource(method2);
 			dCDescriptor.addMonitoredResource("ResponseTime", method2);
 
 			InternalComponent ic2 = new InternalComponent();
@@ -111,7 +118,8 @@ public class TrafficGenerator {
 
 			dCDescriptor.addResource(amazon);
 
-			DCAgent dcAgent = new DCAgent(new ManagerAPI(MANAGER_HOST, MANAGER_PORT));
+			DCAgent dcAgent = new DCAgent(new ManagerAPI(MANAGER_HOST,
+					MANAGER_PORT));
 			dcAgent.setDCDescriptor(dCDescriptor);
 			dcAgent.start();
 
@@ -120,7 +128,7 @@ public class TrafficGenerator {
 			while (!sent) { // temp fix, sometimes the server fails to respond
 				try {
 					MonitoringRules rules = XMLHelper.deserialize(
-							getResourceAsStream("rules.xml"),
+							getResourceAsStream("rules4TrafficGenerator.xml"),
 							MonitoringRules.class);
 					managerServer.registerRules(rules);
 					sent = true;
@@ -133,6 +141,9 @@ public class TrafficGenerator {
 
 			if (ATTACH_GRAPHITE) {
 				managerServer.registerSocketObserver("AverageResponseTime",
+						GRAPHITE_HOST, GRAPHITE_PORT, SocketProtocol.TCP,
+						Format.GRAPHITE);
+				managerServer.registerSocketObserver("RequestPerMinute",
 						GRAPHITE_HOST, GRAPHITE_PORT, SocketProtocol.TCP,
 						Format.GRAPHITE);
 				managerServer.registerSocketObserver("ViolatedAvgResponseTime",
@@ -157,14 +168,17 @@ public class TrafficGenerator {
 								Format.INFLUXDB);
 			}
 
-			if (ATTACH_DATA2STDOUT_SENDING_NEW_FORMAT) {
+			if (ATTACH_DATA2STDOUT_SENDING_GRAPHITE_FORMAT) {
 
 				managerServer.registerHttpObserver("AverageResponseTime",
 						"http://" + DATA2STDOUT_HOST + ":" + DATA2STDOUT_PORT
-								+ "/data", Format.TOWER_JSON);
+								+ "/data", Format.GRAPHITE);
+				managerServer.registerHttpObserver("RequestPerMinute",
+						"http://" + DATA2STDOUT_HOST + ":" + DATA2STDOUT_PORT
+								+ "/data", Format.GRAPHITE);
 				managerServer.registerHttpObserver("ViolatedAvgResponseTime",
 						"http://" + DATA2STDOUT_HOST + ":" + DATA2STDOUT_PORT
-								+ "/data", Format.TOWER_JSON);
+								+ "/data", Format.GRAPHITE);
 			}
 
 			if (ATTACH_DATA2STDOUT_SENDING_OLD_RDF_JSON) {
@@ -185,11 +199,27 @@ public class TrafficGenerator {
 			dcAgent.send(method1, "ResponseTime", 2000 * Math.random());
 			Thread.sleep(2000);
 
-			for (int i = 0; i < 10000
+			Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(
+					new Runnable() {
+						@Override
+						public void run() {
+							synchronized (lock) {
+								System.out.println("Sending " + counter
+										+ " requests per minute");
+								counter = 0;
+							}
+						}
+					}, 60, 60, TimeUnit.SECONDS);
+			for (int i = 0; i < 100000
 					&& dcAgent.shouldMonitor(method1, "ResponseTime")
 					&& dcAgent.shouldMonitor(method2, "ResponseTime"); i++) {
-				dcAgent.send(method1, "ResponseTime", 2000 + 500 * Math.random());
-				dcAgent.send(method2, "ResponseTime", 3000 + 500 * Math.random());
+				dcAgent.send(method1, "ResponseTime",
+						2000 + 500 * Math.random());
+				dcAgent.send(method2, "ResponseTime",
+						3000 + 500 * Math.random());
+				synchronized (lock) {
+					counter += 2;
+				}
 				Thread.sleep(100);
 			}
 

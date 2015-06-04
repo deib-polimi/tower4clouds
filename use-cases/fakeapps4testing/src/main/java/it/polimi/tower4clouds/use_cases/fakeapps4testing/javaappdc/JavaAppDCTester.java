@@ -32,6 +32,8 @@ import it.polimi.tower4clouds.rules.MonitoringRules;
 
 public class JavaAppDCTester {
 
+	private static final String graphiteIP = "localhost";
+	private static final int graphitePort = 8001;
 	private static String managerIP = "localhost";
 	private static int managerPort = 8170;
 
@@ -41,9 +43,9 @@ public class JavaAppDCTester {
 		manager.registerRules(XMLHelper.deserialize(JavaAppDCTester.class
 				.getResourceAsStream("/rules4JavaAppDCTester.xml"),
 				MonitoringRules.class));
-		manager.registerHttpObserver("AverageResponseTime", "http://localhost:8000/data", "GRAPHITE");
-		manager.registerHttpObserver("AverageEffectiveResponseTime", "http://localhost:8000/data", "GRAPHITE");
-		manager.registerHttpObserver("AverageThroughput", "http://localhost:8000/data", "GRAPHITE");
+		manager.registerHttpObserver("AverageResponseTime", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+		manager.registerHttpObserver("AverageEffectiveResponseTime", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+		manager.registerHttpObserver("AverageThroughput", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
 		Map<Property, String> applicationProperties = new HashMap<Property, String>();
 		applicationProperties.put(Property.ID, "App1");
 		applicationProperties.put(Property.TYPE, "App");
