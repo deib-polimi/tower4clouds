@@ -20,7 +20,6 @@ import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -62,7 +61,8 @@ public class DefaultRestClient implements RestClient {
 		connManager = new PoolingHttpClientConnectionManager();
 		connManager.setDefaultMaxPerRoute(maxThreads);
 		connManager.setMaxTotal(maxThreads);
-		client = HttpClients.custom().setConnectionManager(connManager).build();
+		client = HttpClients.custom().setConnectionManager(connManager)
+				.disableContentCompression().build();
 	}
 
 	@Override
