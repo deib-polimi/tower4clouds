@@ -16,7 +16,6 @@
 package it.polimi.tower4clouds.data_analyzer;
 
 import it.polimi.deib.rsp_services_csparql.observers.utilities.OutputDataMarshaller;
-import it.polimi.tower4clouds.model.ontology.MO;
 import it.polimi.tower4clouds.model.ontology.MOVocabulary;
 
 import java.util.ArrayList;
@@ -25,15 +24,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.jena.atlas.json.JsonString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.hp.hpl.jena.sparql.util.NodeFactoryExtra;
@@ -49,6 +45,7 @@ public class DAOutputDataMarshaller implements OutputDataMarshaller {
 
 	@Override
 	public String marshal(RDFTable q, String format) {
+		try {
 		if (format == null)
 			format = "RDF/JSON";
 		switch (format) {
@@ -62,6 +59,10 @@ public class DAOutputDataMarshaller implements OutputDataMarshaller {
 			return getGraphiteSerialization(q);
 		default:
 			return getRDFJsonSerialization(q);
+		}
+		} catch (NullPointerException e) {
+			logger.error("CSPARQL is sending partial results, could not serialize");
+			return null;
 		}
 	}
 	
