@@ -50,8 +50,8 @@ _variable_defaults=(
 		_FUSEKI_ENDPOINT_PORT=3030
 		_FUSEKI_DB_PATH='/ds'
 
-		_JAVA_HOME='/usr/lib64/jvm/jre'
-		_PATH="/usr/lib64/jvm/jre/bin:/usr/bin:/bin"
+		_JAVA_HOME='/opt/mosaic-rt-jre-7'
+		_PATH="/opt/mosaic-rt-jre-7/bin:/usr/bin:/bin"
 		_TMPDIR='/tmp/modaclouds/${dist.file.name}'
 )
 declare "${_variable_defaults[@]}"
