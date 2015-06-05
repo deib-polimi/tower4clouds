@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 #
 # Copyright (C) 2014 Politecnico di Milano (marco.miglierina@polimi.it)
 #
@@ -42,8 +42,14 @@ tar xf rdf-history-db-*.tar.gz
 cd rdf-history-db-*
 ./tower4clouds-rdf-history-db > hdb.log 2>&1 &
 
+IP=127.0.0.1
+if [ "$#" -ge 1 ];
+then
+    IP=$1
+fi
+
 log 'Starting the Manager'
 cd ${TOWER_ROOT}/manager/manager-server/target/
 tar xf manager-server-*.tar.gz
 cd manager-server-*
-./tower4clouds-manager -rdf-history-db-ip 127.0.0.1 > mgr.log 2>&1 &
+./tower4clouds-manager -mmip $IP -daip $IP -rdf-history-db-ip 127.0.0.1 > mgr.log 2>&1 &
