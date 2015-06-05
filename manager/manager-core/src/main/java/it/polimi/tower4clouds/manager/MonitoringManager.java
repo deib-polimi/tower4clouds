@@ -727,6 +727,7 @@ public class MonitoringManager {
 	// @Monitor(type = "registerDataCollector")
 	public void registerDataCollector(String dcId, DCDescriptor dCDescriptor)
 			throws SerializationException, IOException {
+		// TODO validate dc descriptor!!!
 		Set<Resource> resources;
 		synchronized (dcAndResourcesLock) {
 			long timestamp = System.currentTimeMillis();
