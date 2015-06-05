@@ -81,7 +81,7 @@ menu:
             relativeUrl: docs/observers
         changelog:
             text: Change log
-            relativeUrl: changelog.html
+            relativeUrl: CHANGELOG.html
         contributing:
             text: Contributing
-            relativeUrl: contributing.html
+            relativeUrl: CONTRIBUTING.html
