@@ -125,6 +125,6 @@ pre code {
 
 .submenu {
     font-size: smaller;
-    line-height: 50%;
-    text-indent: 20px;
+    line-height: 120%;
+    margin-left: 20px;
 }

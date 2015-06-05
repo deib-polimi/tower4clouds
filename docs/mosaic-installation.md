@@ -18,7 +18,7 @@ Installation:
 			--non-interactive --no-refresh \
 			--no-gpg-checks --gpg-auto-import-keys \
        	install \
-			modaclouds-services-tower4clouds-rdf-history-db-${TOWER4CLOUDS_RELEASE}
+			modaclouds-services-tower4clouds-rdf-history-db-${TOWER4CLOUDS_RELEASE}.rpm
 	```
 
 Start it:
