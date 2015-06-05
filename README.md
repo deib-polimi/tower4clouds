@@ -4,4 +4,4 @@ layout: home
 
 # Tower 4Clouds
 
-Everything will be soon documented on [http://deib-polimi.github.io/tower4clouds](http://deib-polimi.github.io/tower4clouds).
+All documentation is published at [http://deib-polimi.github.io/tower4clouds](http://deib-polimi.github.io/tower4clouds).
