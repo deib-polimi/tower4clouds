@@ -1,3 +1,7 @@
+---
+currentMenu: changelog
+---
+
 # Change Log
 All notable changes to this project will be documented in this file.
 This document adheres to [keep-a-changelog].
