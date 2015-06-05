@@ -6,7 +6,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased][unreleased]
 [unreleased]: https://github.com/deib-polimi/tower4clouds/compare/v0.1...develop
 
-**The RDF History DB has been moved from its [original repository](https://github.com/deib-polimi/modaclouds-history-db) to this one, and it has been integrated.** Changes in this section refer to changes with respect to the [latest released version](https://github.com/deib-polimi/modaclouds-history-db/releases/tag/v0.1.4) of the component.
+### Note
+The RDF History DB has been moved from its [original repository](https://github.com/deib-polimi/modaclouds-history-db) to this one, and it has been integrated. Changes in this section refer to changes with respect to the [latest released version](https://github.com/deib-polimi/modaclouds-history-db/releases/tag/v0.1.4) of the component.
 
 ### Added
 - If an RDF history db is configured, the manager is now sending updates about resources

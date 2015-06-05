@@ -1,3 +1,7 @@
+---
+currentMenu: mosaic-installation
+---
+
 # Installation on mOSAIC
 
 Requirements:

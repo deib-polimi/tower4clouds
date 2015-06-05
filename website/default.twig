@@ -57,6 +57,17 @@
                         {{ item.text|raw }}
                     </a>
                 </li>
+                {% if itemId == currentMenu or itemId == parentMenu %}
+                <ul class="submenu nav nav-stacked nav-pills">
+                    {% for item2Id, item2 in item.submenu.items %}
+                    <li class="{{ item2Id == currentMenu ? 'active' }}">
+                        <a href="{{ item2.absoluteUrl|default(baseUrl ~ '/' ~ item2.relativeUrl) }}">
+                            {{ item2.text|raw }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
                 {% endfor %}
             </ul>
 

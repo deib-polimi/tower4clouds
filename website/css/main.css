@@ -122,3 +122,9 @@ pre code {
 .home #main {
     margin-top: 150px;
 }
+
+.submenu {
+    font-size: smaller;
+    line-height: 50%;
+    text-indent: 20px;
+}

@@ -18,13 +18,18 @@ template:
     directory: website
 
 exclude:
-    - data-analyzer
-    - data-collectors
-    - integration
-    - manager
-    - model
-    - rules
-    - use-cases
+    - /data-analyzer
+    - /data-collectors
+    - /data-collector-library
+    - /integration
+    - /manager
+    - /model
+    - /rules
+    - /use-cases
+    - /observers
+    - /common
+    - /scripts
+    - /target
 
 baseUrl: http://deib-polimi.github.io/tower4clouds
 
@@ -42,12 +47,38 @@ menu:
         home:
             text: Home
             relativeUrl: .
-        getting-started:
+        overview:
+            text: Overview
+            relativeUrl: docs/overview.html
+        get-started:
             text: Get started
             relativeUrl: docs/get-started.html
         mosaic-installation:
             text: Installation on mOSAIC
             relativeUrl: docs/mosaic-installation.html
+        data-collectors:
+            text: Data Collectors
+            relativeUrl: docs/data-collectors
+            submenu:
+                items:
+                    java-app-dc:
+                        text: Java App Data Collector
+                        relativeUrl: docs/data-collectors/java-app-dc.html
+                    byodc:
+                        text: Bring Your Own Data Collector
+                        relativeUrl: docs/data-collectors/byodc.html
+        manager:
+            text: Manager
+            relativeUrl: docs/manager.html
+        data-analyzer:
+            text: Data Analyzer
+            relativeUrl: docs/data-analyzer.html
+        monitoring-rules:
+            text: Monitoring Rules
+            relativeUrl: docs/monitoring-rules.html
+        observers:
+            text: Observers
+            relativeUrl: docs/observers
         changelog:
             text: Change log
             relativeUrl: changelog.html
