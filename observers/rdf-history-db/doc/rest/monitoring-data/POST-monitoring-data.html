@@ -108,51 +108,61 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>Change Log</h1>
-<p>All notable changes to this project will be documented in this file.
-This document adheres to <a href="https://github.com/olivierlacan/keep-a-changelog">keep-a-changelog</a>.
-This project adheres to <a href="http://semver.org/">Semantic Versioning</a>.</p>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.1...develop">Unreleased</a></h2>
-<h3>Note</h3>
-<p>The RDF History DB has been moved from its <a href="https://github.com/deib-polimi/modaclouds-history-db">original repository</a> to this one, and it has been integrated. Changes in this section refer to changes with respect to the <a href="https://github.com/deib-polimi/modaclouds-history-db/releases/tag/v0.1.4">latest released version</a> of the component.</p>
-<h3>Added</h3>
+            <p><a href="../../toc.html">Documentation table of contents</a> / <a href="../../api.html">API Reference</a> / POST-monitoring-data</p>
+<h1>Results</h1>
+<pre><code>POST /monitoringdata</code></pre>
+<h2>Description</h2>
+<p>Send a monitoring datum to the metrics observer.</p>
+<h2>URL Parameters</h2>
+<p>None.</p>
+<h2>Data Parameters</h2>
+<p>A monitoring datum in <a href="https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-json/index.html">json rdf serialization format</a> of the following rdf model (here in ttl format for simplicity):</p>
+<pre><code>[] &lt;http://www.modaclouds.eu/rdfs/1.0/monitoringdata#metric&gt; ?metric;
+&lt;http://www.modaclouds.eu/rdfs/1.0/monitoringdata#timestamp&gt; ?timestamp;
+&lt;http://www.modaclouds.eu/rdfs/1.0/monitoringdata#value&gt; ?value;
+&lt;http://www.modaclouds.eu/rdfs/1.0/monitoringdata#resourceId&gt; ?resourceId .</code></pre>
+<h2>Response</h2>
+<pre><code>Status: 204 No Content</code></pre>
+<pre><code>-</code></pre>
+<h2>Errors</h2>
 <ul>
-<li>If an RDF history db is configured, the manager is now sending updates about resources</li>
-<li>Possibility to specify protocol, format, observer host and port when attaching an observer to a metric from the manager web control panel</li>
-<li>Vagrantfile in the observers folder 'influxdb-graphite-grafana' for creating a VM with graphite, influxdb and grafana installed and running</li>
-<li>Vagrantfile in the observers module 'rdf-history-db' for creating a VM with RabbitMQ and Fuseki</li>
-<li>Traffic Generator for testing and showcasing purposes in MockApplication module</li>
-<li>Data2Stdout, a simple observer application that prints data to standard output</li>
-<li>Useful scripts in folder scripts for starting and stopping the entire platform and one for destroying vms</li>
-<li>java app dc implemented</li>
+<li><strong>400 Results not valid</strong> -- The results aren't valid or aren't expressed in the expected way.</li>
+<li><strong>500 Server error</strong> -- Given when it is impossible to communicate either with the queue or the datastore.</li>
 </ul>
-<h3>Changed</h3>
-<ul>
-<li>Data collector configuration is now deleted from the ServerFacade local memory when the server is down</li>
-<li>Improved logging information</li>
-<li>The RDF History DB Rest API for the resources is now <code>/resources</code></li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>Jena-core and knowledge base api version changed for a conflict which prevented the platform to work</li>
-<li>DefaultRestClient NullPointerException problem fixed</li>
-<li>Webapp rest call to model is updated to the new version, and the model loads fine now</li>
-<li>Fixed bug that was causing null pointer exception when loading an empty list of observers</li>
-<li>Fixed bug that did not allow to attach observers through the Manager web control panel</li>
-<li>In the RDF History DB the bugs given by the modifications in the used libraries are solved</li>
-<li>Fixed the create queue subscribe to it race in the RDF History DB</li>
-<li>Fixed bug in the Manager that caused an observer to be deleted from registry when deleted from a metric and was also observing another metric</li>
-</ul>
-<h2>v0.1 - 2015-05-19</h2>
-<p><strong>This project was created by integrating several existing projects in a unique multi-module project in order to foster maintainability and exploitation of the Tower4Clouds platform.</strong> Changes in this section refer to changes with respect to the last released version of each component, i.e.:</p>
-<ul>
-<li><a href="https://github.com/deib-polimi/modaclouds-monitoring-manager/releases/tag/v1.7">https://github.com/deib-polimi/modaclouds-monitoring-manager/releases/tag/v1.7</a></li>
-<li><a href="https://github.com/deib-polimi/modaclouds-qos-models/releases/tag/v2.4.4">https://github.com/deib-polimi/modaclouds-qos-models/releases/tag/v2.4.4</a></li>
-<li><a href="https://github.com/deib-polimi/modaclouds-app-level-dc/releases/tag/v0.6.3">https://github.com/deib-polimi/modaclouds-app-level-dc/releases/tag/v0.6.3</a></li>
-<li><a href="https://github.com/deib-polimi/modaclouds-data-collector-factory/releases/tag/v0.3.4">https://github.com/deib-polimi/modaclouds-data-collector-factory/releases/tag/v0.3.4</a></li>
-<li><a href="https://github.com/deib-polimi/modaclouds-history-db/releases/tag/v0.1.4">https://github.com/deib-polimi/modaclouds-history-db/releases/tag/v0.1.4</a></li>
-</ul>
-<p><strong> TODO </strong></p>
+<p>The errors aren't implemented at the time of writing this, so every request will always answer with a 204 status even if there is a problem.</p>
+<h2>Example</h2>
+<h3>Request</h3>
+<pre><code>POST /results</code></pre>
+<pre><code class="language-json">{ 
+  "a.unique.id.for.the.datum" : { 
+    "http://www.modaclouds.eu/rdfs/1.0/monitoringdata#metric" : [ { 
+      "type" : "literal" ,
+      "value" : "FrontendCPUUtilization"
+    }
+     ] ,
+    "http://www.modaclouds.eu/rdfs/1.0/monitoringdata#timestamp" : [ { 
+      "type" : "literal" ,
+      "value" : "1409223851698" ,
+      "datatype" : "http://www.w3.org/2001/XMLSchema#integer"
+    }
+     ] ,
+    "http://www.modaclouds.eu/rdfs/1.0/monitoringdata#value" : [ { 
+      "type" : "literal" ,
+      "value" : "0.11416644992590952e0" ,
+      "datatype" : "http://www.w3.org/2001/XMLSchema#double"
+    }
+     ] ,
+    "http://www.modaclouds.eu/rdfs/1.0/monitoringdata#resourceId" : [ { 
+      "type" : "literal" ,
+      "value" : "frontend1" ,
+      "datatype" : "http://www.w3.org/2001/XMLSchema#string"
+    }
+     ]
+  }
+}</code></pre>
+<h3>Response</h3>
+<pre><code>Status: 204 No Content</code></pre>
+<pre><code>-</code></pre>
         </section>
 
     </div>

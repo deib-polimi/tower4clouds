@@ -52,28 +52,91 @@
                         Home
                     </a>
                 </li>
-                                <li class="">
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/overview.html">
+                        Overview
+                    </a>
+                </li>
+                                                <li class="active">
                     <a href="http://deib-polimi.github.io/tower4clouds/docs/get-started.html">
                         Get started
                     </a>
                 </li>
-                                <li class="">
+                                <ul class="submenu nav nav-stacked nav-pills">
+                                    </ul>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/mosaic-installation.html">
+                        Installation on mOSAIC
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/data-collectors">
+                        Data Collectors
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/manager.html">
+                        Manager
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/data-analyzer.html">
+                        Data Analyzer
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/monitoring-rules.html">
+                        Monitoring Rules
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/observers">
+                        Observers
+                    </a>
+                </li>
+                                                <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/changelog.html">
                         Change log
                     </a>
                 </li>
-                                <li class="">
+                                                <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/contributing.html">
                         Contributing
                     </a>
                 </li>
-                            </ul>
+                                            </ul>
 
         </nav>
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>Home</h1>
+            <h1>Get Started</h1>
+<p>Requirements:</p>
+<ul>
+<li>Java 1.7</li>
+</ul>
+<p>Installation:</p>
+<ul>
+<li>Download and untar the packages from the <a href="https://github.com/deib-polimi/tower4clouds/releases">latest release</a>:
+<ul>
+<li>manager-server-VERSION.tar.gz</li>
+<li>data-analyzer-VERSION.tar.gz</li>
+</ul></li>
+</ul>
+<p>Start it:</p>
+<ul>
+<li>Start the <a href="data-analyzer.html">Data Analyzer</a>:
+<pre><code class="language-bash">./tower4clouds-data-analyzer &gt; tower4clouds-data-analyzer.log 2&gt;&amp;1 &amp;</code></pre></li>
+<li>Start the <a href="manager.html">Manager</a>:
+<pre><code class="language-bash">./tower4clouds-manager &gt; tower4clouds-manager.log 2&gt;&amp;1 &amp;</code></pre></li>
+<li>Point your browser to <code>http://&lt;manager-host&gt;:8170/webapp</code> and you should see the administration panel.</li>
+</ul>
+<p>Your Tower4Clouds Core instance is up, now you need:</p>
+<ol>
+<li><a href="data-collectors.html">Data Collectors</a> to gather monitoring data,</li>
+<li><a href="monitoring-rules.html">Monitoring Rules</a> to instruct the platform on what to do,</li>
+<li><a href="observers.html">Observers</a> to visualize or make use of data or events.</li>
+</ol>
         </section>
 
     </div>

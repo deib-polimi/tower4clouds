@@ -108,51 +108,56 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>Change Log</h1>
-<p>All notable changes to this project will be documented in this file.
-This document adheres to <a href="https://github.com/olivierlacan/keep-a-changelog">keep-a-changelog</a>.
-This project adheres to <a href="http://semver.org/">Semantic Versioning</a>.</p>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.1...develop">Unreleased</a></h2>
-<h3>Note</h3>
-<p>The RDF History DB has been moved from its <a href="https://github.com/deib-polimi/modaclouds-history-db">original repository</a> to this one, and it has been integrated. Changes in this section refer to changes with respect to the <a href="https://github.com/deib-polimi/modaclouds-history-db/releases/tag/v0.1.4">latest released version</a> of the component.</p>
-<h3>Added</h3>
+            <h1>MODAClouds HistoryDB</h1>
+<p>In the context of <a href="http://www.modaclouds.eu">MODAClouds European project</a>, the <a href="http://www.polimi.it">Politecnico di Milano</a> was one of the partners involved in the development of the Monitoring Platform.</p>
+<p>HistoryDB is a component that logs in a <strong>datastore</strong> (usually <a href="http://jena.apache.org/documentation/serving_data/index.html">Apache Fuseki</a>) a number of different requests, making it possible to check the evolution of the system step by step.</p>
+<p>A <strong>queue</strong> (usually <a href="http://www.rabbitmq.com">RabbitMQ</a>) is used for decoupling the sub-component listening to the requests and the sub-component that manages the datastore. </p>
+<h2>Documentation</h2>
+<p>Useful links to the documentation:</p>
 <ul>
-<li>If an RDF history db is configured, the manager is now sending updates about resources</li>
-<li>Possibility to specify protocol, format, observer host and port when attaching an observer to a metric from the manager web control panel</li>
-<li>Vagrantfile in the observers folder 'influxdb-graphite-grafana' for creating a VM with graphite, influxdb and grafana installed and running</li>
-<li>Vagrantfile in the observers module 'rdf-history-db' for creating a VM with RabbitMQ and Fuseki</li>
-<li>Traffic Generator for testing and showcasing purposes in MockApplication module</li>
-<li>Data2Stdout, a simple observer application that prints data to standard output</li>
-<li>Useful scripts in folder scripts for starting and stopping the entire platform and one for destroying vms</li>
-<li>java app dc implemented</li>
+<li><a href="https://github.com/deib-polimi/tower4clouds/blob/develop/observers/rdf-history-db/doc/user-manual.html">User Manual</a></li>
+<li><a href="https://github.com/deib-polimi/tower4clouds/blob/develop/observers/rdf-history-db/doc/api.html">API reference</a></li>
+<li><a href="https://github.com/deib-polimi/tower4clouds/blob/develop/observers/rdf-history-db/doc/datastore.html">DataStore reference</a></li>
+<li><a href="https://github.com/deib-polimi/tower4clouds/blob/develop/observers/rdf-history-db/doc/install.html">Install Guide</a></li>
 </ul>
-<h3>Changed</h3>
+<h2>ChangeLog</h2>
+<p>v0.1.5 (not yet realeased):</p>
 <ul>
-<li>Data collector configuration is now deleted from the ServerFacade local memory when the server is down</li>
-<li>Improved logging information</li>
-<li>The RDF History DB Rest API for the resources is now <code>/resources</code></li>
+<li>Changed the packages names everywhere (from <code>it.polimi.modaclouds.hdb</code> to <code>it.polimi.tower4clouds.observers.hdb</code>) to resemble the parent projects.</li>
+<li>Updated the versions of the used libraries.</li>
+<li>Restructured the packages in a multi-pom fashion.</li>
+<li>Solved the bugs given by the modifications in the used libraries.</li>
+<li>Changed the REST URIs for the models from <code>/model/resources</code> to <code>/resources</code>.</li>
 </ul>
-<h3>Fixed</h3>
+<p><a href="https://github.com/deib-polimi/modaclouds-history-db/blob/master/bin/historydb-0.1.4.zip">v0.1.4</a>:</p>
 <ul>
-<li>Jena-core and knowledge base api version changed for a conflict which prevented the platform to work</li>
-<li>DefaultRestClient NullPointerException problem fixed</li>
-<li>Webapp rest call to model is updated to the new version, and the model loads fine now</li>
-<li>Fixed bug that was causing null pointer exception when loading an empty list of observers</li>
-<li>Fixed bug that did not allow to attach observers through the Manager web control panel</li>
-<li>In the RDF History DB the bugs given by the modifications in the used libraries are solved</li>
-<li>Fixed the create queue subscribe to it race in the RDF History DB</li>
-<li>Fixed bug in the Manager that caused an observer to be deleted from registry when deleted from a metric and was also observing another metric</li>
+<li>A subscription is used instead of polling the queue: better performances should be expected.</li>
+<li>Now a fake message is sent at the beginning for each queue handled, so that the code could work with older versions of RabbitMQ.</li>
+<li>Better handling of failures: the fuseki and rabbitmq hosts are checked at the beginning and signaled if they're wrongly configured.</li>
 </ul>
-<h2>v0.1 - 2015-05-19</h2>
-<p><strong>This project was created by integrating several existing projects in a unique multi-module project in order to foster maintainability and exploitation of the Tower4Clouds platform.</strong> Changes in this section refer to changes with respect to the last released version of each component, i.e.:</p>
+<p><a href="https://github.com/deib-polimi/modaclouds-history-db/blob/master/bin/historydb-0.1.3.zip">v0.1.3</a>:</p>
 <ul>
-<li><a href="https://github.com/deib-polimi/modaclouds-monitoring-manager/releases/tag/v1.7">https://github.com/deib-polimi/modaclouds-monitoring-manager/releases/tag/v1.7</a></li>
-<li><a href="https://github.com/deib-polimi/modaclouds-qos-models/releases/tag/v2.4.4">https://github.com/deib-polimi/modaclouds-qos-models/releases/tag/v2.4.4</a></li>
-<li><a href="https://github.com/deib-polimi/modaclouds-app-level-dc/releases/tag/v0.6.3">https://github.com/deib-polimi/modaclouds-app-level-dc/releases/tag/v0.6.3</a></li>
-<li><a href="https://github.com/deib-polimi/modaclouds-data-collector-factory/releases/tag/v0.3.4">https://github.com/deib-polimi/modaclouds-data-collector-factory/releases/tag/v0.3.4</a></li>
-<li><a href="https://github.com/deib-polimi/modaclouds-history-db/releases/tag/v0.1.4">https://github.com/deib-polimi/modaclouds-history-db/releases/tag/v0.1.4</a></li>
+<li>Now an executor service is used also while adding messages to the datastore, fixing all the problems!</li>
 </ul>
-<p><strong> TODO </strong></p>
+<p><a href="https://github.com/deib-polimi/modaclouds-history-db/blob/master/bin/historydb-0.1.2.zip">v0.1.2</a>:</p>
+<ul>
+<li>Bug fixes.</li>
+<li>Better handling of the queue (maybe fixing some &quot;too many files opened&quot; bug).</li>
+<li>Two new parameters to the script &quot;historydb&quot; for launching fake messages at the beginning of the tool.</li>
+</ul>
+<p><a href="https://github.com/deib-polimi/modaclouds-history-db/blob/master/bin/historydb-0.1.1.zip">v0.1.1</a>:</p>
+<ul>
+<li>Few bug fixes.</li>
+</ul>
+<p><a href="https://github.com/deib-polimi/modaclouds-history-db/blob/master/bin/historydb-0.1.0.zip">v0.1.0</a>:</p>
+<ul>
+<li>First (actually and hopefully) working version. The previous one wasn't saving all the messages received.</li>
+<li>Added some other information in the &quot;default&quot; graph, as described in the datastore guide.</li>
+</ul>
+<p><a href="https://github.com/deib-polimi/modaclouds-history-db/blob/master/bin/historydb-0.0.1-SNAPSHOT.zip">v0.0.1-SNAPSHOT</a>:</p>
+<ul>
+<li>First beta release!</li>
+</ul>
         </section>
 
     </div>

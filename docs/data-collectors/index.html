@@ -67,11 +67,23 @@
                         Installation on mOSAIC
                     </a>
                 </li>
-                                                <li class="">
+                                                <li class="active">
                     <a href="http://deib-polimi.github.io/tower4clouds/docs/data-collectors">
                         Data Collectors
                     </a>
                 </li>
+                                <ul class="submenu nav nav-stacked nav-pills">
+                                        <li class="">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/data-collectors/java-app-dc.html">
+                            Java App Data Collector
+                        </a>
+                    </li>
+                                        <li class="">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/data-collectors/byodc.html">
+                            Bring Your Own Data Collector
+                        </a>
+                    </li>
+                                    </ul>
                                                 <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/docs/manager.html">
                         Manager
@@ -108,51 +120,32 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>Change Log</h1>
-<p>All notable changes to this project will be documented in this file.
-This document adheres to <a href="https://github.com/olivierlacan/keep-a-changelog">keep-a-changelog</a>.
-This project adheres to <a href="http://semver.org/">Semantic Versioning</a>.</p>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.1...develop">Unreleased</a></h2>
-<h3>Note</h3>
-<p>The RDF History DB has been moved from its <a href="https://github.com/deib-polimi/modaclouds-history-db">original repository</a> to this one, and it has been integrated. Changes in this section refer to changes with respect to the <a href="https://github.com/deib-polimi/modaclouds-history-db/releases/tag/v0.1.4">latest released version</a> of the component.</p>
-<h3>Added</h3>
+            <h1>Data Collectors</h1>
+<p>Data Collectors are <em>client-side</em> <em>self-registering</em> agents responsible of sending monitoring data to the <a href="data-analyzer.html">Data Analyzer</a>. They are built with the Cloud in mind, which is dynamic and heterogeneous. A resource being monitored (e.g. a virtual machine) can be shut down as a result of scale down activity, or a new resource can be started as a result of a scale up activity. In both cases, Tower 4Clouds is able to keep its <a href="model.html">Model</a> of the system updated. Data Collectors automatically register and periodically notify their existence and the existence of the resource they monitor. Once a resource is shut down, the <a href="manager.html">Manager</a> will take care of unregistering expired resources after the timeout (keep alive period) defined by the data collector itself. Moreover, data collectors are client-side, which means communication is mono-directional, so that really few requirements are requested on the location where they run and collect data. Finally, in order to save traffic (and therefore money) and reduce the overhead, data collectors collect data only when and how requested by the <a href="manager.html">Manager</a> according to the <a href="monitoring-rules.html">Monitoring Rules</a> installed by the user.</p>
+<p>Two kind of data collectors have been implemented so far:</p>
 <ul>
-<li>If an RDF history db is configured, the manager is now sending updates about resources</li>
-<li>Possibility to specify protocol, format, observer host and port when attaching an observer to a metric from the manager web control panel</li>
-<li>Vagrantfile in the observers folder 'influxdb-graphite-grafana' for creating a VM with graphite, influxdb and grafana installed and running</li>
-<li>Vagrantfile in the observers module 'rdf-history-db' for creating a VM with RabbitMQ and Fuseki</li>
-<li>Traffic Generator for testing and showcasing purposes in MockApplication module</li>
-<li>Data2Stdout, a simple observer application that prints data to standard output</li>
-<li>Useful scripts in folder scripts for starting and stopping the entire platform and one for destroying vms</li>
-<li>java app dc implemented</li>
+<li>the <a href="data-collectors/java-app-dc.html">Java App Data Collector</a>, which is a Java library that uses aspect oriented programming for collecting application level metrics of your Java application such as Response Time and Throughput,</li>
+<li>a data collector built by another MODAClouds partner (Imperial University), which is an executable Java application able to collect both infrastructure and application level metrics such as CPU Utilization and Application Availability. This data collector can be found <a href="https://github.com/imperial-modaclouds/modaclouds-data-collectors">here</a>.</li>
 </ul>
-<h3>Changed</h3>
+<p>If you want to build your data collector feel free to contribute. You can find instructions on how to build a data collector <a href="data-collectors/byodc.html">here</a> and instructions on how to contribute <a href="CONTRIBUTING.html">here</a>.</p>
+<p>What a data collector actually does:</p>
+<ol>
+<li>Once started, it contacts the <a href="manager.html">Manager</a> registering:
 <ul>
-<li>Data collector configuration is now deleted from the ServerFacade local memory when the server is down</li>
-<li>Improved logging information</li>
-<li>The RDF History DB Rest API for the resources is now <code>/resources</code></li>
-</ul>
-<h3>Fixed</h3>
+<li>the resources being monitored and their relationships with the entire <a href="model.html">Model</a>,</li>
+<li>the metrics it is able to collect for each resource</li>
+<li>the keep alive period, which tells the <a href="manager.html">Manager</a> how long to wait an acknowledgement from the data collector before considering it and its resources expired.</li>
+</ul></li>
+<li>Periodically, it will contact the <a href="manager.html">Manager</a> to acknowledge if any collecting activity is requested for any metric about any resource it is responsible for.</li>
+<li>Whenever requested, it will start collecting and sending data according to the configuration provided by the <a href="manager.html">Manager</a>, which contains:
 <ul>
-<li>Jena-core and knowledge base api version changed for a conflict which prevented the platform to work</li>
-<li>DefaultRestClient NullPointerException problem fixed</li>
-<li>Webapp rest call to model is updated to the new version, and the model loads fine now</li>
-<li>Fixed bug that was causing null pointer exception when loading an empty list of observers</li>
-<li>Fixed bug that did not allow to attach observers through the Manager web control panel</li>
-<li>In the RDF History DB the bugs given by the modifications in the used libraries are solved</li>
-<li>Fixed the create queue subscribe to it race in the RDF History DB</li>
-<li>Fixed bug in the Manager that caused an observer to be deleted from registry when deleted from a metric and was also observing another metric</li>
-</ul>
-<h2>v0.1 - 2015-05-19</h2>
-<p><strong>This project was created by integrating several existing projects in a unique multi-module project in order to foster maintainability and exploitation of the Tower4Clouds platform.</strong> Changes in this section refer to changes with respect to the last released version of each component, i.e.:</p>
-<ul>
-<li><a href="https://github.com/deib-polimi/modaclouds-monitoring-manager/releases/tag/v1.7">https://github.com/deib-polimi/modaclouds-monitoring-manager/releases/tag/v1.7</a></li>
-<li><a href="https://github.com/deib-polimi/modaclouds-qos-models/releases/tag/v2.4.4">https://github.com/deib-polimi/modaclouds-qos-models/releases/tag/v2.4.4</a></li>
-<li><a href="https://github.com/deib-polimi/modaclouds-app-level-dc/releases/tag/v0.6.3">https://github.com/deib-polimi/modaclouds-app-level-dc/releases/tag/v0.6.3</a></li>
-<li><a href="https://github.com/deib-polimi/modaclouds-data-collector-factory/releases/tag/v0.3.4">https://github.com/deib-polimi/modaclouds-data-collector-factory/releases/tag/v0.3.4</a></li>
-<li><a href="https://github.com/deib-polimi/modaclouds-history-db/releases/tag/v0.1.4">https://github.com/deib-polimi/modaclouds-history-db/releases/tag/v0.1.4</a></li>
-</ul>
-<p><strong> TODO </strong></p>
+<li>the metrics to be collected</li>
+<li>the resources to be monitored for each metric</li>
+<li>a list of key value parameters that are data collector specific and specify how the collection should be performed</li>
+<li>the URL where the data should be sent (*)</li>
+</ul></li>
+</ol>
+<p>(*) The URL identifies a <a href="streams.html">Stream</a> on the <a href="data-analyzer.html">Data Analyzer</a></p>
         </section>
 
     </div>

@@ -108,51 +108,51 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>Change Log</h1>
-<p>All notable changes to this project will be documented in this file.
-This document adheres to <a href="https://github.com/olivierlacan/keep-a-changelog">keep-a-changelog</a>.
-This project adheres to <a href="http://semver.org/">Semantic Versioning</a>.</p>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.1...develop">Unreleased</a></h2>
-<h3>Note</h3>
-<p>The RDF History DB has been moved from its <a href="https://github.com/deib-polimi/modaclouds-history-db">original repository</a> to this one, and it has been integrated. Changes in this section refer to changes with respect to the <a href="https://github.com/deib-polimi/modaclouds-history-db/releases/tag/v0.1.4">latest released version</a> of the component.</p>
-<h3>Added</h3>
+            <p><a href="../toc.html">Documentation table of contents</a> / <a href="../datastore.html">DataStore Reference</a> / delete-model</p>
+<h1>Delete Model</h1>
+<p>When deleting a model from the system (using the REST API <a href="../rest/model/DELETE-model.html">DELETE-model</a>), a number of triples are inserted in the datastore.</p>
+<p>Let's assume that:</p>
 <ul>
-<li>If an RDF history db is configured, the manager is now sending updates about resources</li>
-<li>Possibility to specify protocol, format, observer host and port when attaching an observer to a metric from the manager web control panel</li>
-<li>Vagrantfile in the observers folder 'influxdb-graphite-grafana' for creating a VM with graphite, influxdb and grafana installed and running</li>
-<li>Vagrantfile in the observers module 'rdf-history-db' for creating a VM with RabbitMQ and Fuseki</li>
-<li>Traffic Generator for testing and showcasing purposes in MockApplication module</li>
-<li>Data2Stdout, a simple observer application that prints data to standard output</li>
-<li>Useful scripts in folder scripts for starting and stopping the entire platform and one for destroying vms</li>
-<li>java app dc implemented</li>
+<li>the sub-component that has to save the model in the datastore received it in a certain time (e.g. with a timestamp <code>1425399022110</code>, corresponding to the date <em>Tue, 03 Mar 2015 17:10:22 GMT+1:00</em>),</li>
+<li>the <code>:id</code> parameter in the API had value <code>id1425399019932</code>.</li>
 </ul>
-<h3>Changed</h3>
+<p>The assumption that no other model is considered at the exact same time is done. Then, a graph with the name containing the timestamp above is created (e.g. <code>http://www.modaclouds.eu/historydb/model/cancellations/1425400773874</code>).</p>
+<p>The graph will contain two triples, both with the value of the <code>:id</code> parameter as the subject. Both the predicates will have the base prefix <code>http://www.modaclouds.eu/rdfs/1.0/deletedmodel#</code>, and there are:</p>
 <ul>
-<li>Data collector configuration is now deleted from the ServerFacade local memory when the server is down</li>
-<li>Improved logging information</li>
-<li>The RDF History DB Rest API for the resources is now <code>/resources</code></li>
+<li><code>id</code>, the id of the model that we want to delete,</li>
+<li><code>timestamp</code>, the timestamp in which the message was received.</li>
 </ul>
-<h3>Fixed</h3>
+<p>Another graph with the name associated to the day in which the timestamp is contained (e.g. <code>http://www.modaclouds.eu/historydb/meta/model/cancellations/1425340800000</code> for the example above, where <code>1425340800000</code> corresponds to the date <em>Tue, 03 Mar 2015 00:00:00 GMT+1:00</em>) is created or used if it already exists.
+Only one triple is added, and this has as the subject the name of the graph considered before (e.g. <code>http://www.modaclouds.eu/historydb/model/cancellations/1425400773874</code>), the predicate <code>&lt;mo:timestamp&gt;</code> and the actual timestamp as the object of the triple (e.g. <code>1425400773874</code>).</p>
+<p>Lastly, in the <code>default</code> graph, one tuple is added, with:</p>
 <ul>
-<li>Jena-core and knowledge base api version changed for a conflict which prevented the platform to work</li>
-<li>DefaultRestClient NullPointerException problem fixed</li>
-<li>Webapp rest call to model is updated to the new version, and the model loads fine now</li>
-<li>Fixed bug that was causing null pointer exception when loading an empty list of observers</li>
-<li>Fixed bug that did not allow to attach observers through the Manager web control panel</li>
-<li>In the RDF History DB the bugs given by the modifications in the used libraries are solved</li>
-<li>Fixed the create queue subscribe to it race in the RDF History DB</li>
-<li>Fixed bug in the Manager that caused an observer to be deleted from registry when deleted from a metric and was also observing another metric</li>
+<li>the subject that is the URI of the graph (e.g. <code>http://www.modaclouds.eu/historydb/model/cancellations/1425400773874</code>),</li>
+<li>the predicate is the constant <code>mo:timestamp</code>, and</li>
+<li>the object is the hour in which the timestamp is contained (e.g. <code>1425398400000</code> for the example above, where <code>1425398400000</code> corresponds to the date <em>Tue, 03 Mar 2015 17:00:00 GMT+1:00</em>).</li>
 </ul>
-<h2>v0.1 - 2015-05-19</h2>
-<p><strong>This project was created by integrating several existing projects in a unique multi-module project in order to foster maintainability and exploitation of the Tower4Clouds platform.</strong> Changes in this section refer to changes with respect to the last released version of each component, i.e.:</p>
+<h2> Examples of Query</h2>
+<p>Here are some examples of SPARQL query:</p>
 <ul>
-<li><a href="https://github.com/deib-polimi/modaclouds-monitoring-manager/releases/tag/v1.7">https://github.com/deib-polimi/modaclouds-monitoring-manager/releases/tag/v1.7</a></li>
-<li><a href="https://github.com/deib-polimi/modaclouds-qos-models/releases/tag/v2.4.4">https://github.com/deib-polimi/modaclouds-qos-models/releases/tag/v2.4.4</a></li>
-<li><a href="https://github.com/deib-polimi/modaclouds-app-level-dc/releases/tag/v0.6.3">https://github.com/deib-polimi/modaclouds-app-level-dc/releases/tag/v0.6.3</a></li>
-<li><a href="https://github.com/deib-polimi/modaclouds-data-collector-factory/releases/tag/v0.3.4">https://github.com/deib-polimi/modaclouds-data-collector-factory/releases/tag/v0.3.4</a></li>
-<li><a href="https://github.com/deib-polimi/modaclouds-history-db/releases/tag/v0.1.4">https://github.com/deib-polimi/modaclouds-history-db/releases/tag/v0.1.4</a></li>
+<li>find all the cancellations of model inserted:</li>
 </ul>
-<p><strong> TODO </strong></p>
+<pre><code class="language-sparql">SELECT * {
+    ?s &lt;mo:timestamp&gt; ?o
+    FILTER (regex(str(?s), "model/cancellations"))
+}</code></pre>
+<ul>
+<li>find all the cancellations of model inserted in a specific hourly timestamp:</li>
+</ul>
+<pre><code class="language-sparql">SELECT * {
+    ?s &lt;mo:timestamp&gt; ?o 
+    FILTER (?o = 1425574800000 &amp;&amp; regex(str(?s), "model/cancellations"))
+}</code></pre>
+<ul>
+<li>find all the cancellations of model inserted in a range of hourly timestamps:</li>
+</ul>
+<pre><code class="language-sparql">SELECT * {
+    ?s &lt;mo:timestamp&gt; ?o
+    FILTER (?o &gt;= 1425574600000 &amp;&amp; ?o &lt;= 1425574900000 &amp;&amp; regex(str(?s), "model/cancellations"))
+}</code></pre>
         </section>
 
     </div>
