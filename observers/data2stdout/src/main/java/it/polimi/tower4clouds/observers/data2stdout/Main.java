@@ -55,7 +55,7 @@ public class Main {
     public static void startServer(String port) throws IOException {
 
         final ResourceConfig rc = new ResourceConfig().packages(Main.class.getPackage().getName());
-        HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(URI.create("http://localhost:"+port), rc, false);
+        HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(URI.create("http://0.0.0.0:"+port), rc, false);
         NetworkListener listener = httpServer.getListeners().iterator().next(); 
         ThreadPoolConfig thx=listener.getTransport().getWorkerThreadPoolConfig(); 
         thx.setQueueLimit(500);
