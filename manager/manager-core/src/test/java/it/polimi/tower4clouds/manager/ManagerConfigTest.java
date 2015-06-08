@@ -27,15 +27,15 @@ public class ManagerConfigTest {
 
 	@Before
 	public void clearProperties() {
-		System.clearProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATAANALYZER_IP);
-		System.clearProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATAANALYZER_PORT);
+		System.clearProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_IP);
+		System.clearProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_PORT);
 	}
 
 	@Test
 	public void daIPFromSystemPropertyShouldOverrideDefault()
 			throws ConfigurationException {
 		String expected = "100.100.100.100";
-		System.setProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATAANALYZER_IP, expected);
+		System.setProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_IP, expected);
 		ManagerConfig.init();
 		assertEquals(ManagerConfig.getInstance().getDaIP(), expected);
 	}
@@ -44,7 +44,7 @@ public class ManagerConfigTest {
 	public void daIPFromArgsShouldOverrideSystemProperty()
 			throws ConfigurationException {
 		String expected = "100.100.100.100";
-		System.setProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATAANALYZER_IP,
+		System.setProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_IP,
 				"99.99.99.99");
 		ManagerConfig.init(new String[] { "-daip", expected },"");
 		assertEquals(ManagerConfig.getInstance().getDaIP(), expected);
@@ -52,14 +52,14 @@ public class ManagerConfigTest {
 
 	@Test(expected = ConfigurationException.class)
 	public void daPortShouldBeANumber() throws ConfigurationException {
-		System.setProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATAANALYZER_PORT,
+		System.setProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_PORT,
 				"notaport");
 		ManagerConfig.init();
 	}
 
 	@Test(expected = ConfigurationException.class)
 	public void daPortShouldBeAValidPort() throws ConfigurationException {
-		System.setProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATAANALYZER_PORT,
+		System.setProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_PORT,
 				"9999999");
 		ManagerConfig.init();
 	}

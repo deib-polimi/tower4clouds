@@ -94,19 +94,19 @@ public class ManagerConfig {
 
 		try {
 			daPort = Integer.parseInt(getEnvVar(
-					Env.MODACLOUDS_TOWER4CLOUDS_DATAANALYZER_PORT, "8175"));
+					Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_PORT, "8175"));
 			mmPort = Integer.parseInt(getEnvVar(
-					Env.MODACLOUDS_TOWER4CLOUDS_MANAGER_PORT, "8170"));
+					Env.MODACLOUDS_TOWER4CLOUDS_MANAGER_PUBLIC_ENDPOINT_PORT, "8170"));
 			rdfHistoryDbPort = Integer.parseInt(getEnvVar(
-					Env.MODACLOUDS_TOWER4CLOUDS_RDFHISTORYDB_PORT, "31337"));
+					Env.MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_PORT, "31337"));
 		} catch (NumberFormatException e) {
 			throw new ConfigurationException(
 					"The chosen port is not a valid number");
 		}
 
-		daIP = getEnvVar(Env.MODACLOUDS_TOWER4CLOUDS_DATAANALYZER_IP, "127.0.0.1");
-		mmIP = getEnvVar(Env.MODACLOUDS_TOWER4CLOUDS_MANAGER_IP, "127.0.0.1");
-		rdfHistoryDbIP = getEnvVar(Env.MODACLOUDS_TOWER4CLOUDS_RDFHISTORYDB_IP, null);
+		daIP = getEnvVar(Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_IP, "127.0.0.1");
+		mmIP = getEnvVar(Env.MODACLOUDS_TOWER4CLOUDS_MANAGER_PUBLIC_ENDPOINT_IP, "127.0.0.1");
+		rdfHistoryDbIP = getEnvVar(Env.MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_IP, null);
 
 		if (!validator.isValid(getDaUrl()))
 			throw new ConfigurationException(getDaUrl() + " is not a valid URL");
