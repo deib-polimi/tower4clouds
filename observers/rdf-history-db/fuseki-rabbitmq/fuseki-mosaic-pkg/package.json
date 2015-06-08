@@ -68,7 +68,7 @@
 		},
 		"fuseki-distribution.tar.gz" : {
 			"generator" : "fetcher",
-			"uri" : "@{definitions:resources:modaclouds:url:dependencies:binaries}/jena-fuseki1-@{versions:modaclouds:fuseki}-distribution.tar.gz"
+			"uri" : "@{definitions:resources:modaclouds:url:dependencies:binaries}/jena-fuseki1-@{definitions:versions:modaclouds:fuseki}-distribution.tar.gz"
 		}
 	},
 
