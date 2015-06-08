@@ -51,18 +51,18 @@ function jsonParser(json) {
 				+ metrics[i] + "')></span>";
 		strToPrint += "  " + metrics[i];
 		strToPrint += "<div class='row'>";
-		strToPrint += "<input class='col-xs-5' type='text' placeholder='Observer URL' id='callbackUrl"
+		strToPrint += "<input class='col-xs-5' type='text' placeholder='Observer URL (when Protocol=HTTP)' id='callbackUrl"
 				+ metrics[i] + "' />";
-		strToPrint += "<input class='col-xs-4' type='text' placeholder='Format (RDF/JSON, GRAPHITE, INFLUXDB)' id='format"
+		strToPrint += "<input class='col-xs-4' type='text' placeholder='Format (TOWER/JSON, RDF/JSON, GRAPHITE, INFLUXDB)' id='format"
 				+ metrics[i] + "' />";
 		strToPrint += "<input class='col-xs-3' type='text' placeholder='Protocol (HTTP, TCP, UDP)' id='protocol"
 				+ metrics[i] + "' />";
 		strToPrint += "</div>";
 
 		strToPrint += "<div class='row'>";
-		strToPrint += "<input class='col-xs-5' type='text' placeholder='Observer Host' id='observerHost"
+		strToPrint += "<input class='col-xs-5' type='text' placeholder='Observer Host (when Protocol=TCP/UDP)' id='observerHost"
 				+ metrics[i] + "' />";
-		strToPrint += "<input class='col-xs-4' type='text' placeholder='Observer Port' id='observerPort"
+		strToPrint += "<input class='col-xs-4' type='text' placeholder='Observer Port (when Protocol=TCP/UDP)' id='observerPort"
 				+ metrics[i] + "' />";
 		strToPrint += "<input type='button' value='Add Observer' onclick=sendFetching('"
 				+ metrics[i] + "') class='col-xs-3' />";
