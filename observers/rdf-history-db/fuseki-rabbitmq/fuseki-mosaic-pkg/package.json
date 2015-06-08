@@ -1,0 +1,94 @@
+{
+	"_schema" : "tag:ieat.ro,2014:mosaic:v2:mos-package-builder:descriptors:composite-package",
+	"_schema/version" : 1,
+	
+	"package" : {
+		"name" : "@{definitions:package:name}",
+		"version" : "@{definitions:package:version}",
+		"release" : "@{definitions:package:release}",
+		"architecture" : "i686",
+		"root" : "/opt/@{package:identifier}"
+	},
+	
+	"dependencies" : {
+		"requires" : [
+			"mosaic-rt-jre-7"
+		]
+	},
+	
+	"miscellaneous" : {
+		"license" : "apache-2.0",
+		"url" : "http://www.modaclouds.eu/",
+		"summary" : "MODAClouds services: fuseki (@{definitions:versions:modaclouds:fuseki})"
+	},
+	
+	"overlays" : [
+		{
+			"generator" : "folders",
+			"target" : "@{package:root}",
+			"folders" : [
+				"/",
+				"/bin",
+				"/lib",
+				"/lib/fuseki",
+				"/lib/scripts"
+			]
+		},
+		{
+			"generator" : "unarchiver",
+			"target" : "@{package:root}/lib/fuseki",
+			"resource" : "fuseki-distribution.tar.gz",
+			"format" : "tar+gzip",
+			"options" : {
+				"strip-components" : 1
+			}
+		},
+		{
+			"generator" : "file-creator",
+			"target" : "@{package:root}/lib/scripts/run.bash",
+			"resource" : "service-run.bash",
+			"executable" : true,
+			"expand" : true
+		},
+		{
+			"generator" : "symlinks",
+			"target" : "@{package:root}/bin",
+			"links" : {
+				"@{package:name}--run-service" : "../lib/scripts/run.bash"
+			}
+		}
+	],
+	
+	"resources" : {
+		"service-run.bash" : {
+			"generator" : "sources",
+			"path" : "service-run.bash"
+		},
+		"fuseki-distribution.tar.gz" : {
+			"generator" : "fetcher",
+			"uri" : "@{definitions:resources:modaclouds:url:dependencies}/distribution.tar.gz"
+		}
+	},
+	
+	"definitions" : {
+		
+		"package:name" : "modaclouds-services-fuseki",
+		"package:version" : "0.7.0_dev",
+		"package:release" : "@{execution:timestamp}",
+		
+		"versions:modaclouds:fuseki" : "1.1.1",
+		
+		"resources:modaclouds:url:base" : "http://data.volution.ro/modaclouds/public",
+		"resources:modaclouds:url:dependencies" : "@{definitions:resources:modaclouds:url:base}/dependencies/@{definitions:package:name}/@{definitions:versions:modaclouds:fuseki}",
+		
+		"environment:FUSEKI_HOME" : "@{package:root}/lib/fuseki",
+		"environment:FUSEKI_VAR" : "@{package:root}/var/fuseki",
+		"environment:FUSEKI_ENDPOINT_IP" : "0.0.0.0",
+		"environment:FUSEKI_ENDPOINT_PORT" : "3030",
+		"environment:FUSEKI_DATASET_PATH" : "/ds",
+		
+		"environment:JAVA_HOME" : "/opt/mosaic-rt-jre-7",
+		"environment:PATH" : "@{definitions:environment:JAVA_HOME}/bin:/usr/bin:/bin",
+		"environment:TMPDIR" : "/tmp/modaclouds/@{package:identifier}"
+	}
+}

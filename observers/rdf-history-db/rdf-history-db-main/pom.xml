@@ -141,7 +141,7 @@
 							<mappings>
 								<mapping>
 									<directory>/opt/modaclouds-services-${dist.file.name}-${project.version}/lib/distribution</directory>
-									<filemode>644</filemode>
+									<filemode>755</filemode>
 									<username>root</username>
 									<groupname>root</groupname>
 									<sources>

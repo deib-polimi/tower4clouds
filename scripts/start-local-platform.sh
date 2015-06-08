@@ -23,7 +23,7 @@ cd ..
 TOWER_ROOT=`pwd`
 
 log 'Starting rabbitMQ and Fuseki inside a VM with Vagrant'
-cd ${TOWER_ROOT}/observers/rdf-history-db
+cd ${TOWER_ROOT}/observers/rdf-history-db/fuseki-rabbitmq
 vagrant up
 
 log 'Starting Influxdb Graphite and Grafana inside a VM with Vagrant'
