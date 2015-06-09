@@ -269,4 +269,42 @@ public class Queue {
 	public Queue(String queueName) throws IOException {
 		this(Configuration.QUEUE_HOST, queueName);
 	}
+	
+	public static boolean isUp() {
+		ConnectionFactory factory = new ConnectionFactory();
+		factory.setHost(Configuration.getHost(Configuration.QUEUE_HOST));
+		
+		int port = Configuration.getPort(Configuration.QUEUE_HOST);
+		if (port > 0)
+			factory.setPort(port);
+		
+		try {
+			Connection connection = factory.newConnection();
+			connection.close();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	public static boolean waitUntilUp() {
+		return waitUntilUp(Integer.MAX_VALUE / 1000, 3000);
+	}
+	
+	public static boolean waitUntilUp(int attempts, int sleep) {
+		int attempt = 0;
+		while (true) {
+			boolean res = isUp();
+			if (res || attempt > attempts)
+				return res;
+			attempt++;
+			try {
+				Thread.sleep(sleep);
+			} catch (Exception e) { }
+		}
+	}
+	
+	public static void main(String[] args) throws Exception {
+		waitUntilUp(); 
+	}
 }

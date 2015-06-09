@@ -113,9 +113,7 @@ public class Main {
 
 		try {
 			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			logger.error("Error while waiting!", e);
-		}
+		} catch (InterruptedException e) { }
 
 		it.polimi.tower4clouds.rdf_history_db.observer.Main.perform(paramsMap);
 	}

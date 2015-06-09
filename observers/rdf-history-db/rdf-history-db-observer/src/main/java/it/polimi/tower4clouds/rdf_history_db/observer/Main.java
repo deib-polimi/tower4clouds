@@ -106,6 +106,8 @@ public class Main {
 			System.exit(-1);
 		}
 		
+		Queue.waitUntilUp();
+		
 		MetricsObserver.RUNNING_TIME = -1;
 		MetricsObserver mo = new MetricsObserver();
 		mo.start();

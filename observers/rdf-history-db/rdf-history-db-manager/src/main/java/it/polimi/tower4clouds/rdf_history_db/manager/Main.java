@@ -96,6 +96,9 @@ public class Main {
 			System.exit(-1);
 		}
 		
+		DataStore.waitUntilUp();
+		Queue.waitUntilUp();
+		
 		DataStore.reset();
 		
 		Manager.RUNNING_TIME = -1;
