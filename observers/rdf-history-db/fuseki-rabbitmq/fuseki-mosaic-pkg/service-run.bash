@@ -20,13 +20,13 @@ exec </dev/null >&2
 ## chunk::dd0589220f7c9bd3c2b62f4e1edc9b95::end ##
 
 _variable_defaults=(
-		
+
 		_FUSEKI_HOME='@{definitions:environment:FUSEKI_HOME}'
 		_FUSEKI_VAR='@{definitions:environment:FUSEKI_VAR}'
 		_FUSEKI_ENDPOINT_IP='@{definitions:environment:FUSEKI_ENDPOINT_IP}'
 		_FUSEKI_ENDPOINT_PORT='@{definitions:environment:FUSEKI_ENDPOINT_PORT}'
 		_FUSEKI_DATASET_PATH='@{definitions:environment:FUSEKI_DATASET_PATH}'
-		
+
 		_JAVA_HOME='@{definitions:environment:JAVA_HOME}'
 		_PATH='@{definitions:environment:PATH}'
 		_TMPDIR='@{definitions:environment:TMPDIR}'
@@ -48,12 +48,12 @@ fi
 ## chunk::fdccb2b60ff605167433bb1c89bd0b84::end ##
 
 _variable_overrides=(
-		
+
 		_FUSEKI_VAR="${MODACLOUDS_FUSEKI_VAR:-${_FUSEKI_VAR}}"
-		_FUSEKI_ENDPOINT_IP="${MODACLOUDS_ENDPOINT_IP:-${_FUSEKI_ENDPOINT_IP}}"
-		_FUSEKI_ENDPOINT_PORT="${MODACLOUDS_ENDPOINT_PORT:-${_FUSEKI_ENDPOINT_PORT}}"
-		_FUSEKI_DATASET_PATH="${MODACLOUDS_DATASET_PATH:-${_FUSEKI_DATASET_PATH}}"
-		
+		_FUSEKI_ENDPOINT_IP="${MODACLOUDS_FUSEKI_ENDPOINT_IP:-${_FUSEKI_ENDPOINT_IP}}"
+		_FUSEKI_ENDPOINT_PORT="${MODACLOUDS_FUSEKI_ENDPOINT_PORT:-${_FUSEKI_ENDPOINT_PORT}}"
+		_FUSEKI_DATASET_PATH="${MODACLOUDS_FUSEKI_DATASET_PATH:-${_FUSEKI_DATASET_PATH}}"
+
 		_TMPDIR="${MODACLOUDS_FUSEKI_TMPDIR:-${_TMPDIR}}"
 )
 declare "${_variable_overrides[@]}"

@@ -75,7 +75,7 @@
 	"definitions" : {
 
 		"package:name" : "modaclouds-services-fuseki",
-		"package:version" : "0.7.0_dev",
+		"package:version" : "0.1",
 		"package:release" : "@{execution:timestamp}",
 
 		"versions:modaclouds:fuseki" : "1.1.2",
