@@ -135,9 +135,12 @@ sudo zypper \
         --no-gpg-checks --gpg-auto-import-keys \
     install mosaic-components-rabbitmq</code></pre></li>
 <li>run via
-<pre><code class="language-bash">nohup /opt/mosaic-components-rabbitmq-0.7.0.11/bin/mosaic-components-rabbitmq--run-component &gt; /tmp/mosaic-components-rabbitmq.log 2&gt;&amp;1 &amp;</code></pre></li>
+<pre><code class="language-bash">nohup /opt/mosaic-components-rabbitmq-0.7.0.11/bin/mosaic-components-rabbitmq--run-component &gt; \
+    /tmp/mosaic-components-rabbitmq-0.7.0.11.log 2&gt;&amp;1 &amp;</code></pre></li>
+<li>stop via
+<pre><code class="language-bash">???</code></pre></li>
 </ul></li>
-<li>apache-fuseki (required by rdf-history-db)
+<li>modaclouds-services-fuseki (required by rdf-history-db)
 <ul>
 <li>install via
 <pre><code class="language-bash">sudo zypper \
@@ -148,8 +151,35 @@ sudo zypper \
 <pre><code class="language-bash">env \
     MODACLOUDS_FUSEKI_ENDPOINT_PORT=3030 \
     MODACLOUDS_FUSEKI_DATASET_PATH=/ds \
-    nohup /opt/modaclouds-services-fuseki ... &gt; /tmp/modaclouds-services-fuseki.log 2&gt;&amp;1 &amp;</code></pre></li>
+nohup /opt/modaclouds-services-fuseki ... &gt; \
+    /tmp/modaclouds-services-fuseki.log 2&gt;&amp;1 &amp;</code></pre></li>
+<li>stop via
+<pre><code class="language-bash">???</code></pre></li>
 </ul></li>
+<li>modaclouds-services-metric-explorer (Graphite) (required to explore data at runtime)
+<ul>
+<li>install via
+<pre><code class="language-bash">sudo zypper \
+        --non-interactive --no-refresh \
+        --no-gpg-checks --gpg-auto-import-keys \
+    install modaclouds-services-metric-explorer</code></pre></li>
+<li>run via
+<pre><code class="language-bash">MOS_NODE_PUBLIC_IP="${mos_node_public_ip}" # CHECK THIS VAR IS ASSIGNED
+env \
+    MODACLOUDS_METRIC_EXPLORER_DASHBOARD_ENDPOINT_IP="${MOS_NODE_PUBLIC_IP}" \
+    MODACLOUDS_METRIC_EXPLORER_DASHBOARD_ENDPOINT_PORT=9010 \
+    MODACLOUDS_METRIC_EXPLORER_QUERY_ENDPOINT_IP="${MOS_NODE_PUBLIC_IP}" \
+    MODACLOUDS_METRIC_EXPLORER_QUERY_ENDPOINT_PORT=9011 \
+    MODACLOUDS_METRIC_EXPLORER_PICKLE_RECEIVER_ENDPOINT_IP="${MOS_NODE_PUBLIC_IP}" \
+    MODACLOUDS_METRIC_EXPLORER_PICKLE_RECEIVER_ENDPOINT_PORT=9012 \
+    MODACLOUDS_METRIC_EXPLORER_LINE_RECEIVER_ENDPOINT_IP="${MOS_NODE_PUBLIC_IP}" \
+    MODACLOUDS_METRIC_EXPLORER_LINE_RECEIVER_ENDPOINT_PORT=9013 \
+nohup /opt/modaclouds-services-metric-explorer-0.7.0.11/bin/modaclouds-services-metric-explorer--run-service &gt; \
+    /tmp/modaclouds-services-metric-explorer-0.7.0.11.log 2&gt;&amp;1 &amp;</code></pre></li>
+<li>stop via
+<pre><code class="language-bash">???</code></pre></li>
+</ul></li>
+<li>Grafana (<a href="http://grafana.org">http://grafana.org</a>) (optional: a nicer gui for Graphite)</li>
 </ul>
 <p>Start Tower 4Clouds:</p>
 <pre><code class="language-bash">components=(manager data-analyzer rdf-history-db)
@@ -169,7 +199,8 @@ export \
     MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_IP=127.0.0.1
 for component in ${components[@]}
 do
-    nohup /opt/modaclouds-services-tower4clouds-${component}-${TOWER4CLOUDS_RELEASE}/bin/service-run.bash &gt; /tmp/modaclouds-services-tower4clouds-${component}-${TOWER4CLOUDS_RELEASE}.log 2&gt;&amp;1 &amp;
+    nohup /opt/modaclouds-services-tower4clouds-${component}-${TOWER4CLOUDS_RELEASE}/bin/service-run.bash &gt; \
+        /tmp/modaclouds-services-tower4clouds-${component}-${TOWER4CLOUDS_RELEASE}.log 2&gt;&amp;1 &amp;
 done</code></pre>
 <p>Shut down Tower 4Clouds:</p>
 <pre><code class="language-bash">pkill -f tower4clouds</code></pre>
