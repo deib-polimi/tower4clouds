@@ -16,6 +16,7 @@
 package it.polimi.tower4clouds.rdf_history_db.manager;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -271,16 +272,12 @@ public class Queue {
 	}
 	
 	public static boolean isUp() {
-		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost(Configuration.getHost(Configuration.QUEUE_HOST));
-		
-		int port = Configuration.getPort(Configuration.QUEUE_HOST);
-		if (port > 0)
-			factory.setPort(port);
-		
 		try {
-			Connection connection = factory.newConnection();
-			connection.close();
+			String host = Configuration.getHost(Configuration.QUEUE_HOST);
+			int port = Configuration.getPort(Configuration.QUEUE_HOST);
+			
+			Socket s = new Socket(host, port);
+			s.close();
 			return true;
 		} catch (Exception e) {
 			return false;

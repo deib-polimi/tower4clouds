@@ -96,8 +96,16 @@ public class Main {
 			System.exit(-1);
 		}
 		
-		DataStore.waitUntilUp();
-		Queue.waitUntilUp();
+		if (!DataStore.waitUntilUp()) {
+			logger.error("The datastore didn't start in time. Aborting.");
+			System.exit(-1);
+		}
+		logger.debug("Found the datastore running.");
+		if (!Queue.waitUntilUp()) {
+			logger.error("The queue didn't start in time. Aborting.");
+			System.exit(-1);
+		}
+		logger.debug("Found the queue running.");
 		
 		DataStore.reset();
 		

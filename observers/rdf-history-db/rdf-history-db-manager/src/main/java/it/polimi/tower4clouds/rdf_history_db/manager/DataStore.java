@@ -24,6 +24,7 @@ import it.polimi.tower4clouds.rdf_history_db.manager.data.Model;
 import it.polimi.tower4clouds.rdf_history_db.manager.data.MonitoringData;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Date;
@@ -307,9 +308,12 @@ public class DataStore {
 	}
 	
 	public static boolean isUp() {
-		DatasetAccessor ds = DatasetAccessorFactory.createHTTP(Configuration.FUSEKI_HOST + "/data");
 		try {
-			ds.containsModel("default");
+			String host = Configuration.getHost(Configuration.FUSEKI_HOST);
+			int port = Configuration.getPort(Configuration.FUSEKI_HOST);
+			
+			Socket s = new Socket(host, port);
+			s.close();
 			return true;
 		} catch (Exception e) {
 			return false;

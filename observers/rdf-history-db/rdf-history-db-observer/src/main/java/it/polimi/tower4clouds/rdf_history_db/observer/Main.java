@@ -106,7 +106,11 @@ public class Main {
 			System.exit(-1);
 		}
 		
-		Queue.waitUntilUp();
+		if (!Queue.waitUntilUp()) {
+			logger.error("The queue didn't start in time. Aborting.");
+			System.exit(-1);
+		}
+		logger.debug("Found the queue running.");
 		
 		MetricsObserver.RUNNING_TIME = -1;
 		MetricsObserver mo = new MetricsObserver();

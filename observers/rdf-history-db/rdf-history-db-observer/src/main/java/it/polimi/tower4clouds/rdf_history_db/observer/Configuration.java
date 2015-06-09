@@ -18,7 +18,6 @@ package it.polimi.tower4clouds.rdf_history_db.observer;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -241,25 +240,7 @@ public abstract class Configuration {
 	public static List<String> checkConfiguration() {
 		List<String> res = new ArrayList<String>();
 		
-		try {
-			String host = getHost(FUSEKI_HOST);
-			int port = getPort(FUSEKI_HOST);
-			
-			Socket s = new Socket(host, port);
-			s.close();
-		} catch (Exception e) {
-			res.add("Error while connecting to the Fuseki datastore. Please check your configuration (" + FUSEKI_HOST + ").");
-		}
-		
-		try {
-			String host = getHost(QUEUE_HOST);
-			int port = getPort(QUEUE_HOST);
-			
-			Socket s = new Socket(host, port);
-			s.close();
-		} catch (Exception e) {
-			res.add("Error while connecting to the queue. Please check your configuration (" + QUEUE_HOST + ").");
-		}
+		// TODO: add any check to the configuration
 		
 		return res;
 	}
