@@ -167,7 +167,7 @@
 						</executions>
 						<configuration>
 							<distribution>tower4clouds</distribution>
-							<name>modaclouds-services-${dist.file.name}-${project.version}</name>
+							<name>modaclouds-services-${dist.file.name}</name>
 							<group>System Environment/Daemons</group>
 							<prefix>/opt/modaclouds-services-${dist.file.name}-${project.version}</prefix>
 							<targetOS>linux</targetOS>

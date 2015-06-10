@@ -16,8 +16,9 @@
 
 # RELEASE
 
-mvn clean license:format release:prepare -P mosaic-rpm
-mvn release:perform -P github-release
+mvn clean release:prepare -DdryRun=true -P mosaic-rpm
+mvn release:clean release:prepare release:perform -P mosaic-rpm
+# manually add artifacts to the github release until u fix github release plugin
 
 # IF SOMETHING GOES WRONG (WARNING: ALL RECENT COMMITS IN THE CURRENT BRANCH WILL BE LOST!)
 git reset --hard <id of the commit you want to reset to>
