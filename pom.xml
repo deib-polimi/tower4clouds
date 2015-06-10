@@ -466,35 +466,45 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- <plugin> PREVENT SNAPSHOTS FROM BEING RELEASED!
-				<groupId>de.jutzig</groupId>
-				<artifactId>github-release-plugin</artifactId>
-				<version>1.1.1</version>
-				<inherited>false</inherited>
-				<configuration>
-					<description>See the
-						[Changelog](https://github.com/deib-polimi/tower4clouds/blob/master/CHANGELOG.md)</description>
-					<releaseName>v${project.version}</releaseName>
-					<tag>v${project.version}</tag>
-					<fileSet>
-						<includes>
-							<include>**/target/*.tar.gz</include>
-							<include>**/target/*.zip</include>
-							<include>**/target/*jar-with-dependencies.jar</include>
-						</includes>
-					</fileSet>
-				</configuration>
-				<executions>
-					<execution>
-						<id>github-upload</id>
-						<phase>deploy</phase>
-						<goals>
-							<goal>release</goal>
-						</goals>
-						<inherited>false</inherited>
-					</execution>
-				</executions>
-			</plugin> -->
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>github-release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>de.jutzig</groupId>
+						<artifactId>github-release-plugin</artifactId>
+						<version>1.1.1</version>
+						<inherited>false</inherited>
+						<configuration>
+							<description>See the
+								[Changelog](https://github.com/deib-polimi/tower4clouds/blob/master/CHANGELOG.md)</description>
+							<releaseName>v${project.version}</releaseName>
+							<tag>v${project.version}</tag>
+							<fileSet>
+								<includes>
+									<include>**/target/**/*.rpm</include>
+									<include>**/target/*.tar.gz</include>
+									<include>**/target/*.zip</include>
+									<include>rules/target/rules-*-jar-with-dependencies.jar</include>
+								</includes>
+							</fileSet>
+						</configuration>
+						<executions>
+							<execution>
+								<id>github-upload</id>
+								<phase>deploy</phase>
+								<goals>
+									<goal>release</goal>
+								</goals>
+								<inherited>false</inherited>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
