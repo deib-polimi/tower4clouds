@@ -331,6 +331,7 @@ public class DataStore {
 			if (res || attempt > attempts)
 				return res;
 			attempt++;
+			logger.info("Cannot connect to the datastore, trying again in " + sleep/1000 + "s...");
 			try {
 				Thread.sleep(sleep);
 			} catch (Exception e) { }
