@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>it.polimi.tower4clouds</groupId>
 		<artifactId>rdf-history-db</artifactId>
-		<version>0.2</version>
+		<version>0.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>rdf-history-db-main</artifactId>
 	<name>MODAClouds - Tower4Clouds - RDF History DB</name>
