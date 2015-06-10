@@ -177,7 +177,7 @@ nohup /opt/modaclouds-services-metric-explorer-0.7.0.11/bin/modaclouds-services-
 <p>Download and install the <a href="https://github.com/deib-polimi/tower4clouds/releases">latest rpms</a>:</p>
 <pre><code class="language-bash">TOWER4CLOUDS_RELEASE=0.2
 rm -f /tmp/modaclouds-services-tower4clouds-*-${TOWER4CLOUDS_RELEASE}.noarch.rpm
-wget -P /tmp https://github.com/deib-polimi/tower4clouds/releases/download/${TOWER4CLOUDS_RELEASE}/modaclouds-services-tower4clouds-{manager,data-analyzer,rdf-history-db}-${TOWER4CLOUDS_RELEASE}.noarch.rpm 
+wget -P /tmp https://github.com/deib-polimi/tower4clouds/releases/download/v${TOWER4CLOUDS_RELEASE}/modaclouds-services-tower4clouds-{manager,data-analyzer,rdf-history-db}-${TOWER4CLOUDS_RELEASE}.noarch.rpm 
 sudo zypper \
         --non-interactive --no-refresh \
         --no-gpg-checks --gpg-auto-import-keys \
