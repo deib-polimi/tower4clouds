@@ -18,7 +18,7 @@ html {
     min-height: 100%;
 }
 body {
-    font-size: 19px;
+    font-size: large;
 }
 
 @media (min-width: 1200px) {
@@ -38,7 +38,7 @@ footer {
     width: 100%;
     background-color: #f5f5f5;
     padding: 25px 0;
-    font-size: 15px;
+    font-size: small;
     text-align: center;
     text-transform: uppercase;
     opacity: 0.6;
@@ -52,8 +52,16 @@ footer p {
     margin: 0;
 }
 
+h1 {
+    font-size: 36px;
+}
+
+h2 {
+    font-size: 30px;
+}
+
 h3 {
-    font-size: 23px;
+    font-size: x-large;
 }
 
 li {
@@ -72,15 +80,43 @@ header.navbar {
     opacity: 0.9;
 }
 .navbar .navbar-brand {
-    font-size: 28px;
+    font-size: 25px;
     height: auto;
     line-height: 30px;
     margin-left: 20px;
 }
 .navbar .navbar-brand small {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 300;
     margin-left: 10px;
+}
+
+pre {
+    padding: 0;
+    border-radius: 4px;
+    margin: 15px;
+    font-size: medium;
+}
+pre code {
+    border: none;
+}
+
+table {
+	border-collapse: collapse;
+	font-size: medium;
+}
+
+table, th, td{
+	border: 1px solid black;
+}
+
+th, td {
+	padding: 5px;
+}
+
+table ul {
+	list-style-type: square;
+	padding: 20px;
 }
 
 @media (min-width: 768px) {
@@ -92,10 +128,10 @@ header.navbar {
 }
 @media (max-width: 960px) {
     body {
-        font-size: 17px;
+        font-size: medium;
     }
     pre {
-        font-size: 12px;
+        font-size: small;
     }
 }
 
@@ -107,15 +143,7 @@ header.navbar {
     color: #bbbbbb;
 }
 
-pre {
-    padding: 0;
-    border-radius: 4px;
-    margin: 15px;
-    font-size: 15px;
-}
-pre code {
-    border: none;
-}
+
 
 .home #main {
     margin-top: 150px;
