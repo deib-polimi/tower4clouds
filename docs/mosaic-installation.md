@@ -81,7 +81,7 @@ Download and install the [latest rpms](https://github.com/deib-polimi/tower4clou
 ```bash
 TOWER4CLOUDS_RELEASE=0.2
 rm -f /tmp/modaclouds-services-tower4clouds-*-${TOWER4CLOUDS_RELEASE}.noarch.rpm
-wget -P /tmp https://github.com/deib-polimi/tower4clouds/releases/download/${TOWER4CLOUDS_RELEASE}/modaclouds-services-tower4clouds-{manager,data-analyzer,rdf-history-db}-${TOWER4CLOUDS_RELEASE}.noarch.rpm 
+wget -P /tmp https://github.com/deib-polimi/tower4clouds/releases/download/v${TOWER4CLOUDS_RELEASE}/modaclouds-services-tower4clouds-{manager,data-analyzer,rdf-history-db}-${TOWER4CLOUDS_RELEASE}.noarch.rpm 
 sudo zypper \
 		--non-interactive --no-refresh \
 		--no-gpg-checks --gpg-auto-import-keys \
@@ -107,7 +107,7 @@ export \
 	MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_PORT=8175 \
 	MODACLOUDS_TOWER4CLOUDS_MANAGER_PUBLIC_ENDPOINT_PORT=8170 \
 	MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_IP=127.0.0.1 \
-	MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_PORT=31337 \
+	MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_PORT=31337
 for component in ${components[@]}
 do
 	nohup /opt/modaclouds-services-tower4clouds-${component}-${TOWER4CLOUDS_RELEASE}/bin/service-run.bash > \

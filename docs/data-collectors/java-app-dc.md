@@ -72,7 +72,18 @@ Include in your build life cycle the aspectj plugin:
 </build>
 ```
 
-When your application starts, the data collector must be configured with the information about the resource it is monitoring, the [manager] endpoint, the package where your java classes are located, and finally started.
+When your application starts, the data collector must be configured with the information about the resource it is monitoring, the [manager] endpoint, the package where your java classes are located, and finally started. Let's see an example:
+```java
+Map<Property, String> applicationProperties = new HashMap<Property, String>();
+applicationProperties.put(Property.ID, "App1");
+applicationProperties.put(Property.TYPE, "App");
+applicationProperties.put(Property.VM_ID, "Frontend1");
+applicationProperties.put(Property.VM_TYPE, "Frontend");
+applicationProperties.put(Property.CLOUD_PROVIDER_ID, "AWS");
+applicationProperties.put(Property.CLOUD_PROVIDER_TYPE, "IaaS");
+Registry.initialize(managerIP, managerPort, applicationProperties, "it.polimi.app");
+Registry.startMonitoring();
+```
 
 Annotate methods you want to monitor, specifying the method [type] as parameter.
 
