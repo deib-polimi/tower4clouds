@@ -201,4 +201,12 @@ public class ManagerAPI {
 		return gson.fromJson(jsonRequiredMetrics, new TypeToken<Set<String>>() {
 		}.getType());
 	}
+	
+	public void enableRule(String id) {
+		// TODO
+	}
+	
+	public void disableRule(String id) {
+		// TODO
+	}
 }
