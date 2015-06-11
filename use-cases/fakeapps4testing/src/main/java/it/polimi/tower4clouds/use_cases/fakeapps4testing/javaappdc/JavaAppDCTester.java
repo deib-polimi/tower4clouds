@@ -55,7 +55,6 @@ public class JavaAppDCTester {
 		applicationProperties.put(Property.CLOUD_PROVIDER_TYPE, "IaaS");
 		Registry.initialize(managerIP, managerPort, applicationProperties,
 				JavaAppDCTester.class.getPackage().getName());
-		Registry.CONFIG_SYNC_PERIOD = 1000;
 		Registry.startMonitoring();
 		for (int i = 0; i < 100000; i++) {
 			login();
