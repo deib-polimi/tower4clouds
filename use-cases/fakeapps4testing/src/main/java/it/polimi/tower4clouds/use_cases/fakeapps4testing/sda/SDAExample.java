@@ -16,29 +16,23 @@
 package it.polimi.tower4clouds.use_cases.fakeapps4testing.sda;
 
 import it.polimi.modaclouds.qos_models.util.XMLHelper;
-import it.polimi.tower4clouds.common.net.UnexpectedAnswerFromServerException;
 import it.polimi.tower4clouds.data_collector_library.DCAgent;
 import it.polimi.tower4clouds.manager.api.ManagerAPI;
 import it.polimi.tower4clouds.model.data_collectors.DCDescriptor;
 import it.polimi.tower4clouds.model.ontology.Resource;
 import it.polimi.tower4clouds.rules.MonitoringRules;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
-
-import javax.xml.bind.JAXBException;
 
 public class SDAExample {
 	private static final String sdaUrl = "http://127.0.0.1/data";
 	private static final String managerHost = "localhost";
 	private static final int managerPort = 8170;
 
-	public static void main(String[] args)
-			throws UnexpectedAnswerFromServerException, IOException,
-			JAXBException {
+	public static void main(String[] args) throws Exception {
 		ManagerAPI manager = new ManagerAPI(managerHost, managerPort);
-		manager.registerRules(XMLHelper.deserialize(
+		manager.installRules(XMLHelper.deserialize(
 				SDAExample.class.getResourceAsStream("/rules4SDAExample.xml"),
 				MonitoringRules.class));
 

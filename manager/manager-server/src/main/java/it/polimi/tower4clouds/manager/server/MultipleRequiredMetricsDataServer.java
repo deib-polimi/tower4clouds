@@ -39,7 +39,7 @@ public class MultipleRequiredMetricsDataServer extends ServerResource {
 		try {
 			MonitoringManager manager = (MonitoringManager) getContext()
 					.getAttributes().get("manager");
-			Set<String> requiredMetrics = manager.getRequiredeMetrics();
+			Set<String> requiredMetrics = manager.getRequiredMetrics();
 			this.getResponse().setStatus(Status.SUCCESS_OK);
 			this.getResponse().setEntity(new Gson().toJson(requiredMetrics).toString(),
 					MediaType.APPLICATION_JSON);

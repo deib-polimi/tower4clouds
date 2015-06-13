@@ -21,9 +21,15 @@ public class UnexpectedAnswerFromServerException extends Exception {
 	 * 
 	 */
 	private static final long serialVersionUID = 3698052056140527233L;
+	private int statusCode;
 
 	public UnexpectedAnswerFromServerException(int statusCode, String reason) {
 		super("Returned status code: " + statusCode + ". " + reason);
+		this.statusCode = statusCode;
+	}
+
+	public int getReturnedCode() {
+		return statusCode;
 	}
 
 }

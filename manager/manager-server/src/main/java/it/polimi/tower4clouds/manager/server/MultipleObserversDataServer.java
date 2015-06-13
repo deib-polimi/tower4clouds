@@ -16,8 +16,9 @@
 package it.polimi.tower4clouds.manager.server;
 
 import it.polimi.tower4clouds.manager.MonitoringManager;
-import it.polimi.tower4clouds.manager.NotFoundException;
+import it.polimi.tower4clouds.manager.api.NotFoundException;
 import it.polimi.tower4clouds.manager.api.Observer;
+import it.polimi.tower4clouds.manager.api.SocketProtocol;
 
 import java.net.MalformedURLException;
 import java.util.Set;
@@ -66,7 +67,7 @@ public class MultipleObserversDataServer extends ServerResource {
 			} else {
 				String observerHost = jsonObject.get("observerHost").getAsString();
 				int observerPort = jsonObject.get("observerPort").getAsInt();
-				observer = manager.registerSocketObserver(metricname, observerHost, observerPort, protocol, format);
+				observer = manager.registerSocketObserver(metricname, observerHost, observerPort, SocketProtocol.valueOf(protocol), format);
 			}
 			String jsonResponse = new Gson().toJson(observer);
 			this.getResponse().setStatus(Status.SUCCESS_CREATED);

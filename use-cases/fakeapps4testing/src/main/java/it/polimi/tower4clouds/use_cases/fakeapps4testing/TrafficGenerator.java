@@ -16,7 +16,6 @@
 package it.polimi.tower4clouds.use_cases.fakeapps4testing;
 
 import it.polimi.modaclouds.qos_models.util.XMLHelper;
-import it.polimi.tower4clouds.common.net.UnexpectedAnswerFromServerException;
 import it.polimi.tower4clouds.data_collector_library.DCAgent;
 import it.polimi.tower4clouds.manager.api.Format;
 import it.polimi.tower4clouds.manager.api.ManagerAPI;
@@ -30,7 +29,6 @@ import it.polimi.tower4clouds.model.ontology.VM;
 import it.polimi.tower4clouds.rules.MonitoringRule;
 import it.polimi.tower4clouds.rules.MonitoringRules;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Set;
@@ -130,7 +128,7 @@ public class TrafficGenerator {
 					MonitoringRules rules = XMLHelper.deserialize(
 							getResourceAsStream("rules4TrafficGenerator.xml"),
 							MonitoringRules.class);
-					managerServer.registerRules(rules);
+					managerServer.installRules(rules);
 					sent = true;
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
@@ -236,15 +234,15 @@ public class TrafficGenerator {
 	}
 
 	private static void resetPlatform()
-			throws UnexpectedAnswerFromServerException, IOException {
+			throws Exception {
 
 		MonitoringRules rules = managerServer.getRules();
 
 		for (MonitoringRule rule : rules.getMonitoringRules()) {
-			managerServer.deleteRule(rule.getId());
+			managerServer.uninstallRule(rule.getId());
 		}
 
-		Map<String, DCDescriptor> dcs = managerServer.getDataCollectors();
+		Map<String, DCDescriptor> dcs = managerServer.getRegisteredDataCollectors();
 
 		for (String dcId : dcs.keySet()) {
 			managerServer.unregisterDataCollector(dcId);

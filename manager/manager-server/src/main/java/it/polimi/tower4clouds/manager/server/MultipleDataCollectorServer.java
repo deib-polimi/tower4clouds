@@ -83,7 +83,7 @@ public class MultipleDataCollectorServer extends ServerResource {
 			MonitoringManager manager = (MonitoringManager) getContext()
 					.getAttributes().get("manager");
 
-			Map<String, DCDescriptor> dcs = manager.getRegisteredDCs();
+			Map<String, DCDescriptor> dcs = manager.getRegisteredDataCollectors();
 
 			this.getResponse().setEntity(new Gson().toJson(dcs),
 					MediaType.APPLICATION_JSON);

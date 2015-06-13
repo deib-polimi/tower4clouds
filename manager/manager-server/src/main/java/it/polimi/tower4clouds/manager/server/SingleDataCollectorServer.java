@@ -16,10 +16,9 @@
 package it.polimi.tower4clouds.manager.server;
 
 import it.polimi.tower4clouds.manager.MonitoringManager;
-import it.polimi.tower4clouds.manager.NotFoundException;
+import it.polimi.tower4clouds.manager.api.NotFoundException;
 import it.polimi.tower4clouds.model.data_collectors.DCDescriptor;
 
-import org.apache.jena.atlas.json.JsonObject;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -79,7 +78,7 @@ public class SingleDataCollectorServer extends ServerResource {
 			MonitoringManager manager = (MonitoringManager) getContext()
 					.getAttributes().get("manager");
 
-			manager.unregisterDC(id);
+			manager.unregisterDataCollector(id);
 
 			this.getResponse().setStatus(Status.SUCCESS_NO_CONTENT,
 					"DC successfully retrieved");

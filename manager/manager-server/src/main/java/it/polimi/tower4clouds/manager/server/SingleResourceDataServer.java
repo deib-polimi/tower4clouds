@@ -16,7 +16,7 @@
 package it.polimi.tower4clouds.manager.server;
 
 import it.polimi.tower4clouds.manager.MonitoringManager;
-import it.polimi.tower4clouds.manager.NotFoundException;
+import it.polimi.tower4clouds.manager.api.NotFoundException;
 import it.polimi.tower4clouds.model.ontology.Resource;
 
 import org.restlet.data.MediaType;

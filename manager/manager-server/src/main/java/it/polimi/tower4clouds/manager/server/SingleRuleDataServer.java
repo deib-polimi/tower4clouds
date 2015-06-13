@@ -16,12 +16,13 @@
 package it.polimi.tower4clouds.manager.server;
 
 import it.polimi.tower4clouds.manager.MonitoringManager;
-import it.polimi.tower4clouds.manager.NotFoundException;
+import it.polimi.tower4clouds.manager.api.NotFoundException;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
+import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,5 +59,43 @@ public class SingleRuleDataServer extends ServerResource {
 			this.release();
 		}
 	}
+	
+	@Get
+	public void ruleProperty() {
+		try {
+			MonitoringManager manager = (MonitoringManager) getContext()
+					.getAttributes().get("manager");
+			String id = (String) this.getRequest().getAttributes().get("id");
+			String enabled = getQueryValue("enabled");
+			if (enabled==null){
+				this.getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			} else if (enabled.equalsIgnoreCase("true")) {
+				manager.enableRule(id);
+				this.getResponse().setStatus(Status.SUCCESS_NO_CONTENT);
+			} else if (enabled.equalsIgnoreCase("false")) {
+				manager.disableRule(id);
+				this.getResponse().setStatus(Status.SUCCESS_NO_CONTENT);
+			} else {
+				this.getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			}
+		} catch (NotFoundException e) {
+			String message = "Rule does not exist: " + e.getMessage();
+			logger.error(message);
+			this.getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND,
+					e.getMessage());
+			this.getResponse().setEntity(message, MediaType.TEXT_PLAIN);
+		} catch (Exception e) {
+			logger.error("Error while uninstalling the rule", e);
+			this.getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,
+					e.getMessage());
+			this.getResponse().setEntity(
+					"Error while uninstalling the rule: " + e.getMessage(),
+					MediaType.TEXT_PLAIN);
+		} finally {
+			this.getResponse().commit();
+			this.commit();
+			this.release();
+		}
+	} 
 
 }

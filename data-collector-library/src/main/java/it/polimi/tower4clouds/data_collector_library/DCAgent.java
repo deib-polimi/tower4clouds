@@ -126,7 +126,7 @@ public class DCAgent extends Observable {
 				} catch (InterruptedException e1) {
 					throw new RuntimeException(e1);
 				}
-			} catch (UnexpectedAnswerFromServerException e) {
+			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}

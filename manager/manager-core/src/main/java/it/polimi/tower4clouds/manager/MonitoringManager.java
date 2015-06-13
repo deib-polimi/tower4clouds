@@ -26,7 +26,10 @@ import it.polimi.modaclouds.monitoring.kb.api.RspKbAPI;
 import it.polimi.modaclouds.monitoring.kb.api.SerializationException;
 import it.polimi.modaclouds.qos_models.Problem;
 import it.polimi.tower4clouds.common.net.NetUtil;
+import it.polimi.tower4clouds.manager.api.IManagerAPI;
+import it.polimi.tower4clouds.manager.api.NotFoundException;
 import it.polimi.tower4clouds.manager.api.Observer;
+import it.polimi.tower4clouds.manager.api.SocketProtocol;
 import it.polimi.tower4clouds.model.data_collectors.DCConfiguration;
 import it.polimi.tower4clouds.model.data_collectors.DCDescriptor;
 import it.polimi.tower4clouds.model.ontology.MO;
@@ -68,7 +71,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public class MonitoringManager {
+public class MonitoringManager implements IManagerAPI {
 
 	private static final int MAX_KEEP_ALIVE = Integer.MAX_VALUE / 1000;
 	private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
@@ -183,6 +186,7 @@ public class MonitoringManager {
 		}
 	}
 
+	@Override
 	public synchronized void installRules(MonitoringRules rules)
 			throws RuleInstallationException {
 		logger.info("{} rule(s) to install", rules.getMonitoringRules().size());
@@ -373,6 +377,7 @@ public class MonitoringManager {
 		}
 	}
 
+	@Override
 	public synchronized void uninstallRule(String ruleId)
 			throws NotFoundException, IOException {
 		logger.info("Uninstalling rule {}", ruleId);
@@ -430,6 +435,49 @@ public class MonitoringManager {
 		}
 		queryIdByRuleId.remove(ruleId);
 	}
+	
+	@Override
+	public void enableRule(String id) throws NotFoundException, IOException {
+		// TODO using startEnabled field, should be renamed to enabled
+		logger.info("Enabling rule {}", id);
+		MonitoringRule rule = rulesByRuleId.get(id);
+		if (rule == null)
+			throw new NotFoundException(id);
+		if (rule.isStartEnabled()) return;
+		String queryId = queryIdByRuleId.get(id);
+		if (queryId == null) {
+			throw new RuntimeException("No query found related to installed rule " + id);
+		}
+		String queryURI = prepareQueryURI(queryId);
+		logger.debug("Enabling query {}", queryURI);
+		try {
+			dataAnalyzer.restartQuery(queryURI);
+		} catch (Exception e) {
+			throw new IOException(e);
+		}
+		rule.setStartEnabled(true);
+	}
+
+	@Override
+	public void disableRule(String id) throws NotFoundException, IOException{
+		logger.info("Disabling rule {}", id);
+		MonitoringRule rule = rulesByRuleId.get(id);
+		if (rule == null)
+			throw new NotFoundException(id);
+		if (!rule.isStartEnabled()) return;
+		String queryId = queryIdByRuleId.get(id);
+		if (queryId == null) {
+			throw new RuntimeException("No query found related to installed rule " + id);
+		}
+		String queryURI = prepareQueryURI(queryId);
+		logger.debug("Disabling query {}", queryURI);
+		try {
+			dataAnalyzer.pauseQuery(queryURI);
+		} catch (Exception e) {
+			throw new IOException(e);
+		}
+		rule.setStartEnabled(false);
+	}
 
 	private boolean noOtherRuleIsUsingIt(String ruleId, String metric) {
 		HashMap<String, Set<String>> copy = new HashMap<String, Set<String>>(
@@ -461,12 +509,14 @@ public class MonitoringManager {
 		return ruleIdByObservableMetric.keySet();
 	}
 
-	public synchronized MonitoringRules getMonitoringRules() {
+	@Override
+	public synchronized MonitoringRules getRules() {
 		MonitoringRules rules = new MonitoringRules();
 		rules.getMonitoringRules().addAll(rulesByRuleId.values());
 		return rules;
 	}
 
+	@Override
 	public synchronized Observer registerHttpObserver(String metric,
 			String callbackUrl, String format) throws NotFoundException,
 			IOException {
@@ -507,8 +557,9 @@ public class MonitoringManager {
 		return observer;
 	}
 
+	@Override
 	public synchronized Observer registerSocketObserver(String metric,
-			String observerHost, int observerPort, String protocol,
+			String observerHost, int observerPort, SocketProtocol protocol,
 			String format) throws NotFoundException, IOException {
 		logger.info(
 				"Adding socket observer with host {} and port {} to metric {} using protocol {} and format {}",
@@ -521,7 +572,7 @@ public class MonitoringManager {
 		String returnedObserverUri;
 		try {
 			returnedObserverUri = dataAnalyzer.addSocketObserver(queryUri,
-					observerHost, observerPort, protocol, format);
+					observerHost, observerPort, protocol.name(), format);
 		} catch (ServerErrorException e) {
 			throw new IOException();
 		} catch (ObserverErrorException e) {
@@ -533,7 +584,7 @@ public class MonitoringManager {
 		Observer observer = observersById.get(observerId);
 		if (observer == null) {
 			observer = new Observer(observerId, observerHost, observerPort,
-					protocol, format);
+					protocol.name(), format);
 			observersById.put(observerId, observer);
 		}
 		observer.addObservedQueryUri(queryUri);
@@ -596,6 +647,7 @@ public class MonitoringManager {
 				&& observersIdsByMetric.get(metric).contains(observerId);
 	}
 
+	@Override
 	public void deleteResource(String resourceId) throws IOException,
 			NotFoundException {
 		logger.info("Deleting resource {} from KB", resourceId);
@@ -660,6 +712,7 @@ public class MonitoringManager {
 		}
 	}
 
+	@Override
 	public Collection<Resource> getResources() throws DeserializationException,
 			IOException {
 		synchronized (dcAndResourcesLock) {
@@ -667,6 +720,7 @@ public class MonitoringManager {
 		}
 	}
 
+	@Override
 	public String registerDataCollector(DCDescriptor dCDescriptor)
 			throws SerializationException, IOException {
 		String dcId = UUID.randomUUID().toString();
@@ -767,7 +821,8 @@ public class MonitoringManager {
 		}
 	}
 
-	public void unregisterDC(String dcId) throws NotFoundException {
+	@Override
+	public void unregisterDataCollector(String dcId) throws NotFoundException {
 		synchronized (dcAndResourcesLock) {
 			DCDescriptor dCDescriptor = registeredDCs.get(dcId);
 			if (dCDescriptor == null) {
@@ -813,6 +868,7 @@ public class MonitoringManager {
 	// }
 
 	// @Monitor(type = "keepAlive")
+	@Override
 	public void keepAlive(String dcId) throws NotFoundException,
 			SerializationException, IOException {
 		synchronized (dcAndResourcesLock) {
@@ -851,7 +907,8 @@ public class MonitoringManager {
 		}
 	}
 
-	public Map<String, DCDescriptor> getRegisteredDCs() {
+	@Override
+	public Map<String, DCDescriptor> getRegisteredDataCollectors() {
 		synchronized (dcAndResourcesLock) {
 			return registeredDCs;
 		}
@@ -869,6 +926,7 @@ public class MonitoringManager {
 	}
 
 	// @Monitor(type = "getDCConfigurationByMetric")
+	@Override
 	public Map<String, DCConfiguration> getDCConfigurationByMetric(String dcId)
 			throws NotFoundException, SerializationException, IOException {
 		Map<String, DCConfiguration> configs = new HashMap<String, DCConfiguration>();
@@ -1107,11 +1165,15 @@ public class MonitoringManager {
 	 * @return the metrics required by one or more installed rule that are not
 	 *         provided as output metric of other rules
 	 */
-	public Set<String> getRequiredeMetrics() {
+	@Override
+	public Set<String> getRequiredMetrics() {
 		HashSet<String> requiredMetrics = new HashSet<String>(
 				streamsByMetric.keySet());
 		requiredMetrics.removeAll(ruleIdByObservableMetric.keySet());
 		return requiredMetrics;
 	}
+
+
+	
 
 }

@@ -15,20 +15,16 @@
  */
 package it.polimi.tower4clouds.use_cases.fakeapps4testing.javaappdc;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.xml.bind.JAXBException;
-
 import it.polimi.modaclouds.qos_models.util.XMLHelper;
-import it.polimi.tower4clouds.common.net.UnexpectedAnswerFromServerException;
 import it.polimi.tower4clouds.java_app_dc.ExternalCall;
 import it.polimi.tower4clouds.java_app_dc.Monitor;
 import it.polimi.tower4clouds.java_app_dc.Property;
 import it.polimi.tower4clouds.java_app_dc.Registry;
 import it.polimi.tower4clouds.manager.api.ManagerAPI;
 import it.polimi.tower4clouds.rules.MonitoringRules;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class JavaAppDCTester {
 
@@ -37,10 +33,9 @@ public class JavaAppDCTester {
 	private static String managerIP = "localhost";
 	private static int managerPort = 8170;
 
-	public static void main(String[] args) throws InterruptedException,
-			UnexpectedAnswerFromServerException, IOException, JAXBException {
+	public static void main(String[] args) throws Exception {
 		ManagerAPI manager = new ManagerAPI(managerIP, managerPort);
-		manager.registerRules(XMLHelper.deserialize(JavaAppDCTester.class
+		manager.installRules(XMLHelper.deserialize(JavaAppDCTester.class
 				.getResourceAsStream("/rules4JavaAppDCTester.xml"),
 				MonitoringRules.class));
 		manager.registerHttpObserver("AverageResponseTime", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");

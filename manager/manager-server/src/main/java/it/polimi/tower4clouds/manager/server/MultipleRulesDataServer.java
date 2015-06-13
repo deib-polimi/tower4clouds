@@ -39,7 +39,7 @@ public class MultipleRulesDataServer extends ServerResource {
 		try {
 			MonitoringManager manager = (MonitoringManager) getContext()
 					.getAttributes().get("manager");
-			MonitoringRules rules = manager.getMonitoringRules();
+			MonitoringRules rules = manager.getRules();
 			this.getResponse().setStatus(Status.SUCCESS_OK);
 			this.getResponse().setEntity(
 					new JaxbRepresentation<MonitoringRules>(rules));

@@ -39,7 +39,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 // TODO create common api interface with core
-public class ManagerAPI {
+public class ManagerAPI implements IManagerAPI {
 
 	private static final String MONITORING_RULES_PATH = "/monitoring-rules";
 	private static final String DATA_COLLECTORS_PATH = "/data-collectors";
@@ -63,6 +63,7 @@ public class ManagerAPI {
 		this.timeout = defaultTimeout;
 	}
 
+	@Override
 	public MonitoringRules getRules()
 			throws UnexpectedAnswerFromServerException, IOException {
 		String xmlRules = client.execute(RestMethod.GET, managerUrl
@@ -76,16 +77,28 @@ public class ManagerAPI {
 		}
 	}
 
-	public void deleteRule(String id)
-			throws UnexpectedAnswerFromServerException, IOException {
-		client.execute(RestMethod.DELETE, managerUrl + MONITORING_RULES_PATH
-				+ "/" + id, null, 204, timeout);
+	@Override
+	public void uninstallRule(String id) throws NotFoundException, IOException {
+		try {
+			client.execute(RestMethod.DELETE, managerUrl
+					+ MONITORING_RULES_PATH + "/" + id, null, 204, timeout);
+		} catch (UnexpectedAnswerFromServerException e) {
+			if (e.getReturnedCode() == 404)
+				throw new NotFoundException(id);
+			throw new RuntimeException(e);
+		}
 	}
 
-	public Map<String, DCDescriptor> getDataCollectors()
-			throws UnexpectedAnswerFromServerException, IOException {
-		String dcsJson = client.execute(RestMethod.GET, managerUrl
-				+ DATA_COLLECTORS_PATH, null, 200, timeout);
+	@Override
+	public Map<String, DCDescriptor> getRegisteredDataCollectors()
+			throws IOException {
+		String dcsJson;
+		try {
+			dcsJson = client.execute(RestMethod.GET, managerUrl
+					+ DATA_COLLECTORS_PATH, null, 200, timeout);
+		} catch (UnexpectedAnswerFromServerException e) {
+			throw new RuntimeException(e);
+		}
 
 		Map<String, DCDescriptor> dcs = gson.fromJson(dcsJson,
 				new TypeToken<Map<String, DCConfiguration>>() {
@@ -93,12 +106,20 @@ public class ManagerAPI {
 		return dcs;
 	}
 
-	public void unregisterDataCollector(String id)
-			throws UnexpectedAnswerFromServerException, IOException {
-		client.execute(RestMethod.DELETE, managerUrl + DATA_COLLECTORS_PATH
-				+ "/" + id, null, 204, timeout);
+	@Override
+	public void unregisterDataCollector(String id) throws NotFoundException,
+			IOException {
+		try {
+			client.execute(RestMethod.DELETE, managerUrl + DATA_COLLECTORS_PATH
+					+ "/" + id, null, 204, timeout);
+		} catch (UnexpectedAnswerFromServerException e) {
+			if (e.getReturnedCode() == 404)
+				throw new NotFoundException(id);
+			throw new RuntimeException(e);
+		}
 	}
 
+	@Override
 	public Set<Resource> getResources()
 			throws UnexpectedAnswerFromServerException, IOException {
 		String jsonResources = client.execute(RestMethod.GET, managerUrl
@@ -106,57 +127,82 @@ public class ManagerAPI {
 		return Resource.fromJsonResources(jsonResources);
 	}
 
-	public void deleteResource(String id)
-			throws UnexpectedAnswerFromServerException, IOException {
-		client.execute(RestMethod.DELETE, managerUrl + RESOURCES_PATH + "/"
-				+ id, null, 204, timeout);
+	@Override
+	public void deleteResource(String id) throws NotFoundException, IOException {
+		try {
+			client.execute(RestMethod.DELETE, managerUrl + RESOURCES_PATH + "/"
+					+ id, null, 204, timeout);
+		} catch (UnexpectedAnswerFromServerException e) {
+			if (e.getReturnedCode() == 404)
+				throw new NotFoundException(id);
+			throw new RuntimeException(id);
+		}
 	}
 
-	public void registerRules(MonitoringRules rules)
-			throws UnexpectedAnswerFromServerException, IOException {
+	@Override
+	public void installRules(MonitoringRules rules) throws IOException {
 		try {
 			client.execute(RestMethod.POST, managerUrl + MONITORING_RULES_PATH,
 					XMLHelper.serialize(rules), 204, timeout);
-		} catch (JAXBException e) {
+		} catch (JAXBException | UnexpectedAnswerFromServerException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
+	@Override
 	public Observer registerHttpObserver(String metric, String callbackUrl,
-			String format) throws UnexpectedAnswerFromServerException,
-			IOException {
+			String format) throws NotFoundException, IOException {
 		Observer observer = new Observer();
 		observer.setCallbackUrl(callbackUrl);
 		observer.setFormat(format);
 		observer.setProtocol("HTTP");
-		String observerJson = client.execute(RestMethod.POST, managerUrl
-				+ METRICS_PATH + "/" + metric + OBSERVERS_PATH,
-				gson.toJson(observer), 201, timeout);
+		String observerJson;
+		try {
+			observerJson = client.execute(RestMethod.POST, managerUrl
+					+ METRICS_PATH + "/" + metric + OBSERVERS_PATH,
+					gson.toJson(observer), 201, timeout);
+		} catch (UnexpectedAnswerFromServerException e) {
+			if (e.getReturnedCode() == 404)
+				throw new NotFoundException(metric);
+			else {
+				throw new RuntimeException(e);
+			}
+		}
 		observer = gson.fromJson(observerJson, Observer.class);
 		return observer;
 	}
 
+	@Override
 	public Observer registerSocketObserver(String metric, String observerHost,
 			int observerPort, SocketProtocol protocol, String format)
-			throws UnexpectedAnswerFromServerException, IOException {
+			throws NotFoundException, IOException {
 		Observer observer = new Observer();
 		observer.setFormat(format);
 		observer.setObserverHost(observerHost);
 		observer.setObserverPort(observerPort);
 		observer.setProtocol(protocol.name());
-		String observerJson = client.execute(RestMethod.POST, managerUrl
-				+ METRICS_PATH + "/" + metric + OBSERVERS_PATH,
-				gson.toJson(observer), 201, timeout);
+		String observerJson;
+		try {
+			observerJson = client.execute(RestMethod.POST, managerUrl
+					+ METRICS_PATH + "/" + metric + OBSERVERS_PATH,
+					gson.toJson(observer), 201, timeout);
+		} catch (UnexpectedAnswerFromServerException e) {
+			if (e.getReturnedCode() == 404)
+				throw new NotFoundException(metric);
+			throw new RuntimeException(e);
+		}
 		observer = gson.fromJson(observerJson, Observer.class);
 		return observer;
 	}
 
+	@Override
 	public void registerDataCollector(String id, DCDescriptor dCDescriptor)
 			throws UnexpectedAnswerFromServerException, IOException {
 		client.execute(RestMethod.PUT, managerUrl + DATA_COLLECTORS_PATH + "/"
 				+ id, dCDescriptor.toJson(), 201, timeout);
 	}
 
+	@Override
 	public String registerDataCollector(DCDescriptor dCDescriptor)
 			throws UnexpectedAnswerFromServerException, IOException {
 		String json = client.execute(RestMethod.POST, managerUrl
@@ -164,12 +210,14 @@ public class ManagerAPI {
 		return jsonParser.parse(json).getAsJsonObject().get("id").getAsString();
 	}
 
+	@Override
 	public void keepAlive(String dataCollectorId)
 			throws UnexpectedAnswerFromServerException, IOException {
 		client.execute(RestMethod.GET, managerUrl + DATA_COLLECTORS_PATH + "/"
 				+ dataCollectorId + "/keepalive", null, 204, timeout);
 	}
 
+	@Override
 	public Map<String, DCConfiguration> getDCConfigurationByMetric(
 			String dataCollectorId) throws UnexpectedAnswerFromServerException,
 			IOException {
@@ -186,6 +234,7 @@ public class ManagerAPI {
 		}
 	}
 
+	@Override
 	public Set<String> getRequiredMetrics()
 			throws UnexpectedAnswerFromServerException, IOException {
 		String jsonRequiredMetrics = client.execute(RestMethod.GET, managerUrl
@@ -194,6 +243,7 @@ public class ManagerAPI {
 		}.getType());
 	}
 
+	@Override
 	public Set<String> getObservableMetrics()
 			throws UnexpectedAnswerFromServerException, IOException {
 		String jsonRequiredMetrics = client.execute(RestMethod.GET, managerUrl
@@ -201,12 +251,28 @@ public class ManagerAPI {
 		return gson.fromJson(jsonRequiredMetrics, new TypeToken<Set<String>>() {
 		}.getType());
 	}
-	
-	public void enableRule(String id) {
-		// TODO
+
+	@Override
+	public void enableRule(String id) throws IOException, NotFoundException {
+		try {
+			client.execute(RestMethod.GET, managerUrl + MONITORING_RULES_PATH
+					+ "/" + id + "?enabled=true", null, 204, timeout);
+		} catch (UnexpectedAnswerFromServerException e) {
+			if (e.getReturnedCode() == 404)
+				throw new NotFoundException(id);
+			throw new RuntimeException(e);
+		}
 	}
-	
-	public void disableRule(String id) {
-		// TODO
+
+	@Override
+	public void disableRule(String id) throws IOException, NotFoundException {
+		try {
+			client.execute(RestMethod.GET, managerUrl + MONITORING_RULES_PATH
+					+ "/" + id + "?enabled=false", null, 204, timeout);
+		} catch (UnexpectedAnswerFromServerException e) {
+			if (e.getReturnedCode() == 404)
+				throw new NotFoundException(id);
+			throw new RuntimeException(e);
+		}
 	}
 }
