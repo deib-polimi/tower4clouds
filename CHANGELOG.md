@@ -9,7 +9,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 ### Added
-- New Manager API for enabling and disabling a rule
+- New Manager REST API and Manager API libraru for enabling and disabling a rule
+- New button on the manager webapp for enabling and disabling rules
 
 ## [0.2] - 2015-06-10
 First official release of the new Tower 4Clouds platform.
