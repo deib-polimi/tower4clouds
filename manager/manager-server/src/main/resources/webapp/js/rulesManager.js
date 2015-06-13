@@ -144,6 +144,36 @@ function deleteRule(id) {
     });
 }
 
+function enableRule(id) {
+    $.ajax({type: "GET",
+        url: URL + "/" + id + "?enabled=true",
+        error: function (jqXHR, textStatus, errorThrown) {
+            detectError(textStatus + " " + jqXHR.status + " : " + errorThrown);
+            tableReloader();
+        },
+        success: function () {
+            showConfirmMessage(SEND);
+            tableReloader();
+        }
+    });
+}
+
+function disableRule(id) {
+    $.ajax({type: "GET",
+        url: URL + "/" + id + "?enabled=false",
+        error: function (jqXHR, textStatus, errorThrown) {
+            detectError(textStatus + " " + jqXHR.status + " : " + errorThrown);
+            tableReloader();
+        },
+        success: function () {
+            showConfirmMessage(SEND);
+            tableReloader();
+        }
+    });
+}
+
+
+
 function xmlParser(xml) {
     $('#treeView').show();
     var tree = $.parseXML(xml);
@@ -173,7 +203,9 @@ function traverse(node, tree) {
     if (tree.nodeName.indexOf("monitoringRule") > -1 && tree.nodeName.indexOf("monitoringRules") < 0) {
         // MonitoringRule
         node.append(" " +tree.nodeName.split(":")[1]  + '</span><span class="spanAttributes"> ' + attributes + ' </span> ');
-        node.append("<button onclick=deleteRule('" + tree.id + "') class='floatRight'><span class = 'glyphicon glyphicon-trash' aria-hidden='true'/></button>");
+        node.append("<button onclick=disableRule('" + tree.id + "') class='floatRight'><span title='Disable rule' class = 'glyphicon glyphicon-volume-off' aria-hidden='true'/></button>");
+        node.append("<button onclick=enableRule('" + tree.id + "') class='floatRight'><span title='Enable rule' class = 'glyphicon glyphicon-volume-up' aria-hidden='true'/></button>");
+        node.append("<button onclick=deleteRule('" + tree.id + "') class='floatRight'><span title='Delete rule' class = 'glyphicon glyphicon-trash' aria-hidden='true'/></button>");
     }
     else{
         //MonitoringRules && MonitoringTargets
