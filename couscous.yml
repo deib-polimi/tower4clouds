@@ -69,7 +69,7 @@ menu:
                         relativeUrl: docs/data-collectors/byodc.html
         manager:
             text: Manager
-            relativeUrl: docs/manager.html
+            relativeUrl: docs/manager
         data-analyzer:
             text: Data Analyzer
             relativeUrl: docs/data-analyzer.html

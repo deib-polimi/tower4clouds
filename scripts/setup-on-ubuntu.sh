@@ -1,5 +1,8 @@
 #!/bin/bash
-### available commands:
+
+# Tested working on Amazon: Ubuntu Server 14.04 LTS (HVM), SSD Volume Type - ami-47a23a30
+
+### available commands after installation:
 # start-tower4clouds
 # stop-tower4clouds
 # cleanup-graphite
