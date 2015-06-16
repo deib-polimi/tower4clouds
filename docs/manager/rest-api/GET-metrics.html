@@ -78,6 +78,28 @@
                         Manager
                     </a>
                 </li>
+                                <ul class="submenu nav nav-stacked nav-pills">
+                                        <li class="">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/configuration.html">
+                            Configuration
+                        </a>
+                    </li>
+                                        <li class="">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/webapp.html">
+                            Webapp
+                        </a>
+                    </li>
+                                        <li class="">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/java-api.html">
+                            Java API
+                        </a>
+                    </li>
+                                        <li class="active">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/rest-api/">
+                            REST API
+                        </a>
+                    </li>
+                                    </ul>
                                                 <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/docs/data-analyzer/">
                         Data Analyzer
@@ -114,56 +136,27 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>MODAClouds HistoryDB</h1>
-<p>In the context of <a href="http://www.modaclouds.eu">MODAClouds European project</a>, the <a href="http://www.polimi.it">Politecnico di Milano</a> was one of the partners involved in the development of the Monitoring Platform.</p>
-<p>HistoryDB is a component that logs in a <strong>datastore</strong> (usually <a href="http://jena.apache.org/documentation/serving_data/index.html">Apache Fuseki</a>) a number of different requests, making it possible to check the evolution of the system step by step.</p>
-<p>A <strong>queue</strong> (usually <a href="http://www.rabbitmq.com">RabbitMQ</a>) is used for decoupling the sub-component listening to the requests and the sub-component that manages the datastore. </p>
-<h2>Documentation</h2>
-<p>Useful links to the documentation:</p>
-<ul>
-<li><a href="https://github.com/deib-polimi/tower4clouds/blob/develop/observers/rdf-history-db/doc/user-manual.html">User Manual</a></li>
-<li><a href="https://github.com/deib-polimi/tower4clouds/blob/develop/observers/rdf-history-db/doc/api.html">API reference</a></li>
-<li><a href="https://github.com/deib-polimi/tower4clouds/blob/develop/observers/rdf-history-db/doc/datastore.html">DataStore reference</a></li>
-<li><a href="https://github.com/deib-polimi/tower4clouds/blob/develop/observers/rdf-history-db/doc/install.html">Install Guide</a></li>
-</ul>
-<h2>ChangeLog</h2>
-<p>v0.1.5 (not yet realeased):</p>
-<ul>
-<li>Changed the packages names everywhere (from <code>it.polimi.modaclouds.hdb</code> to <code>it.polimi.tower4clouds.observers.hdb</code>) to resemble the parent projects.</li>
-<li>Updated the versions of the used libraries.</li>
-<li>Restructured the packages in a multi-pom fashion.</li>
-<li>Solved the bugs given by the modifications in the used libraries.</li>
-<li>Changed the REST URIs for the models from <code>/model/resources</code> to <code>/resources</code>.</li>
-</ul>
-<p><a href="https://github.com/deib-polimi/modaclouds-history-db/blob/master/bin/historydb-0.1.4.zip">v0.1.4</a>:</p>
-<ul>
-<li>A subscription is used instead of polling the queue: better performances should be expected.</li>
-<li>Now a fake message is sent at the beginning for each queue handled, so that the code could work with older versions of RabbitMQ.</li>
-<li>Better handling of failures: the fuseki and rabbitmq hosts are checked at the beginning and signaled if they're wrongly configured.</li>
-</ul>
-<p><a href="https://github.com/deib-polimi/modaclouds-history-db/blob/master/bin/historydb-0.1.3.zip">v0.1.3</a>:</p>
-<ul>
-<li>Now an executor service is used also while adding messages to the datastore, fixing all the problems!</li>
-</ul>
-<p><a href="https://github.com/deib-polimi/modaclouds-history-db/blob/master/bin/historydb-0.1.2.zip">v0.1.2</a>:</p>
-<ul>
-<li>Bug fixes.</li>
-<li>Better handling of the queue (maybe fixing some &quot;too many files opened&quot; bug).</li>
-<li>Two new parameters to the script &quot;historydb&quot; for launching fake messages at the beginning of the tool.</li>
-</ul>
-<p><a href="https://github.com/deib-polimi/modaclouds-history-db/blob/master/bin/historydb-0.1.1.zip">v0.1.1</a>:</p>
-<ul>
-<li>Few bug fixes.</li>
-</ul>
-<p><a href="https://github.com/deib-polimi/modaclouds-history-db/blob/master/bin/historydb-0.1.0.zip">v0.1.0</a>:</p>
-<ul>
-<li>First (actually and hopefully) working version. The previous one wasn't saving all the messages received.</li>
-<li>Added some other information in the &quot;default&quot; graph, as described in the datastore guide.</li>
-</ul>
-<p><a href="https://github.com/deib-polimi/modaclouds-history-db/blob/master/bin/historydb-0.0.1-SNAPSHOT.zip">v0.0.1-SNAPSHOT</a>:</p>
-<ul>
-<li>First beta release!</li>
-</ul>
+            <p><a href=".">&#9664; Back to API list</a></p>
+<h1><code>GET</code> /metrics</h1>
+<h2>Description</h2>
+<p>Returns the list of <a href="../../monitoring-rules/actions.html#output-metric">Observable Metrics</a>.</p>
+<hr />
+<h2>URL Parameters</h2>
+<p>None</p>
+<hr />
+<h2>Response</h2>
+<p><strong>Status:</strong> <strong>200 OK</strong></p>
+<p><strong>Body:</strong> A json array with the observable metrics.</p>
+<hr />
+<h2>Errors</h2>
+<p>None</p>
+<hr />
+<h2>Example</h2>
+<p><strong>Request</strong></p>
+<pre><code>GET v1/metrics</code></pre>
+<p><strong>Response</strong></p>
+<pre><code>Status: 200 OK</code></pre>
+<pre><code class="language-json">["CpuUtilization", "ResponseTime", "CpuUtilizationViolation"]</code></pre>
         </section>
 
     </div>

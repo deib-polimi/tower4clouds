@@ -69,7 +69,7 @@
                     </a>
                 </li>
                                                 <li class="">
-                    <a href="http://deib-polimi.github.io/tower4clouds/docs/data-collectors">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/data-collectors/">
                         Data Collectors
                     </a>
                 </li>
@@ -95,28 +95,28 @@
                         </a>
                     </li>
                                         <li class="active">
-                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/rest-api.html">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/rest-api/">
                             REST API
                         </a>
                     </li>
                                     </ul>
                                                 <li class="">
-                    <a href="http://deib-polimi.github.io/tower4clouds/docs/data-analyzer">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/data-analyzer/">
                         Data Analyzer
                     </a>
                 </li>
                                                 <li class="">
-                    <a href="http://deib-polimi.github.io/tower4clouds/docs/model">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/model/">
                         The Model
                     </a>
                 </li>
                                                 <li class="">
-                    <a href="http://deib-polimi.github.io/tower4clouds/docs/monitoring-rules">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/monitoring-rules/">
                         Monitoring Rules
                     </a>
                 </li>
                                                 <li class="">
-                    <a href="http://deib-polimi.github.io/tower4clouds/docs/observers">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/observers/">
                         Observers
                     </a>
                 </li>
@@ -136,7 +136,74 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            
+            <p><a href=".">&#9664; Back to API list</a></p>
+<h1><code>POST</code> /model/resources</h1>
+<h2>Description</h2>
+<p>Add resources to the knowledge base. If a previous model existed, the existing model is updated.
+A new resource is created for each resource in the uploaded model with the id specified. If a resource with an existing
+id already exists, the resource is replaced with the new one.
+The Java representation of the model is available <a href="https://github.com/deib-polimi/modaclouds-monitoring-manager/blob/master/src/main/java/it/polimi/modaclouds/monitoring/monitoring_manager/server/Model.java">here</a>.
+The Java representation of resources are available <a href="https://github.com/deib-polimi/modaclouds-qos-models/tree/master/src/main/java/it/polimi/modaclouds/qos_models/monitoring_ontology">here</a>.
+A graphical representation of resources and their relations is available <a href="https://github.com/deib-polimi/modaclouds-qos-models/blob/master/doc/user-manual.md#the-monitoring-ontology">here</a>.</p>
+<hr />
+<h2>URL Parameters</h2>
+<p>None</p>
+<hr />
+<h2>Data Parameters</h2>
+<p>A JSON containing all the resources that must be added to the knowledge base.</p>
+<hr />
+<h2>Response</h2>
+<p><strong>Status:</strong> <strong>204 No Content</strong></p>
+<hr />
+<h2>Errors</h2>
+<ul>
+<li><strong>400 Bad Request</strong> - One or more resources were not valid</li>
+</ul>
+<hr />
+<h2>Example</h2>
+<p><strong>Request</strong></p>
+<pre><code>POST v1/model/resources</code></pre>
+<pre><code class="language-json">{
+  "internalComponents": [
+    {
+      "id": "mic3", 
+      "providedMethods": [
+        "mic3-register", 
+        "mic3-answerQuestions", 
+        "mic3-saveAnswers"
+      ], 
+      "requiredComponents": [
+        "frontend3"
+      ], 
+      "type": "Mic"
+    }
+  ], 
+  "methods": [
+    {
+      "id": "mic3-answerQuestions", 
+      "type": "answerQuestions"
+    }, 
+    {
+      "id": "mic3-saveAnswers", 
+      "type": "saveAnswers"
+    }, 
+    {
+      "id": "mic3-register", 
+      "type": "register"
+    }
+  ], 
+  "vMs": [
+    {
+      "cloudProvider": "amazon", 
+      "id": "frontend3", 
+      "numberOfCPUs": 2, 
+      "type": "Frontend"
+    }
+  ]
+}
+</code></pre>
+<p><strong>Response</strong></p>
+<pre><code>Status: 204 No Content</code></pre>
         </section>
 
     </div>
