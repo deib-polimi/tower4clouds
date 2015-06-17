@@ -138,8 +138,6 @@ public class MMServer extends Application {
 				SingleRuleDataServer.class);
 		router.attach("/" + apiVersion + "/metrics",
 				MultipleMetricsDataServer.class);
-		router.attach("/" + apiVersion + "/metrics/{metricname}",
-				SingleMetricDataServer.class);
 		router.attach("/" + apiVersion + "/metrics/{metricname}/observers",
 				MultipleObserversDataServer.class);
 		router.attach(
