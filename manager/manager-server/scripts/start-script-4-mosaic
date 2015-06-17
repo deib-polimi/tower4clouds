@@ -22,7 +22,7 @@ _variable_defaults=(
 		# NOTE:  Add other definitions that could come from the packaging descriptor, and are needed at runtime.
 		#   It enables hard-coding some definitions, which could later be overriden with environment variables.
 		
-		_TOWER4CLOUDS_MANAGER_DISTRIBUTION='/opt/modaclouds-services-${dist.file.name}-${project.version}/lib/distribution'
+		_TOWER4CLOUDS_MANAGER_DISTRIBUTION='/opt/modaclouds-services-${dist.file.name}-${modaclouds.release}/lib/distribution'
 		
 		_TOWER4CLOUDS_MANAGER_PUBLIC_ENDPOINT_PORT=8170
 		_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_PORT=8175
@@ -141,7 +141,7 @@ exec \
 	env \
 			-i "${_environment[@]}" \
 	"${_JAVA_HOME}/bin/java" \
-			-jar "${_TOWER4CLOUDS_MANAGER_DISTRIBUTION}/service.jar"
+			-jar "${_TOWER4CLOUDS_MANAGER_DISTRIBUTION}/${project.artifactId}-${project.version}.jar"
 
 
 exit 1

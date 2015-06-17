@@ -111,7 +111,7 @@
 
 	<profiles>
 		<profile>
-			<id>mosaic-rpm</id>
+			<id>modaclouds-rpm</id>
 			<build>
 				<resources>
 					<resource>
@@ -136,30 +136,31 @@
 							<distribution>tower4clouds</distribution>
 							<name>modaclouds-services-${dist.file.name}</name>
 							<group>System Environment/Daemons</group>
-							<prefix>/opt/modaclouds-services-${dist.file.name}-${project.version}</prefix>
+							<prefix>/opt/modaclouds-services-${dist.file.name}-${modaclouds.release}</prefix>
 							<targetOS>linux</targetOS>
+							<release>${modaclouds.release}</release>
 							<mappings>
 								<mapping>
-									<directory>/opt/modaclouds-services-${dist.file.name}-${project.version}/lib/distribution</directory>
-									<filemode>755</filemode>
-									<username>root</username>
-									<groupname>root</groupname>
+									<directory>/opt/modaclouds-services-${dist.file.name}-${modaclouds.release}/lib/distribution</directory>
+									<filemode>0444</filemode>
+									<username>mos-packages</username>
+									<groupname>mos-packages</groupname>
 									<sources>
 										<source>
 											<location>target/${project.artifactId}-${project.version}-jar-with-dependencies.jar</location>
-											<destination>service.jar</destination>
+											<destination>${project.artifactId}-${project.version}.jar</destination>
 										</source>
 									</sources>
 								</mapping>
 								<mapping>
-									<directory>/opt/modaclouds-services-${dist.file.name}-${project.version}/bin</directory>
-									<filemode>755</filemode>
-									<username>root</username>
-									<groupname>root</groupname>
+									<directory>/opt/modaclouds-services-${dist.file.name}-${modaclouds.release}/bin</directory>
+									<filemode>0555</filemode>
+									<username>mos-packages</username>
+									<groupname>mos-packages</groupname>
 									<sources>
 										<source>
 											<location>target/classes/start-script-4-mosaic</location>
-											<destination>service-run.bash</destination>
+											<destination>modaclouds-services-${dist.file.name}--run-service</destination>
 										</source>
 									</sources>
 								</mapping>
