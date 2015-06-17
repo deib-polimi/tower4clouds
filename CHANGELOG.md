@@ -17,6 +17,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - MODAClouds packaging
 
+### Changed
+- returned JSON from `/metrics/{metricname}/observers/` api changed to a simple list
+
 ## [0.2] - 2015-06-10
 First official release of the new Tower 4Clouds platform.
 

@@ -112,7 +112,7 @@ function deleteObserver(composedID) {
 	});
 }
 
-function observersParser(obj, metricID) {
+function observersParser(observers, metricID) {
 	// var obj = $.parseJSON(jsonString);a
 	var returnStr = "<div class='panel-body borderedDiv' id='toggled_"
 			+ metricID + "'>";
@@ -122,23 +122,23 @@ function observersParser(obj, metricID) {
 	returnStr += "<div class='col-xs-2'><u>Protocol</u></div>";
 	returnStr += "<div class='col-xs-2'><u>Format</u></div>";
 	returnStr += "<div class='col-xs-2'><u>Delete</u></div>";
-	var length = obj.observers.length;
+	var length = observers.length;
 
 	for (var i = 0; i < length; i++) {
 		param = "";
 		returnStr += "<div class='row'>";
-		returnStr += "<div class='col-xs-2'>" + obj.observers[i].id + "</div>";
-		var callbackAddress = obj.observers[i].callbackUrl;
+		returnStr += "<div class='col-xs-2'>" + observers[i].id + "</div>";
+		var callbackAddress = observers[i].callbackUrl;
 		if (callbackAddress == null)
-			callbackAddress = obj.observers[i].observerHost + ":"
-					+ obj.observers[i].observerPort;
+			callbackAddress = observers[i].observerHost + ":"
+					+ observers[i].observerPort;
 		returnStr += "<div class='col-xs-4'>" + callbackAddress + "</div>";
-		returnStr += "<div class='col-xs-2'>" + obj.observers[i].protocol
+		returnStr += "<div class='col-xs-2'>" + observers[i].protocol
 				+ "</div>";
-		returnStr += "<div class='col-xs-2'>" + obj.observers[i].format
+		returnStr += "<div class='col-xs-2'>" + observers[i].format
 				+ "</div>";
 		returnStr += "<div class='col-xs-2'>";
-		param = obj.observers[i].id + "§" + metricID;
+		param = observers[i].id + "§" + metricID;
 		returnStr += "<button onclick=deleteObserver('" + param + "')>";
 		returnStr += "<span class = 'glyphicon glyphicon-trash floatRight' aria-hidden = 'true' /></button> </div>";
 		returnStr += "</div>";
