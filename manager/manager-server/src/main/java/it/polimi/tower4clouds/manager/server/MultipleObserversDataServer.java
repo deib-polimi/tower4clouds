@@ -112,10 +112,8 @@ public class MultipleObserversDataServer extends ServerResource {
 					.get("metricname");
 
 			Set<Observer> observers = manager.getObservers(metricname);
-			JsonObject json = new JsonObject();
-			json.add("observers", new Gson().toJsonTree(observers));
-			this.getResponse().setStatus(Status.SUCCESS_CREATED);
-			this.getResponse().setEntity(json.toString(),
+			this.getResponse().setStatus(Status.SUCCESS_OK);
+			this.getResponse().setEntity(new Gson().toJson(observers),
 					MediaType.APPLICATION_JSON);
 		} catch (NotFoundException e) {
 			String message = "The metric does not exist: " + e.getMessage();
