@@ -13,7 +13,7 @@ Installation:
 	- data-analyzer-VERSION.tar.gz
 	
 Start it:
-- Start the [Data Analyzer](data-analyzer.md):
+- Start the [Data Analyzer]:
 	```bash
 	./tower4clouds-data-analyzer > tower4clouds-data-analyzer.log 2>&1 &
 	```
@@ -21,7 +21,7 @@ Start it:
 	```bash
 	./tower4clouds-manager > tower4clouds-manager.log 2>&1 &
 	```
-- Point your browser to `http://<manager-host>:8170/webapp` and you will see the administration panel.
+- Point your browser to `http://<manager-host>:8170/webapp` and you will see the [Manager Webapp].
 
 Your Tower4Clouds Core instance is up, now you need:
 1. [Data Collectors] to gather monitoring data,
@@ -29,6 +29,8 @@ Your Tower4Clouds Core instance is up, now you need:
 3. [Observers] to visualize or make use of data or events.
 
 [Manager]: manager
-[Data Collectors]: data-collectors
-[Monitoring Rules]: monitoring-rules.html
-[Observers]: observers
+[Data Analyzer]: data-analyzer/
+[Manager Webapp]: manager/webapp.html
+[Data Collectors]: data-collectors/
+[Monitoring Rules]: monitoring-rules/
+[Observers]: observers/

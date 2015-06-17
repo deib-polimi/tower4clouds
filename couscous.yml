@@ -58,7 +58,7 @@ menu:
             relativeUrl: docs/mosaic-installation.html
         data-collectors:
             text: Data Collectors
-            relativeUrl: docs/data-collectors
+            relativeUrl: docs/data-collectors/
             submenu:
                 items:
                     java-app-dc:
@@ -70,15 +70,48 @@ menu:
         manager:
             text: Manager
             relativeUrl: docs/manager
+            submenu:
+                items:
+                    configuration:
+                        text: Configuration
+                        relativeUrl: docs/manager/configuration.html
+                    webapp:
+                        text: Webapp
+                        relativeUrl: docs/manager/webapp.html
+                    java-api:
+                        text: Java API
+                        relativeUrl: docs/manager/java-api.html
+                    rest-api:
+                        text: REST API
+                        relativeUrl: docs/manager/rest-api/
         data-analyzer:
             text: Data Analyzer
-            relativeUrl: docs/data-analyzer.html
+            relativeUrl: docs/data-analyzer/
+            submenu:
+                items:
+                    streams:
+                        text: Streams
+                        relativeUrl: docs/data-analyzer/streams.html
+                    serialization-formats:
+                        text: Serialization Formats
+                        relativeUrl: docs/data-analyzer/serialization-formats.html
+                    transfer-protocol:
+                        text: Transfer Protocol
+                        relativeUrl: docs/data-analyzer/transfer-protocol.html
+        model:
+            text: The Model
+            relativeUrl: docs/model/
         monitoring-rules:
             text: Monitoring Rules
-            relativeUrl: docs/monitoring-rules.html
+            relativeUrl: docs/monitoring-rules/
+            submenu:
+                items:
+                    actions:
+                        text: Actions
+                        relativeUrl: docs/monitoring-rules/actions.html
         observers:
             text: Observers
-            relativeUrl: docs/observers
+            relativeUrl: docs/observers/
         changelog:
             text: Change log
             relativeUrl: CHANGELOG.html

@@ -4,6 +4,11 @@ currentMenu: mosaic-installation
 
 # Installation on mOSAIC
 
+Set current MODAClouds release number:
+```bash
+MODACLOUDS_RELEASE=0.7.13
+```
+
 ## Requirements
 Dependencies:
 - mosaic-rt-jre-7
@@ -19,8 +24,8 @@ Required components:
 		```
 	* run via
 		```bash
-		nohup /opt/mosaic-components-rabbitmq-0.7.0.11/bin/mosaic-components-rabbitmq--run-component > \
-			/tmp/mosaic-components-rabbitmq-0.7.0.11.log 2>&1 &
+		nohup /opt/mosaic-components-rabbitmq-${MODACLOUDS_RELEASE}/bin/mosaic-components-rabbitmq--run-component > \
+			/tmp/mosaic-components-rabbitmq-${MODACLOUDS_RELEASE}.log 2>&1 &
 		```
 	* stop via
 		```bash
@@ -39,8 +44,8 @@ Required components:
 		env \
 			MODACLOUDS_FUSEKI_ENDPOINT_PORT=3030 \
 			MODACLOUDS_FUSEKI_DATASET_PATH=/ds \
-		nohup /opt/modaclouds-services-fuseki ... > \
-			/tmp/modaclouds-services-fuseki.log 2>&1 &
+		nohup /opt/modaclouds-services-fuseki-${MODACLOUDS_RELEASE}/bin/modaclouds-services-fuseki--run-component > \
+			/tmp/modaclouds-services-fuseki-${MODACLOUDS_RELEASE}.log 2>&1 &
 		```
 	* stop via
 		```bash
@@ -66,8 +71,8 @@ Required components:
 	        MODACLOUDS_METRIC_EXPLORER_PICKLE_RECEIVER_ENDPOINT_PORT=9012 \
 	        MODACLOUDS_METRIC_EXPLORER_LINE_RECEIVER_ENDPOINT_IP="${MOS_NODE_PUBLIC_IP}" \
 	        MODACLOUDS_METRIC_EXPLORER_LINE_RECEIVER_ENDPOINT_PORT=9013 \
-	    nohup /opt/modaclouds-services-metric-explorer-0.7.0.11/bin/modaclouds-services-metric-explorer--run-service > \
-	    	/tmp/modaclouds-services-metric-explorer-0.7.0.11.log 2>&1 &
+	    nohup /opt/modaclouds-services-metric-explorer-${MODACLOUDS_RELEASE}/bin/modaclouds-services-metric-explorer--run-service > \
+	    	/tmp/modaclouds-services-metric-explorer-${MODACLOUDS_RELEASE}.log 2>&1 &
 		```
 	* stop via
 		```bash
@@ -75,18 +80,16 @@ Required components:
 		```
 - Grafana (http://grafana.org) (optional: a nicer gui for Graphite)
 
-## Manual Installation
+## Installation of Tower 4Clouds
 
-Download and install the [latest rpms](https://github.com/deib-polimi/tower4clouds/releases):
 ```bash
-TOWER4CLOUDS_RELEASE=0.2
-rm -f /tmp/modaclouds-services-tower4clouds-*-${TOWER4CLOUDS_RELEASE}.noarch.rpm
-wget -P /tmp https://github.com/deib-polimi/tower4clouds/releases/download/v${TOWER4CLOUDS_RELEASE}/modaclouds-services-tower4clouds-{manager,data-analyzer,rdf-history-db}-${TOWER4CLOUDS_RELEASE}.noarch.rpm 
 sudo zypper \
 		--non-interactive --no-refresh \
 		--no-gpg-checks --gpg-auto-import-keys \
    	install \
-		/tmp/modaclouds-services-tower4clouds-*-${TOWER4CLOUDS_RELEASE}.noarch.rpm
+		modaclouds-services-tower4clouds-manager \
+		modaclouds-services-tower4clouds-data-analyzer \
+		modaclouds-services-tower4clouds-rdf-history-db
 ```
 
 
@@ -94,7 +97,6 @@ sudo zypper \
 On a single machine in one go:
 ```bash
 components=(data-analyzer manager rdf-history-db)
-TOWER4CLOUDS_RELEASE=0.2
 MOS_NODE_PUBLIC_IP="${mos_node_public_ip}" # CHECK THIS VAR IS ASSIGNED
 export \
 	MODACLOUDS_RABBITMQ_ENDPOINT_IP=127.0.0.1 \
@@ -110,19 +112,18 @@ export \
 	MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_PORT=31337
 for component in ${components[@]}
 do
-	nohup /opt/modaclouds-services-tower4clouds-${component}-${TOWER4CLOUDS_RELEASE}/bin/service-run.bash > \
-		/tmp/modaclouds-services-tower4clouds-${component}-${TOWER4CLOUDS_RELEASE}.log 2>&1 &
+	nohup /opt/modaclouds-services-tower4clouds-${component}-${MODACLOUDS_RELEASE}/bin/modaclouds-services-${component}--run-service > \
+		/tmp/modaclouds-services-tower4clouds-${component}-${MODACLOUDS_RELEASE}.log 2>&1 &
 done
 ```
 
 One component at a time:
 ```bash
-TOWER4CLOUDS_RELEASE=0.2
 MOS_NODE_PUBLIC_IP="${mos_node_public_ip}" # CHECK THIS VAR IS ASSIGNED
 env \
 	MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_PORT=8175 \
-	nohup /opt/modaclouds-services-tower4clouds-data-analyzer-${TOWER4CLOUDS_RELEASE}/bin/service-run.bash > \
-		/tmp/modaclouds-services-tower4clouds-data-analyzer-${TOWER4CLOUDS_RELEASE}.log 2>&1 &
+	nohup /opt/modaclouds-services-tower4clouds-data-analyzer-${MODACLOUDS_RELEASE}/bin/modaclouds-services-data-analyzer--run-service > \
+		/tmp/modaclouds-services-tower4clouds-data-analyzer-${MODACLOUDS_RELEASE}.log 2>&1 &
 #
 env \
 	MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_IP=${MOS_NODE_PUBLIC_IP} \
@@ -131,8 +132,8 @@ env \
 	MODACLOUDS_TOWER4CLOUDS_MANAGER_PUBLIC_ENDPOINT_PORT=8170 \
 	MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_IP=127.0.0.1
 	MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_PORT=31337 \
-	nohup /opt/modaclouds-services-tower4clouds-manager-${TOWER4CLOUDS_RELEASE}/bin/service-run.bash > \
-		/tmp/modaclouds-services-tower4clouds-manager-${TOWER4CLOUDS_RELEASE}.log 2>&1 &
+	nohup /opt/modaclouds-services-tower4clouds-manager-${MODACLOUDS_RELEASE}/bin/modaclouds-services-manager--run-service > \
+		/tmp/modaclouds-services-tower4clouds-manager-${MODACLOUDS_RELEASE}.log 2>&1 &
 #
 env \
 	MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_PORT=31337 \
@@ -141,8 +142,8 @@ env \
 	MODACLOUDS_FUSEKI_ENDPOINT_IP=127.0.0.1 \
 	MODACLOUDS_FUSEKI_ENDPOINT_PORT=3030 \
 	MODACLOUDS_FUSEKI_DB_PATH=/ds \
-	nohup /opt/modaclouds-services-tower4clouds-rdf-history-db-${TOWER4CLOUDS_RELEASE}/bin/service-run.bash > \
-		/tmp/modaclouds-services-tower4clouds-rdf-history-db-${TOWER4CLOUDS_RELEASE}.log 2>&1 &
+	nohup /opt/modaclouds-services-tower4clouds-rdf-history-db-${MODACLOUDS_RELEASE}/bin/modaclouds-services-rdf-history-db--run-service > \
+		/tmp/modaclouds-services-tower4clouds-rdf-history-db-${MODACLOUDS_RELEASE}.log 2>&1 &
 ```
 
 Shut down Tower 4Clouds:
