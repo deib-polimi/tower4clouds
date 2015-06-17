@@ -16,8 +16,9 @@
 
 # RELEASE
 
-mvn clean release:prepare -DdryRun=true -P mosaic-rpm
-mvn release:clean release:prepare release:perform -P mosaic-rpm
+MODACLOUDS_RELEASE=0.7.13 # Put the current one
+mvn clean release:prepare -DdryRun=true -Pmodaclouds-rpm -Dmodaclouds.release=${MODACLOUDS_RELEASE}
+mvn release:clean release:prepare release:perform -Pmodaclouds-rpm -Dmodaclouds.release=${MODACLOUDS_RELEASE}
 # manually add artifacts to the github release until u fix github release plugin
 
 # IF SOMETHING GOES WRONG (WARNING: ALL RECENT COMMITS IN THE CURRENT BRANCH WILL BE LOST!)
