@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>it.polimi.tower4clouds</groupId>
 		<artifactId>tower4clouds</artifactId>
-		<version>0.2.1</version>
+		<version>0.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>data-collector-library</artifactId>
 	<name>MODAClous - Tower4Clouds - Data Collector Library</name>
