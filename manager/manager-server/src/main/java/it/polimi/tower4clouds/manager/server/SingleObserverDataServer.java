@@ -16,6 +16,7 @@
 package it.polimi.tower4clouds.manager.server;
 
 import it.polimi.tower4clouds.manager.MonitoringManager;
+import it.polimi.tower4clouds.manager.api.NotFoundException;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -41,7 +42,13 @@ public class SingleObserverDataServer extends ServerResource {
 
 			manager.unregisterObserver(metricName, observerId);
 			this.getResponse().setStatus(Status.SUCCESS_NO_CONTENT);
-
+		} catch (NotFoundException e) {
+			String message = "Either the metric or the observer was not found: " + e.getMessage();
+			logger.error(message);
+			this.getResponse()
+					.setStatus(Status.CLIENT_ERROR_NOT_FOUND, message);
+			this.getResponse().setEntity(message, MediaType.TEXT_PLAIN);
+		
 		} catch (Exception e) {
 			logger.error("Error while deleting observer", e);
 			this.getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,
