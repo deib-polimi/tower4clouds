@@ -29,16 +29,16 @@ public class ManagerConfig {
 	@Parameter(names = "-help", help = true, description = "Shows this message")
 	private boolean help;
 
-	@Parameter(names = "-daip", description = "DA endpoint IP address")
+	@Parameter(names = "-daip", description = "DA public endpoint IP address")
 	private String daIP;
 
-	@Parameter(names = "-daport", description = "DA endpoint port")
+	@Parameter(names = "-daport", description = "DA public endpoint port")
 	private int daPort;
 
-	@Parameter(names = "-mmip", description = "Monitoring Manager endpoint IP address")
+	@Parameter(names = "-mmip", description = "Monitoring Manager public endpoint IP address")
 	private String mmIP;
 
-	@Parameter(names = "-mmport", description = "Monitoring Manager endpoint port")
+	@Parameter(names = "-mmport", description = "Monitoring Manager public endpoint port")
 	private int mmPort;
 
 	@Parameter(names = "-rdf-history-db-port", description = "RDF History DB endpoint port")
