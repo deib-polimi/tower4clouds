@@ -44,9 +44,9 @@ subTitle: A monitoring framework for clouds
 # The left menu bar
 menu:
     items:
-        home:
-            text: Home
-            relativeUrl: .
+        index:
+            text: Documentation Index
+            relativeUrl: docs/
         overview:
             text: Overview
             relativeUrl: docs/overview.html
