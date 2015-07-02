@@ -101,8 +101,8 @@
                     </a>
                 </li>
                                                 <li class="">
-                    <a href="http://deib-polimi.github.io/tower4clouds/docs/monitoring-rules/">
-                        Monitoring Rules
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/rules/">
+                        Rules
                     </a>
                 </li>
                                                 <li class="">
@@ -127,23 +127,23 @@
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
             <h1>Data Collectors</h1>
-<p>Data Collectors are <em>client-side</em> <em>self-registering</em> agents responsible of sending monitoring data to the <a href="data-analyzer.html">Data Analyzer</a>. They are built with the Cloud in mind, which is dynamic and heterogeneous. A resource being monitored (e.g. a virtual machine) can be shut down as a result of scale down activity, or a new resource can be started as a result of a scale up activity. In both cases, Tower 4Clouds is able to keep its <a href="model.html">Model</a> of the system updated. Data Collectors automatically register and periodically notify their existence and the existence of the resource they monitor. Once a resource is shut down, the <a href="manager.html">Manager</a> will take care of unregistering expired resources after the timeout (keep alive period) defined by the data collector itself. Moreover, data collectors are client-side, which means communication is mono-directional, so that really few requirements are requested on the location where they run and collect data. Finally, in order to save traffic (and therefore money) and reduce the overhead, data collectors collect data only when and how requested by the <a href="manager.html">Manager</a> according to the <a href="monitoring-rules.html">Monitoring Rules</a> installed by the user.</p>
+<p>Data Collectors are <em>client-side</em> <em>self-registering</em> agents responsible of sending monitoring data to the <a href="../data-analyzer/">Data Analyzer</a>. They are built with the Cloud in mind, which is dynamic and heterogeneous. A resource being monitored (e.g. a virtual machine) can be shut down as a result of scale down activity, or a new resource can be started as a result of a scale up activity. In both cases, Tower 4Clouds is able to keep its <a href="../model/">Model</a> of the system updated. Data Collectors automatically register and periodically notify their existence and the existence of the resource they monitor. Once a resource is shut down, the <a href="../manager/">Manager</a> will take care of unregistering expired resources after the timeout (keep alive period) defined by the data collector itself. Moreover, data collectors are client-side, which means communication is mono-directional, so that really few requirements are requested on the location where they run and collect data. Finally, in order to save traffic (and therefore money) and reduce the overhead, data collectors collect data only when and how requested by the <a href="../manager/">Manager</a> according to the <a href="../rules/">Rules</a> installed by the user.</p>
 <p>Two kind of data collectors have been implemented so far:</p>
 <ul>
-<li>the <a href="data-collectors/java-app-dc.html">Java App Data Collector</a>, which is a Java library that uses aspect oriented programming for collecting application level metrics of your Java application such as Response Time and Throughput,</li>
+<li>the <a href="java-app-dc.html">Java App Data Collector</a>, which is a Java library that uses aspect oriented programming for collecting application level metrics of your Java application such as Response Time and Throughput,</li>
 <li>a data collector built by another MODAClouds partner (Imperial University), which is an executable Java application able to collect both infrastructure and application level metrics such as CPU Utilization and Application Availability. This data collector can be found <a href="https://github.com/imperial-modaclouds/modaclouds-data-collectors">here</a>.</li>
 </ul>
-<p>If you want to build your data collector feel free to contribute. You can find instructions on how to build a data collector <a href="data-collectors/byodc.html">here</a> and instructions on how to contribute <a href="CONTRIBUTING.html">here</a>.</p>
+<p>If you want to build your data collector feel free to contribute. You can find instructions on how to build a data collector <a href="byodc.html">here</a> and instructions on how to contribute <a href="/CONTRIBUTING.html">here</a>.</p>
 <p>What a data collector actually does:</p>
 <ol>
-<li>Once started, it contacts the <a href="manager.html">Manager</a> registering:
+<li>Once started, it contacts the <a href="../manager/">Manager</a> registering:
 <ul>
-<li>the resources being monitored and their relationships with the entire <a href="model.html">Model</a>,</li>
+<li>the resources being monitored and their relationships with the entire <a href="../model/">Model</a>,</li>
 <li>the metrics it is able to collect for each resource</li>
-<li>the keep alive period, which tells the <a href="manager.html">Manager</a> how long to wait an acknowledgement from the data collector before considering it and its resources expired.</li>
+<li>the keep alive period, which tells the <a href="../manager/">Manager</a> how long to wait an acknowledgement from the data collector before considering it and its resources expired.</li>
 </ul></li>
-<li>Periodically, it will contact the <a href="manager.html">Manager</a> to acknowledge if any collecting activity is requested for any metric about any resource it is responsible for.</li>
-<li>Whenever requested, it will start collecting and sending data according to the configuration provided by the <a href="manager.html">Manager</a>, which contains:
+<li>Periodically, it will contact the <a href="../manager/">Manager</a> to acknowledge if any collecting activity is requested for any metric about any resource it is responsible for.</li>
+<li>Whenever requested, it will start collecting and sending data according to the configuration provided by the <a href="../manager/">Manager</a>, which contains:
 <ul>
 <li>the metrics to be collected</li>
 <li>the resources to be monitored for each metric</li>
@@ -151,7 +151,7 @@
 <li>the URL where the data should be sent (*)</li>
 </ul></li>
 </ol>
-<p>(*) The URL identifies a <a href="streams.html">Stream</a> on the <a href="data-analyzer.html">Data Analyzer</a></p>
+<p>(*) The URL identifies a <a href="../data-analyzer/streams.html">Stream</a> on the <a href="../data-analyzer/">Data Analyzer</a></p>
         </section>
 
     </div>

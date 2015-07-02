@@ -101,8 +101,8 @@
                     </a>
                 </li>
                                                 <li class="">
-                    <a href="http://deib-polimi.github.io/tower4clouds/docs/monitoring-rules/">
-                        Monitoring Rules
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/rules/">
+                        Rules
                     </a>
                 </li>
                                                 <li class="">
@@ -167,20 +167,16 @@
 <h2>Usage</h2>
 <p>In order to use the library you should first add the java-app-dc library as a dependency in your maven project:</p>
 <p>Releases repository:</p>
-<pre><code class="language-xml">&lt;repositories&gt;
-    &lt;repository&gt;
-        &lt;id&gt;deib-polimi-releases&lt;/id&gt;
-        &lt;url&gt;https://github.com/deib-polimi/deib-polimi-mvn-repo/raw/master/releases&lt;/url&gt;
-    &lt;/repository&gt;
-&lt;/repositories&gt;</code></pre>
+<pre><code class="language-xml">&lt;repository&gt;
+    &lt;id&gt;deib-polimi-releases&lt;/id&gt;
+    &lt;url&gt;https://github.com/deib-polimi/deib-polimi-mvn-repo/raw/master/releases&lt;/url&gt;
+&lt;/repository&gt;</code></pre>
 <p>Dependency:</p>
-<pre><code class="language-xml">&lt;dependencies&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;it.polimi.tower4clouds&lt;/groupId&gt;
-        &lt;artifactId&gt;java-app-dc&lt;/artifactId&gt;
-        &lt;version&gt;VERSION&lt;/version&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;</code></pre>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;it.polimi.tower4clouds&lt;/groupId&gt;
+    &lt;artifactId&gt;java-app-dc&lt;/artifactId&gt;
+    &lt;version&gt;VERSION&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
 <p>Include in your build life cycle the aspectj plugin:</p>
 <pre><code class="language-xml">&lt;build&gt;
     &lt;plugins&gt;
@@ -210,7 +206,7 @@
         &lt;/plugin&gt;
     &lt;/plugins&gt;
 &lt;/build&gt;</code></pre>
-<p>When your application starts, the data collector must be configured with the information about the resource it is monitoring, the <a href="../manager.html">manager</a> endpoint, the package where your java classes are located, and finally started. Let's see an example:</p>
+<p>When your application starts, the data collector must be configured with the information about the resource it is monitoring, the <a href="../manager/">manager</a> endpoint, the package where your java classes are located, and finally started. Let's see an example:</p>
 <pre><code class="language-java">Map&lt;Property, String&gt; applicationProperties = new HashMap&lt;Property, String&gt;();
 applicationProperties.put(Property.ID, "App1");
 applicationProperties.put(Property.TYPE, "App");
@@ -220,7 +216,7 @@ applicationProperties.put(Property.CLOUD_PROVIDER_ID, "AWS");
 applicationProperties.put(Property.CLOUD_PROVIDER_TYPE, "IaaS");
 Registry.initialize(managerIP, managerPort, applicationProperties, "it.polimi.app");
 Registry.startMonitoring();</code></pre>
-<p>Annotate methods you want to monitor, specifying the method <a href="../model.html">type</a> as parameter.</p>
+<p>Annotate methods you want to monitor, specifying the method <a href="../model/">type</a> as parameter.</p>
 <pre><code class="language-java">@Monitor(type = "register")
 private void register() {
     //...
@@ -238,6 +234,8 @@ AppDataCollectorFactory.startsExternalCall();
 AppDataCollectorFactory.endsExternalCall();
 // registration code
 Registry.ended("register");</code></pre>
+<h2>Developers</h2>
+<p>The source code of the latest release of the Java App DC can be found <a href="https://github.com/deib-polimi/tower4clouds/tree/master/data-collectors/java-app-dc">here</a>. </p>
         </section>
 
     </div>

@@ -89,17 +89,10 @@
                     </a>
                 </li>
                                                 <li class="">
-                    <a href="http://deib-polimi.github.io/tower4clouds/docs/monitoring-rules/">
-                        Monitoring Rules
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/rules/">
+                        Rules
                     </a>
                 </li>
-                                <ul class="submenu nav nav-stacked nav-pills">
-                                        <li class="active">
-                        <a href="http://deib-polimi.github.io/tower4clouds/docs/monitoring-rules/actions.html">
-                            Actions
-                        </a>
-                    </li>
-                                    </ul>
                                                 <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/docs/observers/">
                         Observers
@@ -121,8 +114,68 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>Actions</h1>
-<h2><a name="output-metric"></a> Output Metric</h2>
+            <p><a href="../../toc.html">Documentation table of contents</a> / <a href="../../api.html">API Reference</a> / POST-model</p>
+<h1>Models</h1>
+<pre><code>POST /resources</code></pre>
+<h2>Description</h2>
+<p>Records the new resource as an update to an existing model (that if it doesn't exist will be instead created).</p>
+<h2>URL Parameters</h2>
+<p>None.</p>
+<h2>Data Parameters</h2>
+<p>A JSON containing all the resources that must be added to the knowledge base.</p>
+<h2>Response</h2>
+<pre><code>Status: 204 No Content</code></pre>
+<pre><code>-</code></pre>
+<h2>Errors</h2>
+<ul>
+<li><strong>400 Resources not valid</strong> -- The resources aren't valid or aren't expressed in the expected way.</li>
+<li><strong>500 Server error</strong> -- Given when it is impossible to communicate either with the queue or the datastore.</li>
+</ul>
+<p>The errors aren't implemented at the time of writing this, so every request will always answer with a 204 status even if there is a problem.</p>
+<h2>Example</h2>
+<h3>Request</h3>
+<pre><code>POST /resources</code></pre>
+<pre><code class="language-json">{
+  "internalComponents": [
+    {
+      "id": "mic3", 
+      "providedMethods": [
+        "mic3-register", 
+        "mic3-answerQuestions", 
+        "mic3-saveAnswers"
+      ], 
+      "requiredComponents": [
+        "frontend3"
+      ], 
+      "type": "Mic"
+    }
+  ], 
+  "methods": [
+    {
+      "id": "mic3-answerQuestions", 
+      "type": "answerQuestions"
+    }, 
+    {
+      "id": "mic3-saveAnswers", 
+      "type": "saveAnswers"
+    }, 
+    {
+      "id": "mic3-register", 
+      "type": "register"
+    }
+  ], 
+  "vMs": [
+    {
+      "cloudProvider": "amazon", 
+      "id": "frontend3", 
+      "numberOfCPUs": 2, 
+      "type": "Frontend"
+    }
+  ]
+}</code></pre>
+<h3>Response</h3>
+<pre><code>Status: 204 No Content</code></pre>
+<pre><code>-</code></pre>
         </section>
 
     </div>
