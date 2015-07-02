@@ -101,14 +101,14 @@ menu:
         model:
             text: The Model
             relativeUrl: docs/model/
-        monitoring-rules:
-            text: Monitoring Rules
-            relativeUrl: docs/monitoring-rules/
+        rules:
+            text: Rules
+            relativeUrl: docs/rules/
             submenu:
                 items:
                     actions:
                         text: Actions
-                        relativeUrl: docs/monitoring-rules/actions.html
+                        relativeUrl: docs/rules/actions.html
         observers:
             text: Observers
             relativeUrl: docs/observers/

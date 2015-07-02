@@ -25,12 +25,12 @@ Start it:
 
 Your Tower4Clouds Core instance is up, now you need:
 1. [Data Collectors] to gather monitoring data,
-2. [Monitoring Rules] to instruct the platform on what to do,
+2. [Rules] to instruct the platform on what to do,
 3. [Observers] to visualize or make use of data or events.
 
 [Manager]: manager
 [Data Analyzer]: data-analyzer/
 [Manager Webapp]: manager/webapp.html
 [Data Collectors]: data-collectors/
-[Monitoring Rules]: monitoring-rules/
+[Rules]: rules/
 [Observers]: observers/

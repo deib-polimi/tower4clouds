@@ -9,7 +9,7 @@ This is the documentation root. Here are some articles to help you:
 - [Manager](manager/)
 - [Data Analyzer](data-analyzer/)
 - [The Model](model/)
-- [Monitoring Rules](monitoring-rules/)
+- [Rules](rules/)
 - [Observers](observers/)
 - [Change log](../CHANGELOG.html)
 - [Contributing](../CONTRIBUTING.html)
