@@ -34,6 +34,7 @@ public abstract class AbstractAction {
 	private static final Logger logger = LoggerFactory
 			.getLogger(AbstractAction.class);
 	private Map<String, String> parameters;
+	private String ruleId;
 
 	protected Logger getLogger() {
 		return LoggerFactory.getLogger(this.getClass().getName());
@@ -159,5 +160,13 @@ public abstract class AbstractAction {
 	 */
 	public abstract void execute(String resourceId, String value,
 			String timestamp);
+	
+	public void setRuleId(String ruleId) {
+		this.ruleId = ruleId;
+	}
+	
+	public String getRuleId() {
+		return ruleId;
+	}
 
 }
