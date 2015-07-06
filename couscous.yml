@@ -44,9 +44,9 @@ subTitle: A monitoring framework for clouds
 # The left menu bar
 menu:
     items:
-        home:
-            text: Home
-            relativeUrl: .
+        index:
+            text: Documentation Index
+            relativeUrl: docs/
         overview:
             text: Overview
             relativeUrl: docs/overview.html
@@ -101,14 +101,14 @@ menu:
         model:
             text: The Model
             relativeUrl: docs/model/
-        monitoring-rules:
-            text: Monitoring Rules
-            relativeUrl: docs/monitoring-rules/
+        rules:
+            text: Rules
+            relativeUrl: docs/rules/
             submenu:
                 items:
                     actions:
                         text: Actions
-                        relativeUrl: docs/monitoring-rules/actions.html
+                        relativeUrl: docs/rules/actions.html
         observers:
             text: Observers
             relativeUrl: docs/observers/

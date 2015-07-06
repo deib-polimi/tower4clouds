@@ -9,7 +9,7 @@ The Webapp is accessible at the [configured][Configuration] manager port under t
 
 ## The Rules Tab
 
-From this view the user can explore all installed [Monitoring Rules], as well as disable, enable or delete them. The user can also install new ones by means of the "Add a new Rule" box, where rules can be either copy pasted in the text area or uploaded from an xml file.
+From this view the user can explore all installed [Rules], as well as disable, enable or delete them. The user can also install new ones by means of the "Add a new Rule" box, where rules can be either copy pasted in the text area or uploaded from an xml file.
 
 ![Rules Tab](../../img/webapp-rules.png)
 
@@ -36,8 +36,8 @@ In this Tab the user can explore the current [Model], as well as add resources t
 
 
 [Configuration]: configuration.html
-[Monitoring Rules]: ../monitoring-rules
-[Output Metrics]: ../monitoring-rules/actions.html#output-metric
+[Rules]: ../rules/
+[Output Metrics]: ../rules/actions.html#output-metric
 [Observers]: ../observers
 [Serialization Formats]: ../data-analyzer/serialization-formats.html
 [Data Analyzer]: ../data-analyzer

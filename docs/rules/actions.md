@@ -1,6 +1,6 @@
 ---
 currentMenu: actions
-parentMenu: monitoring-rules
+parentMenu: rules
 ---
 
 # Actions
