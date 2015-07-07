@@ -135,12 +135,13 @@
 							<distribution>tower4clouds</distribution>
 							<name>modaclouds-services-${dist.file.name}</name>
 							<group>System Environment/Daemons</group>
-							<prefix>/opt/modaclouds-services-${dist.file.name}-${modaclouds.release}</prefix>
+							<prefix>/opt/modaclouds-services-${dist.file.name}-${modaclouds.version}</prefix>
 							<targetOS>linux</targetOS>
-							<release>${modaclouds.release}</release>
+							<version>${modaclouds.version}</version>
+							<release>${project.version}</release>
 							<mappings>
 								<mapping>
-									<directory>/opt/modaclouds-services-${dist.file.name}-${modaclouds.release}/lib/distribution</directory>
+									<directory>/opt/modaclouds-services-${dist.file.name}-${modaclouds.version}/lib/distribution</directory>
 									<filemode>0444</filemode>
 									<username>mos-packages</username>
 									<groupname>mos-packages</groupname>
@@ -152,7 +153,7 @@
 									</sources>
 								</mapping>
 								<mapping>
-									<directory>/opt/modaclouds-services-${dist.file.name}-${modaclouds.release}/bin</directory>
+									<directory>/opt/modaclouds-services-${dist.file.name}-${modaclouds.version}/bin</directory>
 									<filemode>0555</filemode>
 									<username>mos-packages</username>
 									<groupname>mos-packages</groupname>
