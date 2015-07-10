@@ -4,9 +4,9 @@ currentMenu: mosaic-installation
 
 # Installation on mOSAIC
 
-Set current MODAClouds release number:
+Set current MODAClouds version number:
 ```bash
-MODACLOUDS_RELEASE=0.7.13
+MODACLOUDS_RELEASE=0.7.0.13
 ```
 
 ## Requirements
@@ -24,8 +24,8 @@ Required components:
 		```
 	* run via
 		```bash
-		nohup /opt/mosaic-components-rabbitmq-${MODACLOUDS_RELEASE}/bin/mosaic-components-rabbitmq--run-component > \
-			/tmp/mosaic-components-rabbitmq-${MODACLOUDS_RELEASE}.log 2>&1 &
+		nohup /opt/mosaic-components-rabbitmq-0.7.0.11/bin/mosaic-components-rabbitmq--run-component > \
+			/tmp/mosaic-components-rabbitmq.log 2>&1 &
 		```
 	* stop via
 		```bash
@@ -45,7 +45,7 @@ Required components:
 			MODACLOUDS_FUSEKI_ENDPOINT_PORT=3030 \
 			MODACLOUDS_FUSEKI_DATASET_PATH=/ds \
 		nohup /opt/modaclouds-services-fuseki-${MODACLOUDS_RELEASE}/bin/modaclouds-services-fuseki--run-component > \
-			/tmp/modaclouds-services-fuseki-${MODACLOUDS_RELEASE}.log 2>&1 &
+			/tmp/modaclouds-services-fuseki.log 2>&1 &
 		```
 	* stop via
 		```bash
@@ -78,7 +78,6 @@ Required components:
 		```bash
 		???
 		```
-- Grafana (http://grafana.org) (optional: a nicer gui for Graphite)
 
 ## Installation of Tower 4Clouds
 
