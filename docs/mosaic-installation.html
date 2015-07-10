@@ -117,8 +117,8 @@
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
             <h1>Installation on mOSAIC</h1>
-<p>Set current MODAClouds release number:</p>
-<pre><code class="language-bash">MODACLOUDS_RELEASE=0.7.13</code></pre>
+<p>Set current MODAClouds version number:</p>
+<pre><code class="language-bash">MODACLOUDS_RELEASE=0.7.0.13</code></pre>
 <h2>Requirements</h2>
 <p>Dependencies:</p>
 <ul>
@@ -134,8 +134,8 @@
         --no-gpg-checks --gpg-auto-import-keys \
     install mosaic-components-rabbitmq</code></pre></li>
 <li>run via
-<pre><code class="language-bash">nohup /opt/mosaic-components-rabbitmq-${MODACLOUDS_RELEASE}/bin/mosaic-components-rabbitmq--run-component &gt; \
-    /tmp/mosaic-components-rabbitmq-${MODACLOUDS_RELEASE}.log 2&gt;&amp;1 &amp;</code></pre></li>
+<pre><code class="language-bash">nohup /opt/mosaic-components-rabbitmq-0.7.0.11/bin/mosaic-components-rabbitmq--run-component &gt; \
+    /tmp/mosaic-components-rabbitmq.log 2&gt;&amp;1 &amp;</code></pre></li>
 <li>stop via
 <pre><code class="language-bash">???</code></pre></li>
 </ul></li>
@@ -151,7 +151,7 @@
     MODACLOUDS_FUSEKI_ENDPOINT_PORT=3030 \
     MODACLOUDS_FUSEKI_DATASET_PATH=/ds \
 nohup /opt/modaclouds-services-fuseki-${MODACLOUDS_RELEASE}/bin/modaclouds-services-fuseki--run-component &gt; \
-    /tmp/modaclouds-services-fuseki-${MODACLOUDS_RELEASE}.log 2&gt;&amp;1 &amp;</code></pre></li>
+    /tmp/modaclouds-services-fuseki.log 2&gt;&amp;1 &amp;</code></pre></li>
 <li>stop via
 <pre><code class="language-bash">???</code></pre></li>
 </ul></li>
@@ -178,7 +178,6 @@ nohup /opt/modaclouds-services-metric-explorer-${MODACLOUDS_RELEASE}/bin/modaclo
 <li>stop via
 <pre><code class="language-bash">???</code></pre></li>
 </ul></li>
-<li>Grafana (<a href="http://grafana.org">http://grafana.org</a>) (optional: a nicer gui for Graphite)</li>
 </ul>
 <h2>Installation of Tower 4Clouds</h2>
 <pre><code class="language-bash">sudo zypper \
