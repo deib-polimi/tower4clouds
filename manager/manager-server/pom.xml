@@ -138,12 +138,13 @@
 							<targetOS>linux</targetOS>
 							<version>${modaclouds.version}</version>
 							<release>${project.version}</release>
+							<defaultFilemode>0444</defaultFilemode>
+							<defaultDirmode>0555</defaultDirmode>
+							<defaultUsername>mos-packages</defaultUsername>
+							<defaultGroupname>mos-packages</defaultGroupname>
 							<mappings>
 								<mapping>
 									<directory>/opt/modaclouds-services-${dist.file.name}-${modaclouds.version}/lib/distribution</directory>
-									<filemode>0444</filemode>
-									<username>mos-packages</username>
-									<groupname>mos-packages</groupname>
 									<sources>
 										<source>
 											<location>target/${project.artifactId}-${project.version}-jar-with-dependencies.jar</location>
@@ -154,8 +155,7 @@
 								<mapping>
 									<directory>/opt/modaclouds-services-${dist.file.name}-${modaclouds.version}/bin</directory>
 									<filemode>0555</filemode>
-									<username>mos-packages</username>
-									<groupname>mos-packages</groupname>
+									<directoryIncluded>false</directoryIncluded>
 									<sources>
 										<source>
 											<location>target/classes/start-script-4-mosaic</location>
