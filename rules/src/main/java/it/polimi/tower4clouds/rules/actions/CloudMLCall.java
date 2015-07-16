@@ -76,7 +76,7 @@ public class CloudMLCall extends AbstractAction {
         DEPLOY("DEPLOY", "!extended { name : Deploy }", false, true, false),
         LOAD_DEPLOYMENT("LOAD_DEPLOYMENT",
                 "!extended { name : LoadDeployment }\n" +
-                "!additional json-string: %s", true, false, false),
+                        "!additional json-string: %s", true, false, false),
         BURST("BURST", "!extended { name: Burst, params: [ %1$s , %2$s ] }", true, true, false);
 
         public String name;
@@ -154,7 +154,7 @@ public class CloudMLCall extends AbstractAction {
 
     @Override
     protected Collection<? extends Problem> validate(MonitoringRule rule,
-            List<MonitoringRule> otherRules) {
+                                                     List<MonitoringRule> otherRules) {
         Set<Problem> problems = new HashSet<Problem>();
         Map<String, String> parameters = getParameters();
 
@@ -220,23 +220,23 @@ public class CloudMLCall extends AbstractAction {
     }
 
     private boolean perform(String ip, String port, Command c, int cooldown,
-            Object... parameters) {
+                            Object... parameters) {
         if (ip == null || port == null || c == null)
             throw new RuntimeException("Error with the parameters!");
 
         if (!c.actualCommand) {
             switch (c) {
-            case SCALE:
-                if (parameters.length >= 2)
-                    return scale(ip, port, (String) parameters[0],
-                            Integer.parseInt((String) parameters[1]));
-                else
-                    throw new RuntimeException(
-                            "You didn't pass the id of the vms and the number of instances.");
-            default:
-                getLogger().debug("Command {} not handled at the moment.",
-                        c.name);
-                return true;
+                case SCALE:
+                    if (parameters.length >= 2)
+                        return scale(ip, port, (String) parameters[0],
+                                Integer.parseInt((String) parameters[1]));
+                    else
+                        throw new RuntimeException(
+                                "You didn't pass the id of the vms and the number of instances.");
+                default:
+                    getLogger().debug("Command {} not handled at the moment.",
+                            c.name);
+                    return true;
             }
         }
 
@@ -267,20 +267,20 @@ public class CloudMLCall extends AbstractAction {
 
         new Thread() {
             public void run() {
-            	DefaultRestClient client = new DefaultRestClient();
-        		String managerUrl = "http://" + fip + ":" + fport + "/v1";
+                DefaultRestClient client = new DefaultRestClient();
+                String managerUrl = "http://" + fip + ":" + fport + "/v1";
 
-        		try {
-        			client.execute(RestMethod.GET, managerUrl + "/monitoring-rules"
-        					+ "/" + fruleId + "?enabled=false", null, 204, 5000);
+                try {
+                    client.execute(RestMethod.GET, managerUrl + "/monitoring-rules"
+                            + "/" + fruleId + "?enabled=false", null, 204, 5000);
 
-        			Thread.sleep(fcooldown * 1000);
+                    Thread.sleep(fcooldown * 1000);
 
-        			client.execute(RestMethod.GET, managerUrl + "/monitoring-rules"
-        					+ "/" + fruleId + "?enabled=true", null, 204, 5000);
-        		} catch (Exception e) {
-        			getLogger().error("Error while disabling temporarely the rule.", e);
-        		}
+                    client.execute(RestMethod.GET, managerUrl + "/monitoring-rules"
+                            + "/" + fruleId + "?enabled=true", null, 204, 5000);
+                } catch (Exception e) {
+                    getLogger().error("Error while disabling temporarely the rule.", e);
+                }
 
 //                ManagerAPI manager = new ManagerAPI(fip, fport);
 //
@@ -415,7 +415,8 @@ public class CloudMLCall extends AbstractAction {
         public void updateStatus() {
             getLogger().info("Asking for the deployment model...");
 
-            wsClient.sendBlocking(Command.GET_STATUS.command, Command.GET_STATUS);
+//            wsClient.sendBlocking(Command.GET_STATUS.command, Command.GET_STATUS);
+            wsClient.send(Command.GET_STATUS.command);
         }
 
         private void getInstanceInfo(String id) {
@@ -424,7 +425,7 @@ public class CloudMLCall extends AbstractAction {
 
             wsClient.send( //Blocking(
                     String.format(Command.GET_INSTANCE_STATUS.command, id)
-                    ); //, Command.GET_INSTANCE_STATUS);
+            ); //, Command.GET_INSTANCE_STATUS);
         }
 
         private void stopInstances(List<String> instances) {
@@ -496,7 +497,7 @@ public class CloudMLCall extends AbstractAction {
 
         public class WSClient extends WebSocketClient {
             public WSClient(String serverURI) throws InterruptedException,
-                URISyntaxException {
+                    URISyntaxException {
                 super(new URI(serverURI), new Draft_17());
                 signalClearWaiting();
             }
@@ -737,6 +738,10 @@ public class CloudMLCall extends AbstractAction {
                     getLogger().info("Deploy completed.");
 
                     pcs.firePropertyChange("Deploy", false, true);
+
+                    try {
+                        Thread.sleep(10000);
+                    } catch (Exception e) { }
 
                     updateStatus();
                 } else if (s.contains("ack")) {
