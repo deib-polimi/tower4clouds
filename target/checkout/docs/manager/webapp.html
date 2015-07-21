@@ -78,6 +78,28 @@
                         Manager
                     </a>
                 </li>
+                                <ul class="submenu nav nav-stacked nav-pills">
+                                        <li class="">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/configuration.html">
+                            Configuration
+                        </a>
+                    </li>
+                                        <li class="active">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/webapp.html">
+                            Webapp
+                        </a>
+                    </li>
+                                        <li class="">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/java-api.html">
+                            Java API
+                        </a>
+                    </li>
+                                        <li class="">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/rest-api/">
+                            REST API
+                        </a>
+                    </li>
+                                    </ul>
                                                 <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/docs/data-analyzer/">
                         Data Analyzer
@@ -98,13 +120,11 @@
                         Observers
                     </a>
                 </li>
-                                                <li class="active">
+                                                <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/CHANGELOG.html">
                         Change log
                     </a>
                 </li>
-                                <ul class="submenu nav nav-stacked nav-pills">
-                                    </ul>
                                                 <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/CONTRIBUTING.html">
                         Contributing
@@ -116,37 +136,29 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>Change Log</h1>
-<p>All notable changes to this project will be documented in this file.
-This document adheres to <a href="https://github.com/olivierlacan/keep-a-changelog">keep-a-changelog</a>.
-This project adheres to <a href="http://semver.org/">Semantic Versioning</a>.</p>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2.1...develop">Unreleased</a></h2>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2.1...v0.2.2">0.2.2</a> - 2015-07-21</h2>
-<h3>Fixed</h3>
+            <h1>Webapp</h1>
+<p>The Webapp is accessible at the <a href="configuration.html">configured</a> manager port under the url path <code>/webapp</code>.</p>
+<h2>The Rules Tab</h2>
+<p>From this view the user can explore all installed <a href="../rules/">Rules</a>, as well as disable, enable or delete them. The user can also install new ones by means of the &quot;Add a new Rule&quot; box, where rules can be either copy pasted in the text area or uploaded from an xml file.</p>
+<p><img src="../../img/webapp-rules.png" alt="Rules Tab" /></p>
+<h2>The Metrics Tab</h2>
+<p>Here the user can explore all <a href="../rules/actions.html#output-metric">Output Metrics</a> as well as view, delete and attach new <a href="../observers">Observers</a> to them. If your observer listens on a Socket TCP or UDP port then you should specify only the following fields:</p>
 <ul>
-<li>Bug that caused two rules with the same collected metric to replace each other target resource</li>
+<li>Observer Host, with the IP address of the observer</li>
+<li>Observer Port, with the Port to which the observer listens to</li>
+<li>Format, with one of the <a href="../data-analyzer/serialization-formats.html">Serialization Formats</a> provided by the <a href="../data-analyzer">Data Analyzer</a></li>
+<li>Protocol, one of <code>TCP</code> or <code>UDP</code></li>
 </ul>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2...v0.2.1">0.2.1</a> - 2015-06-17</h2>
-<h3>Added</h3>
+<p>If your observer uses an <code>HTTP</code> protocol, only the following fields should be specified:</p>
 <ul>
-<li>New Manager REST API and Manager API library for enabling and disabling rules</li>
-<li>New button on the manager webapp for enabling and disabling rules</li>
+<li>Observer Url, with the complete url of the observer endpoint (e.g.: <a href="http://my.observer:9999/metrics">http://my.observer:9999/metrics</a>)</li>
+<li>Format, with one of the <a href="../data-analyzer/serialization-formats.html">Serialization Formats</a> provided by the <a href="../data-analyzer">Data Analyzer</a>,</li>
+<li>Protocol, with <code>HTTP</code></li>
 </ul>
-<h3>Fixed</h3>
-<ul>
-<li>MODAClouds packaging</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>returned JSON from <code>/metrics/{metricname}/observers/</code> api changed to a simple list</li>
-</ul>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.1...v0.2">0.2</a> - 2015-06-10</h2>
-<p>First official release of the new Tower 4Clouds platform.</p>
-<h2>0.1 - 2015-05-18</h2>
-<h3>Added</h3>
-<ul>
-<li>First intial migration and integration of the old MODAClouds Monitoring Platform projects</li>
-</ul>
+<p><img src="../../img/webapp-metrics.png" alt="Metrics Tab" /></p>
+<h2>The Model Tab</h2>
+<p>In this Tab the user can explore the current <a href="../model">Model</a>, as well as add resources to or remove resources from the model. Consider that <a href="../data-collectors">Data Collectors</a> are in charge of keeping their respective sub graph alive, therefore if you try to delete a resource which is kept alive by a running data collector, it will be restored. On the other side, if you add new resources from this tab, those resources will have an infinite keep alive period, i.e., they won't ever expire unless manually deleted through the webapp or through the <a href="../manager/rest-api.html">REST API</a>. </p>
+<p><img src="../../img/webapp-model.png" alt="Model Tab" /></p>
         </section>
 
     </div>

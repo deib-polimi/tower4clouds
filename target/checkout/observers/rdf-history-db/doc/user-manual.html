@@ -98,13 +98,11 @@
                         Observers
                     </a>
                 </li>
-                                                <li class="active">
+                                                <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/CHANGELOG.html">
                         Change log
                     </a>
                 </li>
-                                <ul class="submenu nav nav-stacked nav-pills">
-                                    </ul>
                                                 <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/CONTRIBUTING.html">
                         Contributing
@@ -116,37 +114,75 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>Change Log</h1>
-<p>All notable changes to this project will be documented in this file.
-This document adheres to <a href="https://github.com/olivierlacan/keep-a-changelog">keep-a-changelog</a>.
-This project adheres to <a href="http://semver.org/">Semantic Versioning</a>.</p>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2.1...develop">Unreleased</a></h2>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2.1...v0.2.2">0.2.2</a> - 2015-07-21</h2>
-<h3>Fixed</h3>
+            <p><a href="toc.html">Documentation table of contents</a> / User Manual</p>
+<h1>User Manual</h1>
+<h2>What to configure</h2>
 <ul>
-<li>Bug that caused two rules with the same collected metric to replace each other target resource</li>
+<li>Queue URL: the endpoint to the queue (tipically a RabbitMQ queue)</li>
+<li>DB URL: the endpoint to the database (tipically a Fuseki datastore)</li>
+<li>Listener port: the port on which the listener will wait for messages.</li>
 </ul>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2...v0.2.1">0.2.1</a> - 2015-06-17</h2>
-<h3>Added</h3>
+<h2>How to configure</h2>
+<p>The monitoring manager can be configured by means of different options (latters replaces the formers):</p>
 <ul>
-<li>New Manager REST API and Manager API library for enabling and disabling rules</li>
-<li>New button on the manager webapp for enabling and disabling rules</li>
+<li>Default Configuration</li>
+<li>Environment Variables</li>
+<li>System Properties</li>
+<li>CLI Arguments</li>
 </ul>
-<h3>Fixed</h3>
+<h3>Default Configuration</h3>
 <ul>
-<li>MODAClouds packaging</li>
+<li>Queue URL: <code>http://localhost:5672</code></li>
+<li>DB URL: <code>http://localhost:3030/ds</code></li>
+<li>Listener port: <code>31337</code>.</li>
 </ul>
-<h3>Changed</h3>
+<h3>Environment Variables</h3>
+<pre><code>MODACLOUDS_HDB_QUEUE_ENDPOINT_IP
+MODACLOUDS_HDB_QUEUE_ENDPOINT_PORT
+MODACLOUDS_HDB_DB_ENDPOINT_IP
+MODACLOUDS_HDB_DB_ENDPOINT_PORT
+MODACLOUDS_HDB_DB_DATASET_PATH
+MODACLOUDS_HDB_LISTENER_PORT</code></pre>
+<p>where:</p>
 <ul>
-<li>returned JSON from <code>/metrics/{metricname}/observers/</code> api changed to a simple list</li>
+<li>Queue URL: <code>http://${MODACLOUDS_HDB_QUEUE_ENDPOINT_IP}:${MODACLOUDS_HDB_QUEUE_ENDPOINT_PORT}</code></li>
+<li>DB URL: <code>http://${MODACLOUDS_HDB_DB_ENDPOINT_IP}:${MODACLOUDS_HDB_DB_ENDPOINT_PORT}${MODACLOUDS_HDB_DB_DATASET_PATH}</code></li>
+<li>Listener port: <code>${MODACLOUDS_HDB_LISTENER_PORT}</code>.</li>
 </ul>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.1...v0.2">0.2</a> - 2015-06-10</h2>
-<p>First official release of the new Tower 4Clouds platform.</p>
-<h2>0.1 - 2015-05-18</h2>
-<h3>Added</h3>
-<ul>
-<li>First intial migration and integration of the old MODAClouds Monitoring Platform projects</li>
-</ul>
+<h3>System Properties</h3>
+<p>Same names used for Environment Variables.</p>
+<h3>CLI Arguments</h3>
+<p>Usage available by running <code>./historydb -help</code>:</p>
+<pre><code>Usage: historydb [options]
+  Options:
+    -queueip
+       Queue endpoint IP address
+       Default: 127.0.0.1
+    -queueport
+       Queue endpoint port
+       Default: 5672
+    -dbip
+       DB endpoint IP address
+       Default: 127.0.0.1
+    -dbpath
+       DB URL path
+       Default: /ds
+    -dbport
+       DB endpoint port
+       Default: 3030
+    -listenerport
+       Listener endpoint port
+       Default: 31337
+    -fakemessages
+       Test the tool sending a number of fake messages at the beginning
+       Default: 0
+    -waitfakemessages
+       The ms to wait between each fake message
+       Default: 1000 (1 second)
+    -help | -h | --help
+       Shows this message.</code></pre>
+<p>There are two new parameters here that are useful when testing the tool: <code>-fakemessages</code> and <code>-waitfakemessages</code>. If you call the tool for having 30 fake messages,
+30 random messages will be sent when the tool starts, and this is useful for testing the environment.</p>
         </section>
 
     </div>

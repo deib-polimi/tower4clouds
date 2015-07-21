@@ -98,13 +98,11 @@
                         Observers
                     </a>
                 </li>
-                                                <li class="active">
+                                                <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/CHANGELOG.html">
                         Change log
                     </a>
                 </li>
-                                <ul class="submenu nav nav-stacked nav-pills">
-                                    </ul>
                                                 <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/CONTRIBUTING.html">
                         Contributing
@@ -116,37 +114,74 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>Change Log</h1>
-<p>All notable changes to this project will be documented in this file.
-This document adheres to <a href="https://github.com/olivierlacan/keep-a-changelog">keep-a-changelog</a>.
-This project adheres to <a href="http://semver.org/">Semantic Versioning</a>.</p>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2.1...develop">Unreleased</a></h2>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2.1...v0.2.2">0.2.2</a> - 2015-07-21</h2>
-<h3>Fixed</h3>
+            <p><a href="../toc.html">Documentation table of contents</a> / <a href="../datastore.html">DataStore Reference</a> / add-monitoringdata</p>
+<h1>Add Monitoring Data</h1>
+<p>When adding a new monitoring datum to the system (using the REST API <a href="../rest/monitoring-data/POST-monitoring-data.html">POST-monitoring-data</a>), a number of triples are inserted in the datastore.</p>
+<p>Let's assume that the element exposes:</p>
 <ul>
-<li>Bug that caused two rules with the same collected metric to replace each other target resource</li>
+<li>a timestamp, e.g. <code>1425399022110</code>, corresponding to the date <em>Tue, 03 Mar 2015 17:10:22 GMT+1:00</em>,</li>
+<li>an unique id, e.g. <code>b499a3d3-248a-4bbe-859c-e345d47ed479</code>.</li>
 </ul>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2...v0.2.1">0.2.1</a> - 2015-06-17</h2>
-<h3>Added</h3>
+<p>A graph with the name associated to the hour in which the timestamp is contained (e.g. <code>http://www.modaclouds.eu/historydb/monitoring-data/1425398400000</code> for the example above, where <code>1425398400000</code> corresponds to the date <em>Tue, 03 Mar 2015 17:00:00 GMT+1:00</em>) is created or used if it already exists.
+The triples added have all the same subject, the unique id (that here is written as <code>&lt;mo:id&gt;</code>, so e.g. <code>&lt;mo:b499a3d3-248a-4bbe-859c-e345d47ed479&gt;</code>), and the predicates and objects couples added are:</p>
 <ul>
-<li>New Manager REST API and Manager API library for enabling and disabling rules</li>
-<li>New button on the manager webapp for enabling and disabling rules</li>
+<li><code>metric</code> and the actual metric name,</li>
+<li><code>timestamp</code>, and the timestamp,</li>
+<li><code>resourceId</code>, and the resource ID,</li>
+<li><code>value</code>, and the actual value of the metric for the resource with the given ID.</li>
 </ul>
-<h3>Fixed</h3>
+<p>All the predicates have the <code>http://www.modaclouds.eu/rdfs/1.0/monitoringdata#</code> prefix (so e.g. for value we'll have <code>http://www.modaclouds.eu/rdfs/1.0/monitoringdata#value</code>).</p>
+<p>Lastly, in the <code>default</code> graph, one tuple is added, with:</p>
 <ul>
-<li>MODAClouds packaging</li>
+<li>the subject that is the URI of the graph (e.g. <code>http://www.modaclouds.eu/historydb/monitoring-data/1425398400000</code>),</li>
+<li>the predicate is the constant <code>mo:timestamp</code>, and</li>
+<li>the object is the hour in which the timestamp is contained (e.g. <code>1425398400000</code> for the example above, where <code>1425398400000</code> corresponds to the date <em>Tue, 03 Mar 2015 17:00:00 GMT+1:00</em>).</li>
 </ul>
-<h3>Changed</h3>
+<h2> Examples of Query</h2>
+<p>Here are some examples of SPARQL query:</p>
 <ul>
-<li>returned JSON from <code>/metrics/{metricname}/observers/</code> api changed to a simple list</li>
+<li>find all the monitoring data inserted:</li>
 </ul>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.1...v0.2">0.2</a> - 2015-06-10</h2>
-<p>First official release of the new Tower 4Clouds platform.</p>
-<h2>0.1 - 2015-05-18</h2>
-<h3>Added</h3>
+<pre><code class="language-sparql">SELECT * {
+    ?s &lt;mo:timestamp&gt; ?o
+    FILTER (regex(str(?s), "monitoring"))
+}</code></pre>
 <ul>
-<li>First intial migration and integration of the old MODAClouds Monitoring Platform projects</li>
+<li>find all the monitoring data inserted in a specific hourly timestamp:</li>
 </ul>
+<pre><code class="language-sparql">SELECT * {
+    ?s &lt;mo:timestamp&gt; ?o 
+    FILTER (?o = 1425574800000 &amp;&amp; regex(str(?s), "monitoring"))
+}</code></pre>
+<ul>
+<li>find all the monitoring data inserted in a range of hourly timestamps:</li>
+</ul>
+<pre><code class="language-sparql">SELECT * {
+    ?s &lt;mo:timestamp&gt; ?o
+    FILTER (?o &gt;= 1425574600000 &amp;&amp; ?o &lt;= 1425574900000 &amp;&amp; regex(str(?s), "monitoring"))
+}</code></pre>
+<ul>
+<li>find all the metrics registered:</li>
+</ul>
+<pre><code class="language-sparql">SELECT DISTINCT ?o
+WHERE {
+    GRAPH ?g { ?s &lt;http://www.modaclouds.eu/rdfs/1.0/monitoringdata#metric&gt; ?o }
+}</code></pre>
+<ul>
+<li>find all the graphs and subjects for a specific metric (e.g. <code>FrontendCPUUtilization</code>):</li>
+</ul>
+<pre><code class="language-sparql">SELECT ?g ?s
+WHERE {
+    GRAPH ?g { ?s &lt;http://www.modaclouds.eu/rdfs/1.0/monitoringdata#metric&gt; "FrontendCPUUtilization" }
+}</code></pre>
+<ul>
+<li>find all data for a specific metric (e.g. <code>FrontendCPUUtilization</code>):</li>
+</ul>
+<pre><code class="language-sparql">SELECT ?g ?s ?p ?o
+WHERE {
+    GRAPH ?g { ?s ?p ?o }
+    GRAPH ?g { ?s &lt;http://www.modaclouds.eu/rdfs/1.0/monitoringdata#metric&gt; "FrontendCPUUtilization" }
+}</code></pre>
         </section>
 
     </div>

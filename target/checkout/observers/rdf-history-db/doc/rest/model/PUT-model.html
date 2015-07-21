@@ -98,13 +98,11 @@
                         Observers
                     </a>
                 </li>
-                                                <li class="active">
+                                                <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/CHANGELOG.html">
                         Change log
                     </a>
                 </li>
-                                <ul class="submenu nav nav-stacked nav-pills">
-                                    </ul>
                                                 <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/CONTRIBUTING.html">
                         Contributing
@@ -116,37 +114,104 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>Change Log</h1>
-<p>All notable changes to this project will be documented in this file.
-This document adheres to <a href="https://github.com/olivierlacan/keep-a-changelog">keep-a-changelog</a>.
-This project adheres to <a href="http://semver.org/">Semantic Versioning</a>.</p>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2.1...develop">Unreleased</a></h2>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2.1...v0.2.2">0.2.2</a> - 2015-07-21</h2>
-<h3>Fixed</h3>
+            <p><a href="../../toc.html">Documentation table of contents</a> / <a href="../../api.html">API Reference</a> / PUT-model</p>
+<h1>Models</h1>
+<pre><code>PUT /resources</code></pre>
+<h2>Description</h2>
+<p>Records the new resource as a new model.</p>
+<h2>URL Parameters</h2>
+<p>None.</p>
+<h2>Data Parameters</h2>
+<p>A JSON containing the new model that must be uploaded on the knowledge base.</p>
+<h2>Response</h2>
+<pre><code>Status: 204 No Content</code></pre>
+<pre><code>-</code></pre>
+<h2>Errors</h2>
 <ul>
-<li>Bug that caused two rules with the same collected metric to replace each other target resource</li>
+<li><strong>400 Resources not valid</strong> -- The resources aren't valid or aren't expressed in the expected way.</li>
+<li><strong>500 Server error</strong> -- Given when it is impossible to communicate either with the queue or the datastore.</li>
 </ul>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2...v0.2.1">0.2.1</a> - 2015-06-17</h2>
-<h3>Added</h3>
-<ul>
-<li>New Manager REST API and Manager API library for enabling and disabling rules</li>
-<li>New button on the manager webapp for enabling and disabling rules</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>MODAClouds packaging</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>returned JSON from <code>/metrics/{metricname}/observers/</code> api changed to a simple list</li>
-</ul>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.1...v0.2">0.2</a> - 2015-06-10</h2>
-<p>First official release of the new Tower 4Clouds platform.</p>
-<h2>0.1 - 2015-05-18</h2>
-<h3>Added</h3>
-<ul>
-<li>First intial migration and integration of the old MODAClouds Monitoring Platform projects</li>
-</ul>
+<p>The errors aren't implemented at the time of writing this, so every request will always answer with a 204 status even if there is a problem.</p>
+<h2>Example</h2>
+<h3>Request</h3>
+<pre><code>PUT /resources</code></pre>
+<pre><code class="language-json">{
+  "cloudProviders": [
+    {
+      "id": "amazon", 
+      "type": "IaaS"
+    }
+  ], 
+  "internalComponents": [
+    {
+      "id": "mic1", 
+      "providedMethods": [
+        "mic1-register", 
+        "mic1-answerQuestions", 
+        "mic1-saveAnswers"
+      ], 
+      "requiredComponents": [
+        "frontend1"
+      ], 
+      "type": "Mic"
+    },
+    {
+      "id": "mic2", 
+      "providedMethods": [
+        "mic2-register", 
+        "mic2-answerQuestions", 
+        "mic2-saveAnswers"
+      ], 
+      "requiredComponents": [
+        "frontend2"
+      ], 
+      "type": "Mic"
+    }
+  ], 
+  "methods": [
+    {
+      "id": "mic1-answerQuestions", 
+      "type": "answerQuestions"
+    }, 
+    {
+      "id": "mic1-saveAnswers", 
+      "type": "saveAnswers"
+    }, 
+    {
+      "id": "mic1-register", 
+      "type": "register"
+    },
+    {
+      "id": "mic2-answerQuestions", 
+      "type": "answerQuestions"
+    }, 
+    {
+      "id": "mic2-saveAnswers", 
+      "type": "saveAnswers"
+    }, 
+    {
+      "id": "mic2-register", 
+      "type": "register"
+    }
+  ], 
+  "vMs": [
+    {
+      "cloudProvider": "amazon", 
+      "id": "frontend1", 
+      "numberOfCPUs": 2, 
+      "type": "Frontend"
+    },
+    {
+      "cloudProvider": "amazon", 
+      "id": "frontend2", 
+      "numberOfCPUs": 2, 
+      "type": "Frontend"
+    }
+  ]
+}</code></pre>
+<h3>Response</h3>
+<pre><code>Status: 204 No Content</code></pre>
+<pre><code>-</code></pre>
         </section>
 
     </div>

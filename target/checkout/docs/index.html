@@ -48,11 +48,13 @@
         <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
 
             <ul class="nav nav-pills nav-stacked">
-                                <li class="">
+                                <li class="active">
                     <a href="http://deib-polimi.github.io/tower4clouds/docs/">
                         Documentation Index
                     </a>
                 </li>
+                                <ul class="submenu nav nav-stacked nav-pills">
+                                    </ul>
                                                 <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/docs/overview.html">
                         Overview
@@ -98,13 +100,11 @@
                         Observers
                     </a>
                 </li>
-                                                <li class="active">
+                                                <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/CHANGELOG.html">
                         Change log
                     </a>
                 </li>
-                                <ul class="submenu nav nav-stacked nav-pills">
-                                    </ul>
                                                 <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/CONTRIBUTING.html">
                         Contributing
@@ -116,36 +116,19 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>Change Log</h1>
-<p>All notable changes to this project will be documented in this file.
-This document adheres to <a href="https://github.com/olivierlacan/keep-a-changelog">keep-a-changelog</a>.
-This project adheres to <a href="http://semver.org/">Semantic Versioning</a>.</p>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2.1...develop">Unreleased</a></h2>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2.1...v0.2.2">0.2.2</a> - 2015-07-21</h2>
-<h3>Fixed</h3>
+            <h1>Documentation</h1>
 <ul>
-<li>Bug that caused two rules with the same collected metric to replace each other target resource</li>
-</ul>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2...v0.2.1">0.2.1</a> - 2015-06-17</h2>
-<h3>Added</h3>
-<ul>
-<li>New Manager REST API and Manager API library for enabling and disabling rules</li>
-<li>New button on the manager webapp for enabling and disabling rules</li>
-</ul>
-<h3>Fixed</h3>
-<ul>
-<li>MODAClouds packaging</li>
-</ul>
-<h3>Changed</h3>
-<ul>
-<li>returned JSON from <code>/metrics/{metricname}/observers/</code> api changed to a simple list</li>
-</ul>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.1...v0.2">0.2</a> - 2015-06-10</h2>
-<p>First official release of the new Tower 4Clouds platform.</p>
-<h2>0.1 - 2015-05-18</h2>
-<h3>Added</h3>
-<ul>
-<li>First intial migration and integration of the old MODAClouds Monitoring Platform projects</li>
+<li><a href="overview.html">Overview</a>: get an idea of our solution </li>
+<li><a href="get-started.html">Get started</a>: make it run in seconds</li>
+<li><a href="mosaic-installation.html">Installation on mOSAIC</a>: have it deployed on mOSAIC</li>
+<li><a href="data-collectors/">Data Collectors</a>: distribute them everywhere</li>
+<li><a href="manager/">Manager</a>: master your monitoring</li>
+<li><a href="data-analyzer/">Data Analyzer</a>: the big guy</li>
+<li><a href="model/">The Model</a>: abstraction is the key</li>
+<li><a href="rules/">Rules</a>: code your monitoring</li>
+<li><a href="observers/">Observers</a>: spread the information</li>
+<li><a href="../CHANGELOG.html">Change log</a>: keep your monitoring up to date</li>
+<li><a href="../CONTRIBUTING.html">Contributing</a>: not yet at the self-coding state</li>
 </ul>
         </section>
 

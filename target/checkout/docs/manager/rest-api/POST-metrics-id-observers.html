@@ -78,6 +78,28 @@
                         Manager
                     </a>
                 </li>
+                                <ul class="submenu nav nav-stacked nav-pills">
+                                        <li class="">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/configuration.html">
+                            Configuration
+                        </a>
+                    </li>
+                                        <li class="">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/webapp.html">
+                            Webapp
+                        </a>
+                    </li>
+                                        <li class="">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/java-api.html">
+                            Java API
+                        </a>
+                    </li>
+                                        <li class="active">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/rest-api/">
+                            REST API
+                        </a>
+                    </li>
+                                    </ul>
                                                 <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/docs/data-analyzer/">
                         Data Analyzer
@@ -98,13 +120,11 @@
                         Observers
                     </a>
                 </li>
-                                                <li class="active">
+                                                <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/CHANGELOG.html">
                         Change log
                     </a>
                 </li>
-                                <ul class="submenu nav nav-stacked nav-pills">
-                                    </ul>
                                                 <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/CONTRIBUTING.html">
                         Contributing
@@ -116,37 +136,79 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>Change Log</h1>
-<p>All notable changes to this project will be documented in this file.
-This document adheres to <a href="https://github.com/olivierlacan/keep-a-changelog">keep-a-changelog</a>.
-This project adheres to <a href="http://semver.org/">Semantic Versioning</a>.</p>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2.1...develop">Unreleased</a></h2>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2.1...v0.2.2">0.2.2</a> - 2015-07-21</h2>
-<h3>Fixed</h3>
+            <p><a href=".">&#9664; Back to API list</a></p>
+<h1><code>POST</code> /metrics/:id/observers</h1>
+<h2>Description</h2>
+<p>Attach an observer to the metric.</p>
+<hr />
+<h2>URL Parameters</h2>
+<p>None</p>
+<hr />
+<h2>Data Parameters</h2>
+<p>A JSON object containing the following fields:</p>
 <ul>
-<li>Bug that caused two rules with the same collected metric to replace each other target resource</li>
-</ul>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.2...v0.2.1">0.2.1</a> - 2015-06-17</h2>
-<h3>Added</h3>
+<li><code>format</code>
 <ul>
-<li>New Manager REST API and Manager API library for enabling and disabling rules</li>
-<li>New button on the manager webapp for enabling and disabling rules</li>
-</ul>
-<h3>Fixed</h3>
+<li>type: <code>String</code></li>
+<li>optional: yes</li>
+<li>default: <code>RDF/JSON</code></li>
+<li>description: specifies the <a href="../../data-analyzer/serialization-formats.html">serialization format</a></li>
+</ul></li>
+<li><code>protocol</code>
 <ul>
-<li>MODAClouds packaging</li>
-</ul>
-<h3>Changed</h3>
+<li>type: <code>String</code></li>
+<li>optional: yes</li>
+<li>default: <code>HTTP</code></li>
+<li>description: specifies the <a href="../../data-analyzer/transfer-protocol.html">transfer protocol</a></li>
+</ul></li>
+<li><code>callbackUrl</code>
 <ul>
-<li>returned JSON from <code>/metrics/{metricname}/observers/</code> api changed to a simple list</li>
-</ul>
-<h2><a href="https://github.com/deib-polimi/tower4clouds/compare/v0.1...v0.2">0.2</a> - 2015-06-10</h2>
-<p>First official release of the new Tower 4Clouds platform.</p>
-<h2>0.1 - 2015-05-18</h2>
-<h3>Added</h3>
+<li>type: <code>String</code></li>
+<li>optional: no, if protocol is <code>HTTP</code></li>
+<li>description: the full endpoint url of the observer</li>
+</ul></li>
+<li><code>observerHost</code>
 <ul>
-<li>First intial migration and integration of the old MODAClouds Monitoring Platform projects</li>
+<li>type: <code>String</code></li>
+<li>optional: no, if protocol is either <code>TCP</code> or <code>UDP</code></li>
+<li>description: the IP address of the observer</li>
+</ul></li>
+<li><code>observerPort</code>
+<ul>
+<li>type: <code>int</code></li>
+<li>optional: no, if protocol is either <code>TCP</code> or <code>UDP</code></li>
+<li>description: the port to which the observer is listening to</li>
+</ul></li>
 </ul>
+<hr />
+<h2>Response</h2>
+<p><strong>Status:</strong> <strong>201 Created</strong></p>
+<p><strong>Body:</strong> a json object containing the information about the observer just registered together with its server assigned id.</p>
+<hr />
+<h2>Errors</h2>
+<ul>
+<li><strong>400 Bad Request</strong> - <description of the error within the provided json></li>
+<li><strong>404 Resource not found</strong> - The metric does not exist.</li>
+</ul>
+<hr />
+<h2>Example</h2>
+<p><strong>Request</strong></p>
+<pre><code>POST v1/metrics/ResponseTime/observers</code></pre>
+<pre><code class="language-json">{
+    "format": "GRAPHITE",
+    "protocol": "TCP",
+    "observerHost": "123.123.123.123",
+    "observerPort": 2003
+}</code></pre>
+<p><strong>Response</strong></p>
+<pre><code>Status: 201 Created</code></pre>
+<pre><code class="language-json">{
+    "id": "109384935893",
+    "format": "GRAPHITE",
+    "protocol": "TCP",
+    "observerHost": "123.123.123.123",
+    "observerPort": 2003
+}</code></pre>
         </section>
 
     </div>
