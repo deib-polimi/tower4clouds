@@ -19,7 +19,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.polimi.tower4clouds</groupId>
-	<version>0.3-SNAPSHOT</version>
+	<version>0.2.2</version>
 	<artifactId>tower4clouds</artifactId>
 	<packaging>pom</packaging>
 	<name>MODAClous - Tower4Clouds - Parent Pom</name>
@@ -89,7 +89,7 @@
 	<scm>
 		<connection>scm:git:git@github.com:deib-polimi/tower4clouds.git</connection>
 		<developerConnection>scm:git:git@github.com:deib-polimi/tower4clouds.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>v0.2.2</tag>
 		<url>https://github.com/deib-polimi/tower4clouds</url>
 	</scm>
 
