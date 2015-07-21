@@ -16,7 +16,7 @@
 
 # RELEASE
 
-MODACLOUDS_VERSION=0.7.0.13 # Put the current one
+MODACLOUDS_VERSION=<Put the current one>
 mvn clean release:prepare -DdryRun=true -Pmodaclouds-rpm -Darguments=-Dmodaclouds.version=${MODACLOUDS_VERSION}
 mvn release:clean release:prepare release:perform -Pmodaclouds-rpm -Darguments=-Dmodaclouds.version=${MODACLOUDS_VERSION}
 # manually add artifacts to the github release until u fix github release plugin
