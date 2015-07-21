@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [0.2.2] - 2015-07-21
+### Fixed
+- Bug that caused two rules with the same collected metric to replace each other target resource
+
 ## [0.2.1] - 2015-06-17
 ### Added
 - New Manager REST API and Manager API library for enabling and disabling rules
@@ -29,5 +33,6 @@ First official release of the new Tower 4Clouds platform.
 
 [keep-a-changelog]: https://github.com/olivierlacan/keep-a-changelog
 [unreleased]: https://github.com/deib-polimi/tower4clouds/compare/v0.2.1...develop
+[0.2.2]: https://github.com/deib-polimi/tower4clouds/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/deib-polimi/tower4clouds/compare/v0.2...v0.2.1
 [0.2]: https://github.com/deib-polimi/tower4clouds/compare/v0.1...v0.2
