@@ -217,19 +217,27 @@ public class MonitoringManager implements IManagerAPI {
 			Set<String> inputMetrics = query.getRequiredMetrics();
 			logger.debug("Input metrics: {}", inputMetrics.toString());
 			for (String inMetric : inputMetrics) {
+				DCConfiguration newDCConfig = prepareDCConfig(rule,
+						inMetric);
 				if (!streamsByMetric.containsKey(inMetric)) {
 					String newStream = prepareStreamURI(inMetric);
-					DCConfiguration newDCConfig = prepareDCConfig(rule,
-							inMetric);
 					logger.debug(
-							"Metric {} not already available, registering stream {} and creating a new DCConfig {}",
+							"Metric {} not already available, registering stream {}",
 							inMetric, newStream, newDCConfig);
 					dataAnalyzer.registerStream(newStream);
 					streamsByMetric.put(inMetric, newStream);
 					addInputMetric(inMetric, rule.getId());
-					synchronized (dcAndResourcesLock) {
-						dCConfigByMetric.put(inMetric, newDCConfig);
+				}
+				synchronized (dcAndResourcesLock) {
+					DCConfiguration oldConfig = dCConfigByMetric.get(inMetric);
+					if (oldConfig!=null) {
+						logger.debug("Merging old dc configuration: {}, with the new one: {}",oldConfig, newDCConfig);
+						for (List<String> oldTargetResource : oldConfig.getTargetResources()) {
+							newDCConfig.getTargetResources().add(oldTargetResource);
+						}
 					}
+					logger.debug("Saving DC configuration: {}", newDCConfig);
+					dCConfigByMetric.put(inMetric, newDCConfig);
 				}
 				String inputStream = streamsByMetric.get(inMetric);
 				logger.debug("Adding input stream {} to query", inputStream);

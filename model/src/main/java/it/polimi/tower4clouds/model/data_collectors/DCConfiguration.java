@@ -17,8 +17,10 @@ package it.polimi.tower4clouds.model.data_collectors;
 
 import it.polimi.tower4clouds.model.ontology.Resource;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,17 +31,21 @@ public class DCConfiguration {
 	private static final int ID = 2;
 
 	private Map<String, String> parameters;
-	private Set<String[]> targetResources;
+	private Set<List<String>> targetResources;
 	private String daUrl;
 	private String dataFormat;
 	
 	public void addTargetResource(String clazz, String type, String id) {
-		getTargetResources().add(new String[]{clazz, type, id});
+		ArrayList<String> resource = new ArrayList<String>();
+		resource.add(clazz);
+		resource.add(type);
+		resource.add(id);
+		getTargetResources().add(resource);
 	}
 	
-	public Set<String[]> getTargetResources() {
+	public Set<List<String>> getTargetResources() {
 		if (targetResources == null) {
-			targetResources = new HashSet<String[]>();
+			targetResources = new HashSet<List<String>>();
 		}
 		return targetResources;
 	}
@@ -134,72 +140,72 @@ public class DCConfiguration {
 	
 	public boolean isAboutResource(Resource resource) {
 		try {
-			for (String[] targetResource : getTargetResources()) {
-				if (targetResource[CLASS] != null) {
+			for (List<String> targetResource : getTargetResources()) {
+				if (targetResource.get(CLASS) != null) {
 					if (!resource.getClass().isAssignableFrom(
 							Class.forName(Resource.class.getPackage()
 									.getName()
 									+ "."
-									+ targetResource[CLASS])))
+									+ targetResource.get(CLASS))))
 						continue;
 				}
-				if (targetResource[TYPE] != null) {
+				if (targetResource.get(TYPE) != null) {
 					if (resource.getType() != null) {
-						if (!resource.getType().equals(targetResource[TYPE]))
+						if (!resource.getType().equals(targetResource.get(TYPE)))
 							continue;
 					}
 				}
 				if (resource.getId() != null) {
-					if (targetResource[ID] != null) {
-						if (resource.getId().equals(targetResource[ID]))
+					if (targetResource.get(ID) != null) {
+						if (resource.getId().equals(targetResource.get(ID)))
 							return true;
-					} else if (targetResource[TYPE] != null) {
+					} else if (targetResource.get(TYPE) != null) {
 						if (resource.getType() != null) {
-							if (resource.getType().equals(targetResource[TYPE]))
+							if (resource.getType().equals(targetResource.get(TYPE)))
 								return true;
 						} else {
-							if (targetResource[CLASS] != null) {
+							if (targetResource.get(CLASS) != null) {
 								if (resource.getClass().isAssignableFrom(
 										Class.forName(Resource.class
 												.getPackage().getName()
 												+ "."
-												+ targetResource[CLASS])))
+												+ targetResource.get(CLASS))))
 									return true;
 							}
 						}
 					} else {
-						if (targetResource[CLASS] != null) {
+						if (targetResource.get(CLASS) != null) {
 							if (resource.getClass().isAssignableFrom(
 									Class.forName(Resource.class
 											.getPackage().getName()
 											+ "."
-											+ targetResource[CLASS])))
+											+ targetResource.get(CLASS))))
 								return true;
 						}
 					}
 				} else if (resource.getType() != null) {
-					if (targetResource[TYPE] != null) {
+					if (targetResource.get(TYPE) != null) {
 						if (resource.getType() != null) {
-							if (resource.getType().equals(targetResource[TYPE]))
+							if (resource.getType().equals(targetResource.get(TYPE)))
 								return true;
 						} else {
-							if (targetResource[CLASS] != null) {
+							if (targetResource.get(CLASS) != null) {
 								if (resource.getClass().isAssignableFrom(
 										Class.forName(Resource.class
 												.getPackage().getName()
 												+ "."
-												+ targetResource[CLASS])))
+												+ targetResource.get(CLASS))))
 									return true;
 							}
 						}
 					}
 				} else {
-					if (targetResource[CLASS] != null) {
+					if (targetResource.get(CLASS) != null) {
 						if (resource.getClass().isAssignableFrom(
 								Class.forName(Resource.class.getPackage()
 										.getName()
 										+ "."
-										+ targetResource[CLASS])))
+										+ targetResource.get(CLASS))))
 							return true;
 					}
 				}
