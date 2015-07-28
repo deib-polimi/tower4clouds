@@ -8,6 +8,8 @@ This document adheres to [keep-a-changelog].
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
+### Fixed
+- Problem with data collectors configuration when multiple rules with same input metrics were installed
 
 ## [0.2.2] - 2015-07-21
 ### Fixed
