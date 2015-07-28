@@ -6,6 +6,7 @@
         <artifactId>data-collectors</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>flexiant-node-dc</artifactId>
+    <artifactId>flexiant-nodes-dc</artifactId>
     <packaging>jar</packaging>
+    <name>flexiant-nodes-dc</name>
 </project>
