@@ -81,7 +81,7 @@ public class Throughput extends Metric {
 		Set<Method> methods = getMonitoredMethods();
 		for (Method method : methods) {
 			if (shouldMonitor(method)) {
-				int newSamplingTime = getSamplingTime();
+				int newSamplingTime = getSamplingTime(method);
 				if (timerPerMethodId.containsKey(method.getId())
 						&& samplingTimePerMethodId.get(method.getId()) != newSamplingTime) {
 					timerPerMethodId.remove(method.getId()).cancel();
@@ -104,7 +104,7 @@ public class Throughput extends Metric {
 		}
 		InternalComponent app = getMonitoredApplication();
 		if (app != null && shouldMonitor(app)) {
-			int newSamplingTime = getSamplingTime();
+			int newSamplingTime = getSamplingTime(app);
 			if (appTimer != null && appSamplingTime != newSamplingTime) {
 				appTimer.cancel();
 				appTimer = null;
@@ -123,12 +123,12 @@ public class Throughput extends Metric {
 		}
 	}
 	
-	private int getSamplingTime() {
-		if (getParameters() == null
-				|| getParameters().get("samplingTime") == null)
+	private int getSamplingTime(Resource resource) {
+		if (getParameters(resource) == null
+				|| getParameters(resource).get("samplingTime") == null)
 			return DEFAULT_SAMPLING_TIME;
 		try {
-			return Integer.parseInt(getParameters()
+			return Integer.parseInt(getParameters(resource)
 					.get("samplingTime"));
 		} catch (Exception e) {
 			logger.error("Error while reading the sampling time", e);

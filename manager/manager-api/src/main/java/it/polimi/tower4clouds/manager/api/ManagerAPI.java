@@ -218,7 +218,7 @@ public class ManagerAPI implements IManagerAPI {
 	}
 
 	@Override
-	public Map<String, DCConfiguration> getDCConfigurationByMetric(
+	public Map<String, Set<DCConfiguration>> getDCConfigurationsByMetric(
 			String dataCollectorId) throws UnexpectedAnswerFromServerException,
 			IOException {
 		String json = client.execute(RestMethod.GET, managerUrl
@@ -226,11 +226,11 @@ public class ManagerAPI implements IManagerAPI {
 				+ "/configuration", null, 200, timeout);
 		try {
 			return new Gson().fromJson(json,
-					new TypeToken<Map<String, DCConfiguration>>() {
+					new TypeToken<Map<String, Set<DCConfiguration>>>() {
 					}.getType());
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new HashMap<String, DCConfiguration>();
+			return new HashMap<String, Set<DCConfiguration>>();
 		}
 	}
 

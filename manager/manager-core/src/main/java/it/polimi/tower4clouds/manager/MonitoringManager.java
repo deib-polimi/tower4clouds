@@ -80,12 +80,13 @@ public class MonitoringManager implements IManagerAPI {
 	private QueryFactory queryFactory;
 
 	private Map<String, String> streamsByMetric = new HashMap<String, String>();
-	private Map<String, DCConfiguration> dCConfigByMetric = new HashMap<String, DCConfiguration>();
+	private Map<String, DCConfiguration> dCConfigByRuleId = new HashMap<String, DCConfiguration>();
 	private Map<String, MonitoringRule> rulesByRuleId = new HashMap<String, MonitoringRule>();
 	private Map<String, String> queryIdByRuleId = new HashMap<String, String>();
 	private Map<String, Query> queryByQueryId = new HashMap<String, Query>();
 	private Map<String, String> ruleIdByObservableMetric = new HashMap<String, String>();
 	private Map<String, Set<String>> inputMetricsByRuleId = new HashMap<String, Set<String>>();
+	private Map<String, Set<String>> rulesIdsByInputMetric = new HashMap<String, Set<String>>();
 
 	private Map<String, Set<String>> observersIdsByMetric = new HashMap<String, Set<String>>();
 	private Map<String, Observer> observersById = new HashMap<String, Observer>();
@@ -217,27 +218,18 @@ public class MonitoringManager implements IManagerAPI {
 			Set<String> inputMetrics = query.getRequiredMetrics();
 			logger.debug("Input metrics: {}", inputMetrics.toString());
 			for (String inMetric : inputMetrics) {
-				DCConfiguration newDCConfig = prepareDCConfig(rule,
-						inMetric);
+				DCConfiguration newDCConfig = prepareDCConfig(rule, inMetric);
 				if (!streamsByMetric.containsKey(inMetric)) {
 					String newStream = prepareStreamURI(inMetric);
-					logger.debug(
-							"Metric {} not already available, registering stream {}",
-							inMetric, newStream, newDCConfig);
+					logger.debug("Registering stream {}", inMetric, newStream,
+							newDCConfig);
 					dataAnalyzer.registerStream(newStream);
 					streamsByMetric.put(inMetric, newStream);
-					addInputMetric(inMetric, rule.getId());
 				}
+				addInputMetric(inMetric, rule.getId());
 				synchronized (dcAndResourcesLock) {
-					DCConfiguration oldConfig = dCConfigByMetric.get(inMetric);
-					if (oldConfig!=null) {
-						logger.debug("Merging old dc configuration: {}, with the new one: {}",oldConfig, newDCConfig);
-						for (List<String> oldTargetResource : oldConfig.getTargetResources()) {
-							newDCConfig.getTargetResources().add(oldTargetResource);
-						}
-					}
+					dCConfigByRuleId.put(rule.getId(), newDCConfig);
 					logger.debug("Saving DC configuration: {}", newDCConfig);
-					dCConfigByMetric.put(inMetric, newDCConfig);
 				}
 				String inputStream = streamsByMetric.get(inMetric);
 				logger.debug("Adding input stream {} to query", inputStream);
@@ -297,6 +289,13 @@ public class MonitoringManager implements IManagerAPI {
 			inputMetricsByRuleId.put(ruleId, iMetrics);
 		}
 		iMetrics.add(inMetric);
+
+		Set<String> rulesIds = rulesIdsByInputMetric.get(inMetric);
+		if (rulesIds == null) {
+			rulesIds = new HashSet<String>();
+			rulesIdsByInputMetric.put(inMetric, rulesIds);
+		}
+		rulesIds.add(ruleId);
 	}
 
 	private Set<String> getRulesIdsFromInputMetric(String iMetric) {
@@ -422,19 +421,22 @@ public class MonitoringManager implements IManagerAPI {
 			Set<String> inputMetrics = inputMetricsByRuleId.get(ruleId);
 			if (inputMetrics != null) {
 				for (String metric : inputMetrics) {
+					rulesIdsByInputMetric.get(metric).remove(ruleId);
+					if (rulesIdsByInputMetric.get(metric).isEmpty())
+						rulesIdsByInputMetric.remove(metric);
 					if (!ruleIdByObservableMetric.containsKey(metric)
-							&& noOtherRuleIsUsingIt(ruleId, metric)) {
+							&& rulesIdsByInputMetric.get(metric) == null) {
 						if (streamsByMetric.containsKey(metric)) {
 							dataAnalyzer
 									.unregisterStream(prepareStreamURI(metric));
 							streamsByMetric.remove(metric);
-							synchronized (dcAndResourcesLock) {
-								dCConfigByMetric.remove(metric);
-							}
 						}
 					}
 				}
 				inputMetricsByRuleId.remove(ruleId);
+				synchronized (dcAndResourcesLock) {
+					dCConfigByRuleId.remove(ruleId);
+				}
 			}
 		} catch (ServerErrorException e) {
 			throw new IOException(e);
@@ -443,7 +445,7 @@ public class MonitoringManager implements IManagerAPI {
 		}
 		queryIdByRuleId.remove(ruleId);
 	}
-	
+
 	@Override
 	public void enableRule(String id) throws NotFoundException, IOException {
 		// TODO using startEnabled field, should be renamed to enabled
@@ -451,10 +453,12 @@ public class MonitoringManager implements IManagerAPI {
 		MonitoringRule rule = rulesByRuleId.get(id);
 		if (rule == null)
 			throw new NotFoundException(id);
-		if (rule.isStartEnabled()) return;
+		if (rule.isStartEnabled())
+			return;
 		String queryId = queryIdByRuleId.get(id);
 		if (queryId == null) {
-			throw new RuntimeException("No query found related to installed rule " + id);
+			throw new RuntimeException(
+					"No query found related to installed rule " + id);
 		}
 		String queryURI = prepareQueryURI(queryId);
 		logger.debug("Enabling query {}", queryURI);
@@ -467,15 +471,17 @@ public class MonitoringManager implements IManagerAPI {
 	}
 
 	@Override
-	public void disableRule(String id) throws NotFoundException, IOException{
+	public void disableRule(String id) throws NotFoundException, IOException {
 		logger.info("Disabling rule {}", id);
 		MonitoringRule rule = rulesByRuleId.get(id);
 		if (rule == null)
 			throw new NotFoundException(id);
-		if (!rule.isStartEnabled()) return;
+		if (!rule.isStartEnabled())
+			return;
 		String queryId = queryIdByRuleId.get(id);
 		if (queryId == null) {
-			throw new RuntimeException("No query found related to installed rule " + id);
+			throw new RuntimeException(
+					"No query found related to installed rule " + id);
 		}
 		String queryURI = prepareQueryURI(queryId);
 		logger.debug("Disabling query {}", queryURI);
@@ -487,12 +493,12 @@ public class MonitoringManager implements IManagerAPI {
 		rule.setStartEnabled(false);
 	}
 
-	private boolean noOtherRuleIsUsingIt(String ruleId, String metric) {
-		HashMap<String, Set<String>> copy = new HashMap<String, Set<String>>(
-				inputMetricsByRuleId);
-		copy.remove(ruleId);
-		return !copy.containsValue(metric);
-	}
+	// private boolean noOtherRuleIsUsingIt(String ruleId, String metric) {
+	// HashMap<String, Set<String>> copy = new HashMap<String, Set<String>>(
+	// inputMetricsByRuleId);
+	// copy.remove(ruleId);
+	// return !copy.containsValue(metric);
+	// }
 
 	// public synchronized DCConfiguration getDCConfig(String metric) {
 	// dcLock.lock();
@@ -935,9 +941,10 @@ public class MonitoringManager implements IManagerAPI {
 
 	// @Monitor(type = "getDCConfigurationByMetric")
 	@Override
-	public Map<String, DCConfiguration> getDCConfigurationByMetric(String dcId)
-			throws NotFoundException, SerializationException, IOException {
-		Map<String, DCConfiguration> configs = new HashMap<String, DCConfiguration>();
+	public Map<String, Set<DCConfiguration>> getDCConfigurationsByMetric(
+			String dcId) throws NotFoundException, SerializationException,
+			IOException {
+		Map<String, Set<DCConfiguration>> configs = new HashMap<String, Set<DCConfiguration>>();
 		synchronized (dcAndResourcesLock) {
 			DCDescriptor dc = registeredDCs.get(dcId);
 			if (dc == null) {
@@ -954,12 +961,23 @@ public class MonitoringManager implements IManagerAPI {
 					.getMonitoredResourcesByMetric().entrySet()) {
 				metric = entry.getKey();
 				resources = entry.getValue();
-				conf = dCConfigByMetric.get(metric);
-				if (conf != null) {
-					for (Resource resource : resources) {
-						if (conf.isAboutResource(resource)) {
-							configs.put(metric, conf);
-							break;
+				Set<String> rulesIds = rulesIdsByInputMetric.get(metric);
+				if (rulesIds != null) {
+					for (String ruleId : rulesIds) {
+						conf = dCConfigByRuleId.get(ruleId);
+						if (conf != null) {
+							for (Resource resource : resources) {
+								if (conf.isAboutResource(resource)) {
+									Set<DCConfiguration> dcconfigs = configs
+											.get(metric);
+									if (dcconfigs == null) {
+										dcconfigs = new HashSet<DCConfiguration>();
+										configs.put(metric, dcconfigs);
+									}
+									dcconfigs.add(conf);
+									break;
+								}
+							}
 						}
 					}
 				}
@@ -1180,8 +1198,5 @@ public class MonitoringManager implements IManagerAPI {
 		requiredMetrics.removeAll(ruleIdByObservableMetric.keySet());
 		return requiredMetrics;
 	}
-
-
-	
 
 }
