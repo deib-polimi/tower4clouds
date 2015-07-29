@@ -94,7 +94,7 @@ public class ManagerConfig {
 
 		try {
 			daPort = Integer.parseInt(getEnvVar(
-					Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_PORT, "8175"));
+					Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_PORT_PUBLIC, "8175"));
 			mmPort = Integer.parseInt(getEnvVar(
 					Env.MODACLOUDS_TOWER4CLOUDS_MANAGER_ENDPOINT_PORT, "8170"));
 			rdfHistoryDbPort = Integer.parseInt(getEnvVar(

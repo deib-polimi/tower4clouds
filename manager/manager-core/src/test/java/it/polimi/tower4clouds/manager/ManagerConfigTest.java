@@ -28,7 +28,7 @@ public class ManagerConfigTest {
 	@Before
 	public void clearProperties() {
 		System.clearProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_IP_PUBLIC);
-		System.clearProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_PORT);
+		System.clearProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_PORT_PUBLIC);
 	}
 
 	@Test
@@ -52,14 +52,14 @@ public class ManagerConfigTest {
 
 	@Test(expected = ConfigurationException.class)
 	public void daPortShouldBeANumber() throws ConfigurationException {
-		System.setProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_PORT,
+		System.setProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_PORT_PUBLIC,
 				"notaport");
 		ManagerConfig.init();
 	}
 
 	@Test(expected = ConfigurationException.class)
 	public void daPortShouldBeAValidPort() throws ConfigurationException {
-		System.setProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_PORT,
+		System.setProperty(Env.MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_PORT_PUBLIC,
 				"9999999");
 		ManagerConfig.init();
 	}
