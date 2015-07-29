@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>it.polimi.tower4clouds</groupId>
 		<artifactId>manager</artifactId>
-		<version>0.2.3</version>
+		<version>0.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>manager-core</artifactId>
 	<name>MODAClous - Tower4Clouds - Manager Core Library</name>
