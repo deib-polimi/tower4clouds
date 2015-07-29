@@ -21,6 +21,8 @@ _variable_defaults=(
 		
 		# NOTE:  Add other definitions that could come from the packaging descriptor, and are needed at runtime.
 		#   It enables hard-coding some definitions, which could later be overriden with environment variables.
+		
+		_TOWER4CLOUDS_RDF_HISTORY_DB_DISTRIBUTION='@{definitions:environment:TOWER4CLOUDS_RDF_HISTORY_DB_DISTRIBUTION}'
 		_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_IP='@{definitions:environment:TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_IP}'
 		_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_PORT='@{definitions:environment:TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_PORT}'
 		_RABBITMQ_ENDPOINT_IP='@{definitions:environment:RABBITMQ_ENDPOINT_IP}'
@@ -55,6 +57,7 @@ _variable_overrides=(
 		# NOTE:  Add the same definitions as in the previous case, but keep the pattern as bellow.
 		#   It enables overriding some definitions with environment variables, or fallbacks to the hard-coded ones.
 		
+		_TOWER4CLOUDS_RDF_HISTORY_DB_DISTRIBUTION="${MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_DISTRIBUTION:-${_TOWER4CLOUDS_RDF_HISTORY_DB_DISTRIBUTION}}"
 		_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_IP="${MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_IP:-${_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_IP}}"
 		_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_PORT="${MODACLOUDS_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_PORT:-${_TOWER4CLOUDS_RDF_HISTORY_DB_ENDPOINT_PORT}}"
 		_RABBITMQ_ENDPOINT_IP="${MODACLOUDS_RABBITMQ_ENDPOINT_IP:-${_RABBITMQ_ENDPOINT_IP}}"
