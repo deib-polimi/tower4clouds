@@ -235,6 +235,7 @@ public class DCAgent extends Observable {
 		}
 	}
 
+	
 	public boolean shouldMonitor(Resource resource, String metric) {
 		if (dCConfigsByMetric == null || !dCConfigsByMetric.containsKey(metric))
 			return false;
