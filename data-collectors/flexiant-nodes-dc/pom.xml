@@ -4,9 +4,22 @@
     <parent>
         <groupId>it.polimi.tower4clouds</groupId>
         <artifactId>data-collectors</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.3-SNAPSHOT</version>
     </parent>
+    
     <artifactId>flexiant-nodes-dc</artifactId>
-    <packaging>jar</packaging>
     <name>flexiant-nodes-dc</name>
+    
+    <dependencies>
+        <dependency>
+            <groupId>it.polimi.tower4clouds</groupId>
+            <artifactId>data-collector-library</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
 </project>
