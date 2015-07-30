@@ -56,6 +56,7 @@ public class QueryFactory {
 		for (Action actionInfo : rule.getActions().getActions()) {
 			AbstractAction action = AbstractAction
 					.getActionInstance(actionInfo);
+			action.setRuleId(rule.getId());
 			if (action instanceof OutputMetric) {
 				Map<String, String> parameters = ((OutputMetric) action)
 						.getParameters();
