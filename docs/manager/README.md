@@ -8,11 +8,9 @@ The Tower 4Clouds Manager is the main coordinator of the platform. It is respons
 
 Check out [how to configure][Configuration] the manager.
 
-[Data Analyzer]: data-analyzer
-[Monitoring Rules]: monitoring-rules
-[Observers]: observers
-[Data Collectors]: data-collectors
-[Webapp]: manager/webapp.html
-[Java API]: manager/java-api.html
-[REST API]: manager/rest-api
-[Configuration]: manager/configuration.html
+[Data Analyzer]: ../data-analyzer/
+[Data Collectors]: ../data-collectors/
+[Webapp]: webapp.html
+[Java API]: java-api.html
+[REST API]: rest-api
+[Configuration]: configuration.html

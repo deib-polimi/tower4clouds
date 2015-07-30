@@ -69,7 +69,7 @@ menu:
                         relativeUrl: docs/data-collectors/byodc.html
         manager:
             text: Manager
-            relativeUrl: docs/manager
+            relativeUrl: docs/manager/
             submenu:
                 items:
                     configuration:
