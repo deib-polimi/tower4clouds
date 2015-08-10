@@ -22,13 +22,13 @@ _variable_defaults=(
 		# NOTE:  Add other definitions that could come from the packaging descriptor, and are needed at runtime.
 		#   It enables hard-coding some definitions, which could later be overriden with environment variables.
 		
-		_TOWER4CLOUDS_DATA_ANALYZER_DISTRIBUTION='/opt/modaclouds-services-${dist.file.name}-${modaclouds.version}/lib/distribution'
-		
-		_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_PORT=8175
+		_TOWER4CLOUDS_DATA_ANALYZER_DISTRIBUTION='@{definitions:environment:TOWER4CLOUDS_DATA_ANALYZER_DISTRIBUTION}'
+		_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_IP='@{definitions:environment:TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_IP}'
+		_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_PORT='@{definitions:environment:TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_PORT}'
 
-		_JAVA_HOME='/opt/mosaic-rt-jre-7'
-		_PATH="/opt/mosaic-rt-jre-7/bin:/usr/bin:/bin"
-		_TMPDIR='/tmp/modaclouds/${dist.file.name}'
+		_JAVA_HOME='@{definitions:environment:JAVA_HOME}'
+		_PATH='@{definitions:environment:PATH}'
+		_TMPDIR='@{definitions:environment:TMPDIR}'
 )
 declare "${_variable_defaults[@]}"
 
@@ -51,9 +51,9 @@ _variable_overrides=(
 		# NOTE:  Add the same definitions as in the previous case, but keep the pattern as bellow.
 		#   It enables overriding some definitions with environment variables, or fallbacks to the hard-coded ones.
 		
-		_TOWER4CLOUDS_TOWER4CLOUDS_DATA_ANALYZER_DISTRIBUTION="${MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_DISTRIBUTION:-${_TOWER4CLOUDS_DATA_ANALYZER_DISTRIBUTION}}"
-		
-		_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_PORT="${MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_PORT:-${_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_PORT}}"
+		_TOWER4CLOUDS_DATA_ANALYZER_DISTRIBUTION="${MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_DISTRIBUTION:-${_TOWER4CLOUDS_DATA_ANALYZER_DISTRIBUTION}}"
+		_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_IP="${MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_IP:-${_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_IP}}"
+		_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_PORT="${MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_PORT:-${_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_PORT}}"
 
 		_JAVA_HOME="${MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_JAVA_HOME:-${_JAVA_HOME}}"
 		_PATH="${MODACLOUDS_TOWER4CLOUDS_DATA_ANALYZER_PATH:-${_PATH}}"
@@ -115,7 +115,7 @@ exec \
 	env \
 			-i "${_environment[@]}" \
 	"${_JAVA_HOME}/bin/java" \
-			-jar "${_TOWER4CLOUDS_DATA_ANALYZER_DISTRIBUTION}/${project.artifactId}-${project.version}.jar" \
-			-port ${_TOWER4CLOUDS_DATA_ANALYZER_PUBLIC_ENDPOINT_PORT}
+			-jar "${_TOWER4CLOUDS_DATA_ANALYZER_DISTRIBUTION}/service.jar" \
+			-port ${_TOWER4CLOUDS_DATA_ANALYZER_ENDPOINT_PORT}
 
 exit 1

@@ -77,7 +77,7 @@ public class SDAExample {
 		if (dcAgent.shouldMonitor(new Resource(null, "frontend1"),
 				"Forecast_AverageFrontendCPU")) {
 			Map<String, String> parameters = dcAgent
-					.getParameters("Forecast_AverageFrontendCPU");
+					.getParameters(new Resource(null, "frontend1"),"Forecast_AverageFrontendCPU");
 			dcAgent.send(new Resource(null, "frontend1"),
 					"Forecast_AverageFrontendCPU", computeForecast(parameters));
 		}

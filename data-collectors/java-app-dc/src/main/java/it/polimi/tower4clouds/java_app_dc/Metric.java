@@ -76,9 +76,9 @@ public abstract class Metric implements Observer {
 		configurationUpdated();
 	}
 
-	protected Map<String, String> getParameters() {
+	protected Map<String, String> getParameters(Resource resource) {
 		if (this.dcAgent != null)
-			return this.dcAgent.getParameters(getName());
+			return this.dcAgent.getParameters(resource, getName());
 		return null;
 	}
 

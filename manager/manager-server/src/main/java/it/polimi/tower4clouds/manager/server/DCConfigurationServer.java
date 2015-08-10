@@ -20,6 +20,7 @@ import it.polimi.tower4clouds.manager.api.NotFoundException;
 import it.polimi.tower4clouds.model.data_collectors.DCConfiguration;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -43,8 +44,8 @@ public class DCConfigurationServer extends ServerResource {
 			MonitoringManager manager = (MonitoringManager) getContext()
 					.getAttributes().get("manager");
 
-			Map<String, DCConfiguration> dcconfig = manager
-					.getDCConfigurationByMetric(id);
+			Map<String, Set<DCConfiguration>> dcconfig = manager
+					.getDCConfigurationsByMetric(id);
 			this.getResponse().setStatus(Status.SUCCESS_OK,
 					"DC configuration successfully retrieved");
 			this.getResponse().setEntity(gson.toJson(dcconfig),

@@ -60,17 +60,17 @@ public class EffectiveResponseTime extends Metric {
 		logger.debug("Effective Response Time for method {}: {}",
 				method.getId(), effectiveResponseTime);
 
-		if (shouldMonitor(method) && getSamplingProbability() > Math.random()) {
+		if (shouldMonitor(method) && getSamplingProbability(method) > Math.random()) {
 			send(effectiveResponseTime, method);
 		}
 	}
 	
-	private double getSamplingProbability() {
-		if (getParameters() == null
-				|| getParameters().get("samplingProbability") == null)
+	private double getSamplingProbability(Method method) {
+		if (getParameters(method) == null
+				|| getParameters(method).get("samplingProbability") == null)
 			return DEFAULT_SAMPLING_PROBABILITY;
 		try {
-			return Double.parseDouble(getParameters()
+			return Double.parseDouble(getParameters(method)
 					.get("samplingProbability"));
 		} catch (Exception e) {
 			logger.error("Error while reading the sampling probability", e);

@@ -59,17 +59,17 @@ public class ResponseTime extends Metric {
 
 		logger.debug("Response Time for method {}: {}", method.getId(),
 				responseTime);
-		if (shouldMonitor(method) && getSamplingProbability() > Math.random()) {
+		if (shouldMonitor(method) && getSamplingProbability(method) > Math.random()) {
 			send(responseTime, method);
 		}
 	}
 
-	private double getSamplingProbability() {
-		if (getParameters() == null
-				|| getParameters().get("samplingProbability") == null)
+	private double getSamplingProbability(Method method) {
+		if (getParameters(method) == null
+				|| getParameters(method).get("samplingProbability") == null)
 			return DEFAULT_SAMPLING_PROBABILITY;
 		try {
-			return Double.parseDouble(getParameters()
+			return Double.parseDouble(getParameters(method)
 					.get("samplingProbability"));
 		} catch (Exception e) {
 			logger.error("Error while reading the sampling probability", e);

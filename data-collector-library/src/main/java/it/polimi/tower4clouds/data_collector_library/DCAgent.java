@@ -51,7 +51,7 @@ public class DCAgent extends Observable {
 
 	private DCDescriptor dCDescriptor;
 	private String dataCollectorId;
-	private Map<String, DCConfiguration> dCConfigsByMetric;
+	private Map<String, Set<DCConfiguration>> dCConfigsByMetric = new HashMap<String, Set<DCConfiguration>>();
 	private boolean registered = false;
 
 	private final int connectionRetryPeriod = 5;
@@ -85,7 +85,6 @@ public class DCAgent extends Observable {
 
 	public DCAgent(ManagerAPI manager) {
 		this.manager = manager;
-		dCConfigsByMetric = new HashMap<String, DCConfiguration>();
 		manager.setDefaultTimeout(timeout);
 	}
 
@@ -163,7 +162,7 @@ public class DCAgent extends Observable {
 			@Override
 			public void run() {
 				try {
-					Map<String, DCConfiguration> newConfig = getRemoteDCConfiguration();
+					Map<String, Set<DCConfiguration>> newConfig = getRemoteDCConfiguration();
 					if (!newConfig.equals(dCConfigsByMetric)) {
 						dCConfigsByMetric = newConfig;
 						logger.debug("Downloaded new dc configuration: {}",
@@ -182,7 +181,7 @@ public class DCAgent extends Observable {
 					logger.error(
 							"Could not download new DC configuration, the server may be down, cancelling any local dc configuration: {}",
 							e.getMessage());
-					dCConfigsByMetric = new HashMap<String, DCConfiguration>();
+					dCConfigsByMetric = new HashMap<String, Set<DCConfiguration>>();
 					setChanged();
 					notifyObservers();
 				} catch (Exception e) {
@@ -199,7 +198,7 @@ public class DCAgent extends Observable {
 		if (maxKeepAlivePeriod >= dCDescriptor.getConfigSyncPeriod()) {
 			logger.info("Keep alive is not required, config sync period is short enough for keeping the resources alive");
 			return;
-		} else if (dCDescriptor.getKeepAlive() <= 0){
+		} else if (dCDescriptor.getKeepAlive() <= 0) {
 			logger.info("Keep alive is not required");
 			return;
 		}
@@ -236,23 +235,33 @@ public class DCAgent extends Observable {
 		}
 	}
 
+	
 	public boolean shouldMonitor(Resource resource, String metric) {
-		if (!dCConfigsByMetric.containsKey(metric))
+		if (dCConfigsByMetric == null || !dCConfigsByMetric.containsKey(metric))
 			return false;
-		if (dCConfigsByMetric.get(metric).isAboutResource(resource))
-			return true;
+		Set<DCConfiguration> dcconfigs = dCConfigsByMetric.get(metric);
+		if (dcconfigs != null) {
+			for (DCConfiguration dcConfiguration : dcconfigs) {
+				if (dcConfiguration != null
+						&& dcConfiguration.isAboutResource(resource))
+					return true;
+			}
+		}
 		return false;
 	}
 
-	public Map<String, String> getParameters(String metric) {
-		if (dCConfigsByMetric == null) {
+	public Map<String, String> getParameters(Resource resource, String metric) {
+		if (dCConfigsByMetric == null || !dCConfigsByMetric.containsKey(metric))
 			return null;
+		Set<DCConfiguration> dcconfigs = dCConfigsByMetric.get(metric);
+		if (dcconfigs != null) {
+			for (DCConfiguration dcConfiguration : dcconfigs) {
+				if (dcConfiguration != null
+						&& dcConfiguration.isAboutResource(resource))
+					return dcConfiguration.getParameters();
+			}
 		}
-		DCConfiguration dcconfig = dCConfigsByMetric.get(metric);
-		if (dcconfig == null) {
-			return null;
-		}
-		return dcconfig.getParameters();
+		return null;
 	}
 
 	public void send(Resource resource, String metric, Object value) {
@@ -346,7 +355,10 @@ public class DCAgent extends Observable {
 						metric);
 				return;
 			}
-			DCConfiguration dcConfiguration = dCConfigsByMetric.get(metric);
+			Set<DCConfiguration> dcConfigurations = dCConfigsByMetric.get(metric);
+
+			// TODO the first URL is used (ok if we are using only one data analyzer) 
+			DCConfiguration dcConfiguration = dcConfigurations.iterator().next();
 
 			long ts = System.currentTimeMillis();
 			logger.debug("Sending {} monitoring data", data.size());
@@ -372,9 +384,9 @@ public class DCAgent extends Observable {
 
 	}
 
-	private Map<String, DCConfiguration> getRemoteDCConfiguration()
+	private Map<String, Set<DCConfiguration>> getRemoteDCConfiguration()
 			throws UnexpectedAnswerFromServerException, IOException {
-		return manager.getDCConfigurationByMetric(dataCollectorId);
+		return manager.getDCConfigurationsByMetric(dataCollectorId);
 	}
 
 	private void keepAlive() throws UnexpectedAnswerFromServerException,
@@ -394,7 +406,7 @@ public class DCAgent extends Observable {
 		});
 		started = true;
 	}
-	
+
 	/**
 	 * To be called when the DCDescriptor is updated to make changes happen
 	 */

@@ -68,7 +68,7 @@ public interface IManagerAPI {
 	public abstract void keepAlive(String dataCollectorId)
 			throws Exception;
 
-	public abstract Map<String, DCConfiguration> getDCConfigurationByMetric(
+	public abstract Map<String, Set<DCConfiguration>> getDCConfigurationsByMetric(
 			String dataCollectorId) throws Exception;
 
 	public abstract Set<String> getRequiredMetrics()
