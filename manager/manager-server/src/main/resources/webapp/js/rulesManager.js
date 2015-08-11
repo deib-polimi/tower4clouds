@@ -60,7 +60,7 @@ function getter() {
             URL, xmlParser, "text"
             )
             .fail(function () {
-                detectError(GET);
+                showError("Error while retrieving Monitoring Rules");
             });
 }
 
@@ -108,7 +108,7 @@ function textualSender(text) {
         contentType: "text/xml",
         cache: false,
         error: function (jqXHR, textStatus, errorThrown) {
-            detectError(textStatus + " " + jqXHR.status + " : " + errorThrown);
+            detectError(jqXHR, textStatus, errorThrown);
             tableReloader();
         },
         success: function (xml) {
@@ -134,7 +134,7 @@ function deleteRule(id) {
     $.ajax({type: "DELETE",
         url: URL + "/" + id,
         error: function (jqXHR, textStatus, errorThrown) {
-            detectError(textStatus + " " + jqXHR.status + " : " + errorThrown);
+            detectError(jqXHR, textStatus, errorThrown);
             tableReloader();
         },
         success: function () {
@@ -148,7 +148,7 @@ function enableRule(id) {
     $.ajax({type: "GET",
         url: URL + "/" + id + "?enabled=true",
         error: function (jqXHR, textStatus, errorThrown) {
-            detectError(textStatus + " " + jqXHR.status + " : " + errorThrown);
+            detectError(jqXHR, textStatus, errorThrown);
             tableReloader();
         },
         success: function () {
@@ -162,7 +162,7 @@ function disableRule(id) {
     $.ajax({type: "GET",
         url: URL + "/" + id + "?enabled=false",
         error: function (jqXHR, textStatus, errorThrown) {
-            detectError(textStatus + " " + jqXHR.status + " : " + errorThrown);
+            detectError(jqXHR, textStatus, errorThrown);
             tableReloader();
         },
         success: function () {
@@ -289,7 +289,7 @@ function redirector(id) {
         type: "GET",
         url: dest,
         error: function (jqXHR, textStatus, errorThrown) {
-            detectError(textStatus + " " + jqXHR.status + " : " + errorThrown);
+            detectError(jqXHR, textStatus, errorThrown);
             tableReloader();
         },
         success: function (data) {
@@ -304,12 +304,18 @@ function redirector(id) {
 /*
  * Manager of the Warning-div messages according to the error types
  */
-function detectError(info) {
+function detectError(jqXHR, textStatus, errorThrown) {
     // display error
-    $("#error").text(info);
+   showError(jqXHR.status + " " + errorThrown + ": " + jqXHR.responseText);
+}
+
+function showError(text) {
+    // display error
+    $("#error").text(text);
     $("success").hide();
     $("#error").show();
 }
+
 /*
  * Manages the information div
  */

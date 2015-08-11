@@ -264,6 +264,15 @@ public class DCAgent extends Observable {
 		return null;
 	}
 
+	/**
+	 * Send a metric to the data analyzer. Note that {@code value} should have the actual data type,
+	 * serialization is managed by the library. Sending Strings, for example, won't allow the data analyzer
+	 * to compute aggregations such as the average.
+	 * 
+	 * @param resource
+	 * @param metric
+	 * @param value
+	 */
 	public void send(Resource resource, String metric, Object value) {
 		if (!started) {
 			logger.error("The DCAgent is not started, data won't be sent");
