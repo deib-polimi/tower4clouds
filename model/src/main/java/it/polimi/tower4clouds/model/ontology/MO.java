@@ -37,6 +37,7 @@ public class MO {
 	public static OntClass InternalComponent = makeClass(MOVocabulary.InternalComponent);
 	public static OntClass ExternalComponent = makeClass(MOVocabulary.ExternalComponent);
 	public static OntClass Method = makeClass(MOVocabulary.Method);
+	public static OntClass Node = makeClass(MOVocabulary.Node);
 
 	public static Property IDRef = makeProperty(MOVocabulary.IDRef);
 	public static Property cloudProvider = makeProperty(MOVocabulary.cloudProvider);
@@ -67,6 +68,7 @@ public class MO {
 		Method.addProperty(RDFS.subClassOf, Resource);
 		CloudProvider.addProperty(RDFS.subClassOf, Resource);
 		Location.addProperty(RDFS.subClassOf, Resource);
+		Node.addProperty(RDFS.subClassOf, Resource);
 		
 		IDRef.addProperty(RDFS.domain, Resource);
 		IDRef.addProperty(RDFS.range, RDFS.Literal);

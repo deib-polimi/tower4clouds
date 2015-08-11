@@ -27,4 +27,5 @@
 	<groupingCategory name="InternalComponent" />
 	<groupingCategory name="PaaSService" />
 	<groupingCategory name="VM" />
+	<groupingCategory name="Node" />
 </groupingCategories>
