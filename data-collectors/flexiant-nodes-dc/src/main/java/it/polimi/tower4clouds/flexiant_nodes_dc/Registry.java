@@ -86,7 +86,7 @@ public class Registry implements Observer{
         Map<String, Node> map = new HashMap<String, Node>();
         
         for(String id:nodeIds){
-            map.put(id, new Node(null, id));
+            map.put(id, new Node("bigNode", id));
         }
         
         return map;
