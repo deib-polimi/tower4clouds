@@ -15,9 +15,11 @@
  */
 package it.polimi.tower4clouds.flexiant_nodes_dc.metrics;
 
-import it.polimi.tower4clouds.data_collector_library.DCAgent;
+import it.polimi.tower4clouds.flexiant_nodes_dc.CsvFileParser;
 import it.polimi.tower4clouds.flexiant_nodes_dc.Metric;
+import it.polimi.tower4clouds.model.ontology.Node;
 import it.polimi.tower4clouds.model.ontology.Resource;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
@@ -34,60 +36,54 @@ import org.slf4j.LoggerFactory;
 public class CPUUtilization extends Metric{
     
     private static final Logger logger = LoggerFactory.getLogger(CPUUtilization.class);
-    
-    private final Map<String, Timer> timerPerNodeId = new ConcurrentHashMap<String, Timer>();
-    private final Map<String, Integer> samplingTimePerNodeId = new ConcurrentHashMap<String, Integer>();
-    
-    private static final int DEFAULT_SAMPLING_TIME = 5;
-    
-    private static final double TRIAL_SAMPLE_VALUE = 65.0;
-    
-    private int getSamplingTime(Resource resource) {
-	if (getParameters(resource) == null 
-                || getParameters(resource).get("samplingTime") == null)
-            return DEFAULT_SAMPLING_TIME;
-        try {
-            return Integer.parseInt(getParameters(resource)
-                    .get("samplingTime"));
-        }
-        catch (Exception e) {
-            logger.error("Error while reading the sampling time", e);
-            return DEFAULT_SAMPLING_TIME;
-        }
-    }
-    
-    @Override
-    public void update(Observable o, Object arg) {
-        super.update(o, arg);
         
-        Set<Resource> nodes = getNodes();
-        for(Resource node : nodes){
-            int newSamplingTime = getSamplingTime(node);
-            if(timerPerNodeId.containsKey(node.getId())
-                    && samplingTimePerNodeId.get(node.getId()) != newSamplingTime){
-                timerPerNodeId.remove(node.getId()).cancel();
-            }
-            if(!timerPerNodeId.containsKey(node.getId())){
-                Timer timer = new Timer();
-                timerPerNodeId.put(node.getId(), timer);
-                samplingTimePerNodeId.put(node.getId(), newSamplingTime);
-                timer.scheduleAtFixedRate(new CpuUtilizationSender(node), 
-                        0, newSamplingTime * 1000);
-            }
-        }
+    @Override
+    protected void createTask(Timer timer, Resource node, int samplingTime){
+        timer.scheduleAtFixedRate(new CpuUtilizationSender(node), 
+                        0, samplingTime * 1000);
     }
     
+    /*
+        Classe privata che gestisce l'acquisizione e l'invio del sample.
+    */
     private final class CpuUtilizationSender extends TimerTask {
         private Resource node;
+        private CsvFileParser fileParser;
         
+        //costruttore: inizializza un oggetto CsvFileParser che gestisce la lettura del
+        //file remoto
         public CpuUtilizationSender(Resource node) {
             this.node = node;
+            String fileName = node.getId()+".csv";
+            if(node.getType().equals("cluster2"))
+                fileName = node.getType()+"-"+fileName;
+            
+            logger.info("URL: "+getUrlFileLocation()+fileName);
+            fileParser = new CsvFileParser(getUrlFileLocation()+fileName, null);
+            
         }
         
         @Override
         public void run() {
-            send(TRIAL_SAMPLE_VALUE, node);
+            send(getSample(), node);
 	}
+        
+        //metodo che acquisisce il sample dal file remoto
+        private double getSample(){
+            logger.info("Getting Sample...");
+            long first = System.currentTimeMillis();
+            double sample = 0.0;
+            int count = 0;
+            fileParser.readLastUpdate(0);
+            List<String> values = fileParser.getData(2);
+            for(String value:values){
+                sample += Double.parseDouble(value);
+                count++;
+            }
+            logger.info("Sample calculated in: "+(System.currentTimeMillis()-first)+ "ms");
+            return sample/count;
+            
+        }
     }
     
     
