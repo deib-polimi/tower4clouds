@@ -4,7 +4,7 @@
             <monitoredTarget class="Node" />
         </monitoredTargets>
         <collectedMetric metricName="CPUUtilization">
-            <parameter name="samplingTime">5</parameter>
+            <parameter name="samplingTime">60</parameter>
         </collectedMetric>
         <actions>
             <action name="OutputMetric">
