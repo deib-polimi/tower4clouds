@@ -17,7 +17,6 @@ package it.polimi.tower4clouds.flexiant_nodes_dc;
 
 
 import it.polimi.tower4clouds.data_collector_library.DCAgent;
-import it.polimi.tower4clouds.model.ontology.Node;
 import it.polimi.tower4clouds.model.ontology.Resource;
 
 import java.util.Map;
@@ -54,21 +53,37 @@ public abstract class Metric implements Observer {
             logger.warn("Monitoring is not required, data won't be sent");
         }
     }
+    
+    private boolean shouldMonitor(Resource resource) {
+        if (dcAgent == null) {
+                logger.error("{}: DCAgent was null", this.toString());
+                return false;
+        }
+        return dcAgent.shouldMonitor(resource, getName());
+    }
 
     public void update(Observable o, Object arg) {
         this.dcAgent = (DCAgent) o;
         Set<Resource> nodes = getNodes();
         for(Resource node : nodes){
-            int newSamplingTime = getSamplingTime(node);
-            if(timerPerNodeId.containsKey(node.getId())
-                    && samplingTimePerNodeId.get(node.getId()) != newSamplingTime){
-                timerPerNodeId.remove(node.getId()).cancel();
+            if(shouldMonitor(node)){
+                int newSamplingTime = getSamplingTime(node);
+                if(timerPerNodeId.containsKey(node.getId())
+                        && samplingTimePerNodeId.get(node.getId()) != newSamplingTime){
+                    timerPerNodeId.remove(node.getId()).cancel();
+                }
+                if(!timerPerNodeId.containsKey(node.getId())){
+                    Timer timer = new Timer();
+                    timerPerNodeId.put(node.getId(), timer);
+                    samplingTimePerNodeId.put(node.getId(), newSamplingTime);
+                    createTask(timer, node, newSamplingTime);
+                }
             }
-            if(!timerPerNodeId.containsKey(node.getId())){
-                Timer timer = new Timer();
-                timerPerNodeId.put(node.getId(), timer);
-                samplingTimePerNodeId.put(node.getId(), newSamplingTime);
-                createTask(timer, node, newSamplingTime);
+            else{
+                Timer timer = timerPerNodeId.remove(node.getId());
+                if (timer != null)
+                    timer.cancel();
+                samplingTimePerNodeId.remove(node.getId());
             }
         }
     }
@@ -86,9 +101,9 @@ public abstract class Metric implements Observer {
             return DEFAULT_SAMPLING_TIME;
         }
     }
-    
-    //metodo astratto che crea il task (uno per ogni nodo) che acquisirà il sample 
-    //periodicamente e lo invierà al manager.
+      
+    //Abstract method which create a task (one for each node) that will acquire and 
+    //send the sample periodically.
     protected abstract void createTask(Timer timer, Resource node, int samplingTime);
 
     protected Map<String, String> getParameters(Resource resource) {

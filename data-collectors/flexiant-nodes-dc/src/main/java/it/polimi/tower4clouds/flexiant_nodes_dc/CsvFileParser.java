@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Stack;
+import java.util.zip.GZIPInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +37,6 @@ public class CsvFileParser {
     
     private String fileUrl;
     
-    //stack utilizzato per leggere le righe del file al contrario (dati più recenti
-    //in testa allo stack
     private Stack<String> fileLines;
     private String terminationString;
     
@@ -48,32 +47,36 @@ public class CsvFileParser {
         this.terminationString = terminationString;
     }
     
-    //Metodo che legge il file riga per riga e carica ogni riga in uno stack in modo
-    //da permetterne la lettura a partire dai dati più recenti
-    private void readFile(){
-        
-        fileLines = new Stack<String>();
+    //Method which read the file line by line and load every line in a stack to allow
+    //the read of data from the most recent.
+    private boolean readFile(){
         
         try{
             URL url = new URL(fileUrl);
             InputStream is = url.openStream();
+            if(fileUrl.endsWith(".gz"))
+                is = new GZIPInputStream(is);
             BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            fileLines = new Stack<String>();
             String line;
             while((line=br.readLine())!=null){
                 fileLines.push(line);
             }
             br.close();
             is.close();
+            return true;
         }//try
         catch(Exception ex){
             logger.warn("Error while reading remote file: "+fileUrl);
+            return false;
         }
         
     }
     
-    //carica le righe del file CSV fino alla stringa di terminazione
-    public void readUntilTerminationString(){
-        readFile();
+    //load lines of the CSV file untile the termination string
+    public boolean readUntilTerminationString(){
+        if(!readFile())
+            return false;
         try{
             String line = fileLines.pop();
             String[] parts = line.split(",");
@@ -87,20 +90,24 @@ public class CsvFileParser {
                 line = fileLines.pop();
                 parts = line.split(",");
             }//while
+            return true;
         }
         catch(EmptyStackException ex){
             logger.warn("Empty stack error: termination string not found");
+            return false;
         }
         catch(ArrayIndexOutOfBoundsException ex){
             logger.warn("Invalid data position");
+            return false;
         }
         
     }
     
-    //carica le righe del file CSV fino a che non cambia il contenuto della colonna
-    //nella posizione specificata come parametro (solitamente è la colonna del timestamp)
-    public void readLastUpdate(int positionColumn){
-        readFile();
+    //load lines of the CSV file untile the content of the selected column changes
+    //usually the selected column content is the timestamp
+    public boolean readLastUpdate(int positionColumn){
+        if(!readFile())
+            return false;
         try{
             String line = fileLines.pop();
             String[] parts = line.split(",");
@@ -112,21 +119,25 @@ public class CsvFileParser {
             while(parts[positionColumn].equals(delimiter)){
                 for(int i = 0; i < parts.length; i++)
                     itemsArray[i].add(parts[i]);
+                if(fileLines.empty())
+                    break;
                 line = fileLines.pop();
                 parts = line.split(",");
             }//while
+            return true;
         }
         catch(EmptyStackException ex){
             logger.warn("Empty stack error");
+            return false;
         }
         catch(ArrayIndexOutOfBoundsException ex){
             logger.warn("Invalid data position");
+            return false;
         }
     }
     
-    //restituisce una colonna di dati specificata dalla posizione passata come parametro
-    //ogni elemento rappresenta il contenuto della colonna in una determinata riga a
-    //partire dalla fine del file.
+    //return a column of data specifice by the position parameter, every element represent
+    //the content of the columns in a row.
     public List<String> getData(int position){
         try{
             return itemsArray[position];
@@ -136,6 +147,10 @@ public class CsvFileParser {
             return null;
         }
         
+    }
+    
+    public void setFileUrl(String fileUrl){
+        this.fileUrl = fileUrl;
     }
     
 }

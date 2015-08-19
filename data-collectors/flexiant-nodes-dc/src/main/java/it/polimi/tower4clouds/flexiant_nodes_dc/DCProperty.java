@@ -18,8 +18,8 @@ package it.polimi.tower4clouds.flexiant_nodes_dc;
 /**
  *
  * @author davide
- * Classe DCProperty: contiene i nomi delle proprietà che dovranno essere impostate
- * per permettere al DC di agganciare i file remoti.
+ * Class DCProperty: contains the names of the properties which must be set to
+ * allow the DC to link the remote files.
  */
 public final class DCProperty {
     

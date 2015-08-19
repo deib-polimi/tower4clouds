@@ -17,15 +17,10 @@ package it.polimi.tower4clouds.flexiant_nodes_dc.metrics;
 
 import it.polimi.tower4clouds.flexiant_nodes_dc.CsvFileParser;
 import it.polimi.tower4clouds.flexiant_nodes_dc.Metric;
-import it.polimi.tower4clouds.model.ontology.Node;
 import it.polimi.tower4clouds.model.ontology.Resource;
 import java.util.List;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,14 +39,14 @@ public class CPUUtilization extends Metric{
     }
     
     /*
-        Classe privata che gestisce l'acquisizione e l'invio del sample.
+        Private class which handle acquisition and sending of a sample.
     */
     private final class CpuUtilizationSender extends TimerTask {
         private Resource node;
         private CsvFileParser fileParser;
         
-        //costruttore: inizializza un oggetto CsvFileParser che gestisce la lettura del
-        //file remoto
+        //constructor: initialize a CsvFileParser object which handle the reading
+        //of the remote file
         public CpuUtilizationSender(Resource node) {
             this.node = node;
             String fileName = node.getId()+".csv";
@@ -68,13 +63,18 @@ public class CPUUtilization extends Metric{
             send(getSample(), node);
 	}
         
-        //metodo che acquisisce il sample dal file remoto
+        //method which acquire the sample from the remote file
         private double getSample(){
             logger.info("Getting Sample...");
             long first = System.currentTimeMillis();
             double sample = 0.0;
             int count = 0;
-            fileParser.readLastUpdate(0);
+            fileParser.setFileUrl(getUrl());
+            if(!fileParser.readLastUpdate(0)){
+                //if the .csv file doesn't exists then search for the compressed file
+                fileParser.setFileUrl(getUrl()+".1.gz");
+                fileParser.readLastUpdate(0);
+            }
             List<String> values = fileParser.getData(2);
             for(String value:values){
                 sample += Double.parseDouble(value);
@@ -83,6 +83,17 @@ public class CPUUtilization extends Metric{
             logger.info("Sample calculated in: "+(System.currentTimeMillis()-first)+ "ms");
             return sample/count;
             
+        }
+        
+        //method which build url of the remote file to parse.
+        private String getUrl(){
+            String url;
+            url = getUrlFileLocation();
+            if(node.getType().equals("cluster2"))
+                url += node.getType()+"-"+node.getId()+".csv";
+            else
+                url += node.getId()+".csv";
+            return url;
         }
     }
     

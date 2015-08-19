@@ -69,7 +69,7 @@ public class Registry implements Observer{
         if (registryInitialized)
             throw new RuntimeException("Registry was already initialized");
         
-        //Acquisizione delle properties del DC
+        //Acquisition of the DC properties
         if(dcProperties == null){
             this.dcProperties = new Properties();
             try{
@@ -85,21 +85,21 @@ public class Registry implements Observer{
         else
             this.dcProperties = dcProperties;
         
-        //Costruzione nodi e metriche
+        //Building of nodes and metrics
         nodesById = buildNodesById();
         this.metrics = buildMetrics();
         
-        //Creazione del DCAgent
+        //Building of the DCAgent
         dcAgent = new DCAgent(new ManagerAPI(managerIP, managerPort));
         dcAgent.addObserver(this);
         
-        //Aggiunta degli observer delle metriche al DCAgent
+        //Adding observers of the metrics to the DCAgent
         for (Metric metric : metrics) {
             logger.debug("Added metric {} as observer of dcagent", metric.getName());
             dcAgent.addObserver(metric);
         }
         
-        //creazione del DCDescriptor
+        //Building of the DCDescriptor
         DCDescriptor dcDescriptor = new DCDescriptor();
         dcDescriptor.addMonitoredResources(getMetrics(), getNodes());
         dcDescriptor.addResources(getNodes());
@@ -136,14 +136,10 @@ public class Registry implements Observer{
         }
     }
     
-    //Costruzione dei nodi del modello mediante parsing del file remoto
+    //Building of the nodes by the parsing of remote files
     private Map<String, Node> buildNodesById(){
         Map<String, Node> map = new HashMap<String, Node>();
         
-        /*** L'ACQUISIZIONE DEI NODI FUNZIONA CORRETTAMENTE, DECOMMENTARE IL CODICE SOTTOSTANTE
-         * PER ATTIVARLA
-         */
-        /*
         CsvFileParser fileParser = new CsvFileParser((String)this.dcProperties.get(DCProperty.URL_NODES_FILE1),"ID,IP");
         fileParser.readUntilTerminationString();
         List<String> nodes = fileParser.getData(1);
@@ -161,10 +157,7 @@ public class Registry implements Observer{
             logger.info("Node added: "+node);
             map.put(node, new Node("cluster2", node));
         }
-        */
         
-        //Inserimento di un solo nodo di prova per l'acquisizione dei sample
-        map.put("10.157.128.30", new Node("cluster1", "10.157.128.30"));
         return map;
     }
     

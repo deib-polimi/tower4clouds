@@ -38,24 +38,18 @@ public class FlexiantNodesDCTester {
         Properties flexDCProp = new Properties();
         flexDCProp.put(DCProperty.URL_NODES_FILE1, "https://cp.sd1.flexiant.net/nodeid/Cluster1.csv");
         flexDCProp.put(DCProperty.URL_NODES_FILE2, "https://cp.sd1.flexiant.net/nodeid/Cluster2.csv");
-        flexDCProp.put(DCProperty.URL_CPU_METRIC, "https://cp.sd1.flexiant.net/nodecpu/");
-        
-        //* PARSING DEL FILE LOCALE: inserire l'url del percorso locale in cui si trova il file
-        //10.157.128.30.csv e commentare la riga soprastante
-        //flexDCProp.put(DCProperty.URL_CPU_METRIC, "file:///Users/davide/Downloads/");
-        
+        flexDCProp.put(DCProperty.URL_CPU_METRIC, "https://cp.sd1.flexiant.net/nodecpu10/");
+
 	ManagerAPI manager = new ManagerAPI(managerIP, managerPort);
-        
 	manager.installRules(XMLHelper.deserialize(FlexiantNodesDCTester.class
 			.getResourceAsStream("/rules4FlexiantNodesDCTester.xml"),
 			MonitoringRules.class));
-        
         manager.registerHttpObserver("CpuUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
         Registry.initialize(managerIP, managerPort, flexDCProp);
         Registry.startMonitoring();
         
         Thread.sleep(5 * 60 * 1000);
-        //Chiude l'applicazione dopo 5 minuti
+        //Close the application after 5 minutes
         Registry.stopMonitoring();
         System.exit(0);
         
