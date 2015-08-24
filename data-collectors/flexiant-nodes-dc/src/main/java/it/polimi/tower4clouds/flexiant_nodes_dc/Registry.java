@@ -17,8 +17,14 @@ package it.polimi.tower4clouds.flexiant_nodes_dc;
 
 import it.polimi.tower4clouds.data_collector_library.DCAgent;
 import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.CPUUtilization;
+import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.NodeLoadMetric;
+import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.RXNetworkMetric;
+import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.RamUsage;
+import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.StorageCluster;
+import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.TXNetworkMetric;
 import it.polimi.tower4clouds.manager.api.ManagerAPI;
 import it.polimi.tower4clouds.model.data_collectors.DCDescriptor;
+import it.polimi.tower4clouds.model.ontology.Cluster;
 import it.polimi.tower4clouds.model.ontology.Node;
 import it.polimi.tower4clouds.model.ontology.Resource;
 import java.io.FileInputStream;
@@ -46,8 +52,10 @@ public class Registry implements Observer{
     private Properties dcProperties;
     
     private Map<String, Node> nodesById;
+    private Map<String, Cluster> clustersById;
     
-    private Set<Metric> metrics;
+    private Set<Metric> nodeMetrics;
+    private Set<Metric> clusterMetrics;
     
     private DCAgent dcAgent;
     
@@ -85,24 +93,36 @@ public class Registry implements Observer{
         else
             this.dcProperties = dcProperties;
         
-        //Building of nodes and metrics
+        //Building of nodes and metrics nodes
         nodesById = buildNodesById();
-        this.metrics = buildMetrics();
+        nodeMetrics = buildNodeMetrics();
+        
+        //Building of clusters and metrics clusters
+        clustersById = buildClustersById();
+        clusterMetrics = buildClusterMetrics();
         
         //Building of the DCAgent
         dcAgent = new DCAgent(new ManagerAPI(managerIP, managerPort));
         dcAgent.addObserver(this);
         
-        //Adding observers of the metrics to the DCAgent
-        for (Metric metric : metrics) {
+        //Adding observers of nodes metrics to the DCAgent
+        for (Metric metric : nodeMetrics) {
+            logger.debug("Added metric {} as observer of dcagent", metric.getName());
+            dcAgent.addObserver(metric);
+        }
+        
+        //Adding observers of cluster metrics to the DCAgent
+        for (Metric metric : clusterMetrics) {
             logger.debug("Added metric {} as observer of dcagent", metric.getName());
             dcAgent.addObserver(metric);
         }
         
         //Building of the DCDescriptor
         DCDescriptor dcDescriptor = new DCDescriptor();
-        dcDescriptor.addMonitoredResources(getMetrics(), getNodes());
+        dcDescriptor.addMonitoredResources(getNodeMetrics(), getNodes());
         dcDescriptor.addResources(getNodes());
+        dcDescriptor.addMonitoredResources(getClusterMetrics(), getClusters());
+        dcDescriptor.addResources(getClusters());
         dcDescriptor.setConfigSyncPeriod(CONFIG_SYNC_PERIOD != null ? CONFIG_SYNC_PERIOD
 					: DEFAULT_CONFIG_SYNC_PERIOD);
 	dcDescriptor.setKeepAlive(KEEP_ALIVE != null ? KEEP_ALIVE
@@ -140,38 +160,45 @@ public class Registry implements Observer{
     private Map<String, Node> buildNodesById(){
         Map<String, Node> map = new HashMap<String, Node>();
         
-        CsvFileParser fileParser = new CsvFileParser((String)this.dcProperties.get(DCProperty.URL_NODES_FILE1),"ID,IP");
-        fileParser.readUntilTerminationString();
-        List<String> nodes = fileParser.getData(1);
-        
-        for(String node:nodes){
-            logger.info("Node added: "+node);
-            map.put(node, new Node("cluster1", node));
-        }
-        
-        fileParser = new CsvFileParser((String)this.dcProperties.get(DCProperty.URL_NODES_FILE2),"ID,IP");
-        fileParser.readUntilTerminationString();
-        nodes = fileParser.getData(1);
-        
-        for(String node:nodes){
-            logger.info("Node added: "+node);
-            map.put(node, new Node("cluster2", node));
-        }
+        retrieveNodesFromFile(map, (String)this.dcProperties.get(DCProperty.URL_NODES_FILE1), "cluster1");
+        retrieveNodesFromFile(map, (String)this.dcProperties.get(DCProperty.URL_NODES_FILE2), "cluster2");
         
         return map;
     }
     
-    private Set<String> getMetrics() {
+    //Building of the cluster
+    private Map<String, Cluster> buildClustersById(){
+        Map<String, Cluster> map = new HashMap<String, Cluster>();
+        
+        map.put("Cluster1", new Cluster("BigCluster", "Cluster1"));
+        map.put("Cluster2", new Cluster("BigCluster", "Cluster2"));
+        
+        return map;
+    }
+    
+    private void retrieveNodesFromFile(Map<String, Node> map, String url, String type){
+        CsvFileParser fileParser = new CsvFileParser(url,"ID,IP");
+        fileParser.readUntilTerminationString();
+        List<String> nodes = fileParser.getData(1);
+        
+        for(String node:nodes){
+            String nodeId = node.replaceAll("\\.", "_");
+            logger.info("Node added: "+nodeId);
+            map.put(nodeId, new Node(type, nodeId));
+        }
+    }
+    
+    private Set<String> getNodeMetrics() {
         
         Set<String> metricsNames = new HashSet<String>();
-	for (Metric metric : metrics) {
+	for (Metric metric : nodeMetrics) {
             metricsNames.add(metric.getName());
 	}
         
         return metricsNames;
     }
     
-    private Set<Metric> buildMetrics() {
+    private Set<Metric> buildNodeMetrics() {
 	Set<Metric> metrics = new HashSet<Metric>();
         
         //add CPUUtilization metric
@@ -179,11 +206,56 @@ public class Registry implements Observer{
         cpuMetric.setUrlFileLocation((String)dcProperties.get(DCProperty.URL_CPU_METRIC));
         metrics.add(cpuMetric);
         
+        //add RamUsage metric
+        Metric ramMetric = new RamUsage();
+        ramMetric.setUrlFileLocation((String)dcProperties.get(DCProperty.URL_RAM_METRIC));
+        metrics.add(ramMetric);
+        
+        //add NodeLoadMetric
+        Metric nodeLoadMetric = new NodeLoadMetric();
+        nodeLoadMetric.setUrlFileLocation((String)dcProperties.get(DCProperty.URL_NODELOAD_METRIC));
+        metrics.add(nodeLoadMetric);
+        
+        //add TXNetworkMetric
+        Metric txNetworkMetric = new TXNetworkMetric();
+        txNetworkMetric.setUrlFileLocation((String)dcProperties.get(DCProperty.URL_TXNETWORK_METRIC));
+        metrics.add(txNetworkMetric);
+        
+        //add RXNetworkMetric
+        Metric rxNetworkMetric = new RXNetworkMetric();
+        rxNetworkMetric.setUrlFileLocation((String)dcProperties.get(DCProperty.URL_RXNETWORK_METRIC));
+        metrics.add(rxNetworkMetric);
+        
+        return metrics;
+    }
+    
+    private Set<String> getClusterMetrics() {
+        
+        Set<String> metricsNames = new HashSet<String>();
+	for (Metric metric : clusterMetrics) {
+            metricsNames.add(metric.getName());
+	}
+        
+        return metricsNames;
+    }
+    
+    private Set<Metric> buildClusterMetrics() {
+	Set<Metric> metrics = new HashSet<Metric>();
+        
+        //add Storage metric
+        Metric storageMetric = new StorageCluster();
+        storageMetric.setUrlFileLocation((String)dcProperties.get(DCProperty.URL_STORAGE_METRIC));
+        metrics.add(storageMetric);
+        
         return metrics;
     }
     
     Set<Resource> getNodes() {
         return new HashSet<Resource>(nodesById.values());
+    }
+    
+    Set<Resource> getClusters() {
+        return new HashSet<Resource>(clustersById.values());
     }
 
     @Override

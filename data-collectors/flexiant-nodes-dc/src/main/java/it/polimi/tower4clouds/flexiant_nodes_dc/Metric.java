@@ -24,6 +24,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
@@ -37,10 +38,12 @@ public abstract class Metric implements Observer {
 
     private String urlFileLocation;
     
-    private final Map<String, Timer> timerPerNodeId = new ConcurrentHashMap<String, Timer>();
-    private final Map<String, Integer> samplingTimePerNodeId = new ConcurrentHashMap<String, Integer>();
+    private final Map<String, Timer> timerPerResourceId = new ConcurrentHashMap<String, Timer>();
+    private final Map<String, Integer> samplingTimePerResourceId = new ConcurrentHashMap<String, Integer>();
     
     private static final int DEFAULT_SAMPLING_TIME = 5;
+    
+    protected MetricsType metricType;
     
     protected String getName() {
         return getClass().getSimpleName();
@@ -64,26 +67,36 @@ public abstract class Metric implements Observer {
 
     public void update(Observable o, Object arg) {
         this.dcAgent = (DCAgent) o;
-        Set<Resource> nodes = getNodes();
-        for(Resource node : nodes){
-            if(shouldMonitor(node)){
-                int newSamplingTime = getSamplingTime(node);
-                if(timerPerNodeId.containsKey(node.getId())
-                        && samplingTimePerNodeId.get(node.getId()) != newSamplingTime){
-                    timerPerNodeId.remove(node.getId()).cancel();
+        Set<Resource> resources;
+        
+        //Determine which type of target.
+        switch(metricType){
+            case CLUSTER_METRIC:
+                resources = Registry._INSTANCE.getClusters();
+                break;
+            default:
+                resources = Registry._INSTANCE.getNodes();
+        }
+        
+        for(Resource resource : resources){
+            if(shouldMonitor(resource)){
+                int newSamplingTime = getSamplingTime(resource);
+                if(timerPerResourceId.containsKey(resource.getId())
+                        && samplingTimePerResourceId.get(resource.getId()) != newSamplingTime){
+                    timerPerResourceId.remove(resource.getId()).cancel();
                 }
-                if(!timerPerNodeId.containsKey(node.getId())){
+                if(!timerPerResourceId.containsKey(resource.getId())){
                     Timer timer = new Timer();
-                    timerPerNodeId.put(node.getId(), timer);
-                    samplingTimePerNodeId.put(node.getId(), newSamplingTime);
-                    createTask(timer, node, newSamplingTime);
+                    timerPerResourceId.put(resource.getId(), timer);
+                    samplingTimePerResourceId.put(resource.getId(), newSamplingTime);
+                    createTask(timer, resource, newSamplingTime);
                 }
             }
             else{
-                Timer timer = timerPerNodeId.remove(node.getId());
+                Timer timer = timerPerResourceId.remove(resource.getId());
                 if (timer != null)
                     timer.cancel();
-                samplingTimePerNodeId.remove(node.getId());
+                samplingTimePerResourceId.remove(resource.getId());
             }
         }
     }
@@ -104,16 +117,52 @@ public abstract class Metric implements Observer {
       
     //Abstract method which create a task (one for each node) that will acquire and 
     //send the sample periodically.
-    protected abstract void createTask(Timer timer, Resource node, int samplingTime);
-
+    private void createTask(Timer timer, Resource node, int samplingTime){
+        timer.scheduleAtFixedRate(new MetricSender(node), 
+                        0, samplingTime * 1000);
+    }
+    
+    private class MetricSender extends TimerTask{
+        private Resource node;
+        private CsvFileParser fileParser;
+        
+        //constructor: initialize a CsvFileParser object which handle the reading
+        //of the remote file
+        public MetricSender(Resource node) {
+            this.node = node;
+            String url = getUrl(node);
+            logger.info("URL: "+url);
+            fileParser = new CsvFileParser(url, null);  
+        }
+        
+        @Override
+        public void run() {
+            logger.info("Getting Sample...");
+            long first = System.currentTimeMillis();
+            send(getSample(fileParser, node), node);
+            logger.info("Sample retrieved and sent in: "+(System.currentTimeMillis()-first)+ "ms");
+	}
+        
+    }
+    
+    //method which build url of the remote file to parse.
+    protected String getUrl(Resource resource){
+        String url;
+        String nodeIp = resource.getId().replaceAll("_", "\\.");
+        url = getUrlFileLocation();
+        if(resource.getType().equals("cluster2"))
+            url += resource.getType()+"-"+nodeIp+".csv";
+        else
+            url += nodeIp+".csv";
+        return url;
+    }
+    
+    protected abstract Number getSample(CsvFileParser fileParser, Resource resource);
+    
     protected Map<String, String> getParameters(Resource resource) {
         if (this.dcAgent != null)
             return this.dcAgent.getParameters(resource, getName());
         return null;
-    }
-
-    protected Set<Resource> getNodes() {
-        return Registry._INSTANCE.getNodes();
     }
 
     public String getUrlFileLocation() {

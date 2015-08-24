@@ -17,6 +17,7 @@ package it.polimi.tower4clouds.flexiant_nodes_dc.metrics;
 
 import it.polimi.tower4clouds.flexiant_nodes_dc.CsvFileParser;
 import it.polimi.tower4clouds.flexiant_nodes_dc.Metric;
+import it.polimi.tower4clouds.flexiant_nodes_dc.MetricsType;
 import it.polimi.tower4clouds.model.ontology.Resource;
 import java.util.List;
 import java.util.Timer;
@@ -31,6 +32,33 @@ import org.slf4j.LoggerFactory;
 public class CPUUtilization extends Metric{
     
     private static final Logger logger = LoggerFactory.getLogger(CPUUtilization.class);
+    
+    public CPUUtilization(){
+        metricType = MetricsType.NODE_METRIC;
+    }
+    
+    @Override
+    protected Number getSample(CsvFileParser fileParser, Resource resource) {
+        
+        fileParser.setFileUrl(getUrl(resource));
+        if(!fileParser.readLastUpdate(0)){
+            //if the .csv file doesn't exists then search for the compressed file
+            fileParser.setFileUrl(getUrl(resource)+".1.gz");
+            fileParser.readLastUpdate(0);
+        }
+        
+        double sample = 0.0;
+        int count = 0;
+        List<String> values = fileParser.getData(2);
+        for(String value:values){
+            sample += Double.parseDouble(value);
+            count++;
+        }
+        return sample/count;
+        
+    }
+    
+    /*
         
     @Override
     protected void createTask(Timer timer, Resource node, int samplingTime){
@@ -40,7 +68,7 @@ public class CPUUtilization extends Metric{
     
     /*
         Private class which handle acquisition and sending of a sample.
-    */
+    
     private final class CpuUtilizationSender extends TimerTask {
         private Resource node;
         private CsvFileParser fileParser;
@@ -49,12 +77,10 @@ public class CPUUtilization extends Metric{
         //of the remote file
         public CpuUtilizationSender(Resource node) {
             this.node = node;
-            String fileName = node.getId()+".csv";
-            if(node.getType().equals("cluster2"))
-                fileName = node.getType()+"-"+fileName;
+            String url = getUrl();
             
-            logger.info("URL: "+getUrlFileLocation()+fileName);
-            fileParser = new CsvFileParser(getUrlFileLocation()+fileName, null);
+            logger.info("URL: "+url);
+            fileParser = new CsvFileParser(url, null);
             
         }
         
@@ -88,14 +114,16 @@ public class CPUUtilization extends Metric{
         //method which build url of the remote file to parse.
         private String getUrl(){
             String url;
+            String nodeIp = node.getId().replaceAll("_", "\\.");
             url = getUrlFileLocation();
             if(node.getType().equals("cluster2"))
-                url += node.getType()+"-"+node.getId()+".csv";
+                url += node.getType()+"-"+nodeIp+".csv";
             else
-                url += node.getId()+".csv";
+                url += nodeIp+".csv";
             return url;
         }
-    }
+        
+        */
     
     
 }

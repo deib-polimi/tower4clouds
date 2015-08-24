@@ -26,5 +26,10 @@ public final class DCProperty {
     public static final String URL_NODES_FILE1 = "URL_NODES_FILE1";
     public static final String URL_NODES_FILE2 = "URL_NODES_FILE2";
     public static final String URL_CPU_METRIC = "URL_CPU_METRIC";
+    public static final String URL_RAM_METRIC = "URL_RAM_METRIC";
+    public static final String URL_NODELOAD_METRIC = "URL_NODELOAD_METRIC";
+    public static final String URL_TXNETWORK_METRIC = "URL_TXNETWORK_METRIC";
+    public static final String URL_RXNETWORK_METRIC = "URL_RXNETWORK_METRIC";
+    public static final String URL_STORAGE_METRIC = "URL_STORAGE_METRIC";
     
 }
