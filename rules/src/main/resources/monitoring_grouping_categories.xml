@@ -28,4 +28,6 @@
 	<groupingCategory name="PaaSService" />
 	<groupingCategory name="VM" />
 	<groupingCategory name="Node" />
+        <groupingCategory name="Cluster" />
+        <groupingCategory name="Rack" />
 </groupingCategories>

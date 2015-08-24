@@ -1,0 +1,94 @@
+<monitoringRules xmlns="http://www.modaclouds.eu/xsd/1.0/monitoring_rules_schema">
+    <monitoringRule id="CpuUtilizationRule" startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Node" />
+        </monitoredTargets>
+        <collectedMetric metricName="CPUUtilization">
+            <parameter name="samplingTime">10</parameter>
+        </collectedMetric>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="resourceId">ID</parameter>
+                <parameter name="metric">CpuUtilization</parameter>
+                <parameter name="value">METRIC</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+    <monitoringRule id="RamUtilizationRule" startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Node" />
+        </monitoredTargets>
+        <collectedMetric metricName="RamUsage">
+            <parameter name="samplingTime">5</parameter>
+        </collectedMetric>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="resourceId">ID</parameter>
+                <parameter name="metric">RamUtilization</parameter>
+                <parameter name="value">METRIC</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+    <monitoringRule id="NodeLoadRule" startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Node" />
+        </monitoredTargets>
+        <collectedMetric metricName="NodeLoadMetric">
+            <parameter name="samplingTime">5</parameter>
+        </collectedMetric>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="resourceId">ID</parameter>
+                <parameter name="metric">NodeLoad</parameter>
+                <parameter name="value">METRIC</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+    <monitoringRule id="TXNetworkRule" startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Node" />
+        </monitoredTargets>
+        <collectedMetric metricName="TXNetworkMetric">
+            <parameter name="samplingTime">5</parameter>
+        </collectedMetric>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="resourceId">ID</parameter>
+                <parameter name="metric">TXNetwork</parameter>
+                <parameter name="value">METRIC</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+    <monitoringRule id="RXNetworkRule" startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Node" />
+        </monitoredTargets>
+        <collectedMetric metricName="RXNetworkMetric">
+            <parameter name="samplingTime">5</parameter>
+        </collectedMetric>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="resourceId">ID</parameter>
+                <parameter name="metric">RXNetwork</parameter>
+                <parameter name="value">METRIC</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+    <monitoringRule id="StorageRule" startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Cluster" />
+        </monitoredTargets>
+        <collectedMetric metricName="StorageCluster">
+            <parameter name="samplingTime">5</parameter>
+        </collectedMetric>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="resourceId">ID</parameter>
+                <parameter name="metric">StorageMetric</parameter>
+                <parameter name="value">METRIC</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+</monitoringRules>
+
+

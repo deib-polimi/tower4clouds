@@ -29,6 +29,8 @@ public class MOVocabulary {
     public static final String Method = "Method";
     public static final String Location = "Location";
     public static final String Node = "Node";
+    public static final String Cluster = "Cluster";
+    public static final String Rack = "Rack";
     
     public static final String IDRef = "IDRef";
     public static final String cloudProvider = "cloudProvider";
