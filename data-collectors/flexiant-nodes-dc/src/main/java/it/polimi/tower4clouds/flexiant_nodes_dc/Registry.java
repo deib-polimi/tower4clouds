@@ -67,9 +67,7 @@ public class Registry implements Observer{
     public static Integer CONFIG_SYNC_PERIOD = null;
     public static Integer KEEP_ALIVE = null;
     private static final int DEFAULT_CONFIG_SYNC_PERIOD = 30;
-    
-    private static final String DEFAULT_CONFIG_FILE_LOCATION = "/etc/opt/flexiant-nodes-dc/config";
-    
+        
     protected Registry(){}
     
     public synchronized void init(String managerIP, int managerPort, Properties dcProperties){
@@ -77,21 +75,7 @@ public class Registry implements Observer{
         if (registryInitialized)
             throw new RuntimeException("Registry was already initialized");
         
-        //Acquisition of the DC properties
-        if(dcProperties == null){
-            this.dcProperties = new Properties();
-            try{
-                this.dcProperties.load(new FileInputStream(DEFAULT_CONFIG_FILE_LOCATION));
-            }
-            catch(FileNotFoundException ex){
-                throw new RuntimeException("Properties file not found");
-            }
-            catch(IOException ex){
-                throw new RuntimeException("Error while parsing properties file");
-            }
-        }
-        else
-            this.dcProperties = dcProperties;
+        this.dcProperties = dcProperties;
         
         //Building of nodes and metrics nodes
         nodesById = buildNodesById();

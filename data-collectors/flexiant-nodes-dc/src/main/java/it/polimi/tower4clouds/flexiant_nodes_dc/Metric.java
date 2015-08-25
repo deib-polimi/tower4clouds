@@ -41,7 +41,7 @@ public abstract class Metric implements Observer {
     private final Map<String, Timer> timerPerResourceId = new ConcurrentHashMap<String, Timer>();
     private final Map<String, Integer> samplingTimePerResourceId = new ConcurrentHashMap<String, Integer>();
     
-    private static final int DEFAULT_SAMPLING_TIME = 5;
+    private static final int DEFAULT_SAMPLING_TIME = 60;
     
     protected MetricsType metricType;
     

@@ -64,6 +64,9 @@ menu:
                     java-app-dc:
                         text: Java App Data Collector
                         relativeUrl: docs/data-collectors/java-app-dc.html
+                    flexiant-dc:
+                        text: Flexiant Data Collector
+                        relativeUrl: docs/data-collectors/flexiant-dc.html
                     byodc:
                         text: Bring Your Own Data Collector
                         relativeUrl: docs/data-collectors/byodc.html
