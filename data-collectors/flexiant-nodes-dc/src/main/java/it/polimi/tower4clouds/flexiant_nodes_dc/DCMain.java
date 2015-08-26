@@ -39,7 +39,6 @@ public class DCMain {
     private static final String DEFAULT_MANAGER_IP = "localhost";
     private static final int DEFAULT_MANAGER_PORT = 8170;
     private static final String DEFAULT_CONFIG_FILE_LOCATION = "/etc/opt/flexiant-nodes-dc/config";
-    private static final String DEFAULT_RULES_FILE_LOCATION = "/etc/opt/flexiant-nodes-dc/rules.xml";
     
     private static final String ENV_VAR_MANAGER_IP = "MODACLOUDS_TOWER4CLOUDS_MANAGER_IP";
     private static final String ENV_VAR_MANAGER_PORT = "MODACLOUDS_TOWER4CLOUDS_MANAGER_PORT";
@@ -56,7 +55,6 @@ public class DCMain {
         String managerIP = DEFAULT_MANAGER_IP;
         int managerPort = DEFAULT_MANAGER_PORT;
         String urlFileProperties = DEFAULT_CONFIG_FILE_LOCATION;
-        String urlFileRules = DEFAULT_RULES_FILE_LOCATION;
         
         String graphiteIP = DEFAULT_GRAPHITE_IP;
         int graphitePort = DEFAULT_GRAPHITE_PORT;
@@ -81,11 +79,6 @@ public class DCMain {
             urlFileProperties = env.get(ENV_VAR_URL_CONFIG_FILE);
         }
         
-        //set url of the rules file
-        if(env.containsKey(ENV_VAR_URL_RULES_FILE)){
-            urlFileRules = env.get(ENV_VAR_URL_RULES_FILE);
-        }
-        
         //load properties from the config file
         try{
             flexDCProp.load(new FileInputStream(urlFileProperties));
@@ -99,42 +92,38 @@ public class DCMain {
             throw new RuntimeException("Error while parsing properties file");
         }
         
-        /* Commented code for debug only: manual set properties without configuration file
+        /* Commented code for debug use only: manual set properties without configuration file
         flexDCProp.put(DCProperty.URL_NODES_FILE1, "https://cp.sd1.flexiant.net/nodeid/Cluster1.csv");
         flexDCProp.put(DCProperty.URL_NODES_FILE2, "https://cp.sd1.flexiant.net/nodeid/Cluster2.csv");
         flexDCProp.put(DCProperty.URL_CPU_METRIC, "https://cp.sd1.flexiant.net/nodecpu10/");
-        flexDCProp.put(DCProperty.URL_RAM_METRIC, "https://cp.sd1.flexiant.net/noderam/");
-        flexDCProp.put(DCProperty.URL_NODELOAD_METRIC, "https://cp.sd1.flexiant.net/nodeload/");
-        flexDCProp.put(DCProperty.URL_TXNETWORK_METRIC, "https://cp.sd1.flexiant.net/nodenet/");
-        flexDCProp.put(DCProperty.URL_RXNETWORK_METRIC, "https://cp.sd1.flexiant.net/nodenet/");
-        flexDCProp.put(DCProperty.URL_STORAGE_METRIC, "https://cp.sd1.flexiant.net/storage/");
+        flexDCProp.put(DCProperty.URL_RAM_METRIC, "https://cp.sd1.flexiant.net/noderam10/");
+        flexDCProp.put(DCProperty.URL_NODELOAD_METRIC, "https://cp.sd1.flexiant.net/nodeload10/");
+        flexDCProp.put(DCProperty.URL_TXNETWORK_METRIC, "https://cp.sd1.flexiant.net/nodenet10/");
+        flexDCProp.put(DCProperty.URL_RXNETWORK_METRIC, "https://cp.sd1.flexiant.net/nodenet10/");
+        flexDCProp.put(DCProperty.URL_STORAGE_METRIC, "https://cp.sd1.flexiant.net/storage10/");
+        flexDCProp.put(DCProperty.URL_RACKLOAD_METRIC, "https://cp.sd1.flexiant.net/rackload10/upsload.csv");
         */
         
 	ManagerAPI manager = new ManagerAPI(managerIP, managerPort);
-        
-        manager.installRules(XMLHelper.deserialize(new FileInputStream(urlFileRules),
-			MonitoringRules.class));
-        
-        /* Commented code for debug only: use the rules.xml file inside the resources folder
+
+        /* Commented code for debug use only: use the rules.xml file inside the resources folder to install rules
 	manager.installRules(XMLHelper.deserialize(DCMain.class
 			.getResourceAsStream("/rules.xml"),
 			MonitoringRules.class));
         */
-                    
+        
+        /* Commented code for debug use only: create HTTP observer to monitor sent datas     
         manager.registerHttpObserver("CpuUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
         manager.registerHttpObserver("RamUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
         manager.registerHttpObserver("NodeLoad", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
         manager.registerHttpObserver("TXNetwork", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
         manager.registerHttpObserver("RXNetwork", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
         manager.registerHttpObserver("StorageMetric", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+        manager.registerHttpObserver("RackLoadMetric", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+        */
+        
         Registry.initialize(managerIP, managerPort, flexDCProp);
         Registry.startMonitoring();
-        
-        Thread.sleep(5 * 60 * 1000);
-        //Close the application after 5 minutes
-        Registry.stopMonitoring();
-        System.exit(0);
-        
     }
     
 }

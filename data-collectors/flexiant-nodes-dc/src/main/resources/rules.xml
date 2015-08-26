@@ -89,6 +89,21 @@
             </action>
         </actions>
     </monitoringRule>
+    <monitoringRule id="RackLoadRule" startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Rack" />
+        </monitoredTargets>
+        <collectedMetric metricName="RackLoad">
+            <parameter name="samplingTime">5</parameter>
+        </collectedMetric>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="resourceId">ID</parameter>
+                <parameter name="metric">RackLoadMetric</parameter>
+                <parameter name="value">METRIC</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
 </monitoringRules>
 
 

@@ -19,6 +19,7 @@ import it.polimi.tower4clouds.data_collector_library.DCAgent;
 import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.CPUUtilization;
 import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.NodeLoadMetric;
 import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.RXNetworkMetric;
+import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.RackLoad;
 import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.RamUsage;
 import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.StorageCluster;
 import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.TXNetworkMetric;
@@ -26,6 +27,7 @@ import it.polimi.tower4clouds.manager.api.ManagerAPI;
 import it.polimi.tower4clouds.model.data_collectors.DCDescriptor;
 import it.polimi.tower4clouds.model.ontology.Cluster;
 import it.polimi.tower4clouds.model.ontology.Node;
+import it.polimi.tower4clouds.model.ontology.Rack;
 import it.polimi.tower4clouds.model.ontology.Resource;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -50,9 +52,11 @@ public class Registry implements Observer{
     
     private Map<String, Node> nodesById;
     private Map<String, Cluster> clustersById;
+    private Map<String, Rack> racksById;
     
     private Set<Metric> nodeMetrics;
     private Set<Metric> clusterMetrics;
+    private Set<Metric> rackMetrics;
     
     private DCAgent dcAgent;
     
@@ -82,6 +86,10 @@ public class Registry implements Observer{
         clustersById = buildClustersById();
         clusterMetrics = buildClusterMetrics();
         
+        //Building of clusters and metrics clusters
+        racksById = buildRacksById();
+        rackMetrics = buildRackMetrics();
+        
         //Building of the DCAgent
         dcAgent = new DCAgent(new ManagerAPI(managerIP, managerPort));
         dcAgent.addObserver(this);
@@ -98,12 +106,20 @@ public class Registry implements Observer{
             dcAgent.addObserver(metric);
         }
         
+        //Adding observers of rack metrics to the DCAgent
+        for (Metric metric : rackMetrics) {
+            logger.debug("Added metric {} as observer of dcagent", metric.getName());
+            dcAgent.addObserver(metric);
+        }
+        
         //Building of the DCDescriptor
         DCDescriptor dcDescriptor = new DCDescriptor();
         dcDescriptor.addMonitoredResources(getNodeMetrics(), getNodes());
         dcDescriptor.addResources(getNodes());
         dcDescriptor.addMonitoredResources(getClusterMetrics(), getClusters());
         dcDescriptor.addResources(getClusters());
+        dcDescriptor.addMonitoredResources(getRackMetrics(), getRacks());
+        dcDescriptor.addResources(getRacks());
         dcDescriptor.setConfigSyncPeriod(CONFIG_SYNC_PERIOD != null ? CONFIG_SYNC_PERIOD
 					: DEFAULT_CONFIG_SYNC_PERIOD);
 	dcDescriptor.setKeepAlive(KEEP_ALIVE != null ? KEEP_ALIVE
@@ -153,6 +169,21 @@ public class Registry implements Observer{
         
         map.put("Cluster1", new Cluster("BigCluster", "Cluster1"));
         map.put("Cluster2", new Cluster("BigCluster", "Cluster2"));
+        
+        return map;
+    }
+    
+    //Building of the cluster
+    private Map<String, Rack> buildRacksById(){
+        Map<String, Rack> map = new HashMap<String, Rack>();
+        
+        CsvFileParser fileParser = new CsvFileParser(dcProperties.getProperty(DCProperty.URL_RACKLOAD_METRIC),null);
+        fileParser.readLastUpdate(0);
+        List<String> racks = fileParser.getData(1);
+        
+        for(String rack:racks){
+            map.put(rack, new Rack("BigRack", rack));
+        }
         
         return map;
     }
@@ -231,12 +262,37 @@ public class Registry implements Observer{
         return metrics;
     }
     
+    private Set<String> getRackMetrics() {
+        
+        Set<String> metricsNames = new HashSet<String>();
+	for (Metric metric : rackMetrics) {
+            metricsNames.add(metric.getName());
+	}
+        
+        return metricsNames;
+    }
+    
+    private Set<Metric> buildRackMetrics() {
+	Set<Metric> metrics = new HashSet<Metric>();
+        
+        //add RackLoad metric
+        Metric rackLoadMetric = new RackLoad();
+        rackLoadMetric.setUrlFileLocation((String)dcProperties.get(DCProperty.URL_RACKLOAD_METRIC));
+        metrics.add(rackLoadMetric);
+        
+        return metrics;
+    }
+    
     Set<Resource> getNodes() {
         return new HashSet<Resource>(nodesById.values());
     }
     
     Set<Resource> getClusters() {
         return new HashSet<Resource>(clustersById.values());
+    }
+    
+    Set<Resource> getRacks() {
+        return new HashSet<Resource>(racksById.values());
     }
 
     @Override

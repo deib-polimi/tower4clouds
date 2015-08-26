@@ -74,6 +74,9 @@ public abstract class Metric implements Observer {
             case CLUSTER_METRIC:
                 resources = Registry._INSTANCE.getClusters();
                 break;
+            case RACK_METRIC:
+                resources = Registry._INSTANCE.getRacks();
+                break;
             default:
                 resources = Registry._INSTANCE.getNodes();
         }
