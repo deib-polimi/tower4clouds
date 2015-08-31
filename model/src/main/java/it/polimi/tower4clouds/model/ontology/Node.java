@@ -15,7 +15,12 @@
  */
 package it.polimi.tower4clouds.model.ontology;
 
+import java.util.Set;
+
 public class Node extends Resource{
+    
+    //set that contains all id of vms inside the node
+    private Set<String> vms;
     
     public Node(String type, String id) {
         super(type, id);
@@ -28,6 +33,22 @@ public class Node extends Resource{
     public String toString() {
         return "Method [clazz=" + getClazz() + ", type=" + getType() + ", id="
                 + getId() + "]";
+    }
+    
+    //add Virtual Machines to the node
+    public void addVms(Set<String> vms){
+        if(this.vms == null)
+            setVms(vms);
+        else
+            this.vms.addAll(vms);
+    }
+
+    public Set<String> getVms() {
+        return vms;
+    }
+
+    public void setVms(Set<String> vms) {
+        this.vms = vms;
     }
     
 }

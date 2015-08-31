@@ -46,6 +46,7 @@ URL_TXNETWORK_METRIC=https://cp.sd1.flexiant.net/nodenet10/
 URL_RXNETWORK_METRIC=https://cp.sd1.flexiant.net/nodenet10/
 URL_STORAGE_METRIC=https://cp.sd1.flexiant.net/storage10/
 URL_RACKLOAD_METRIC=https://cp.sd1.flexiant.net/rackload10/upsload.csv
+URL_VMS=https://cp.sd1.flexiant.net/VMPlacement/FCOVMPlacement.csv
 ```
 
 The first two properties specify URLs of two files which contain the target nodes.<br/>

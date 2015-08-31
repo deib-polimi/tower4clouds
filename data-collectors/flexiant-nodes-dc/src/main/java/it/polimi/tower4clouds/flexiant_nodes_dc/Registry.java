@@ -77,10 +77,13 @@ public class Registry implements Observer{
             throw new RuntimeException("Registry was already initialized");
         
         this.dcProperties = dcProperties;
-        
+                
         //Building of nodes and metrics nodes
         nodesById = buildNodesById();
         nodeMetrics = buildNodeMetrics();
+        
+        //add VMs to nodes
+        retrieveVmsFromFile();       
         
         //Building of clusters and metrics clusters
         clustersById = buildClustersById();
@@ -198,6 +201,37 @@ public class Registry implements Observer{
             logger.info("Node added: "+nodeId);
             map.put(nodeId, new Node(type, nodeId));
         }
+    }
+    
+    private void retrieveVmsFromFile(){
+        
+        Map<String, Set<String>> vmsByNodeId;
+        
+        //Initialize map of vms
+        vmsByNodeId = new HashMap<String, Set<String>>();
+        for(String nodeId:nodesById.keySet()){
+            vmsByNodeId.put(nodeId, new HashSet<String>());
+        }
+        
+        //retrieve vms from remote file
+        CsvFileParser fileParser = new CsvFileParser(dcProperties.getProperty(DCProperty.URL_VMS), "Date,Server UUID,Server IP,Number of CPUs,RAM,Custer,Node UUID,Node IP,Server status,All key data,");
+        fileParser.readLastUpdate(0);
+        List<String> nodesId = fileParser.getData(7);
+        List<String> vmsId = fileParser.getData(2);
+        
+        for(int i = 0; i < vmsId.size(); i++){
+            String vmId = vmsId.get(i).replaceAll("\\.", "_");
+            String nodeId = nodesId.get(i).replaceAll("\\.", "_");
+            vmsByNodeId.get(nodeId).add(vmId);
+            logger.info("Added VM: "+vmId+" to node: "+nodeId);
+        }
+        
+        //add vms to the nodes
+        for(Node node:nodesById.values()){
+            node.addVms(vmsByNodeId.get(node.getId()));
+        }
+        
+        
     }
     
     private Set<String> getNodeMetrics() {

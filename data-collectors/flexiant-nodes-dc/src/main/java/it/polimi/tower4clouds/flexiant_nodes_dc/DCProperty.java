@@ -32,5 +32,6 @@ public final class DCProperty {
     public static final String URL_RXNETWORK_METRIC = "URL_RXNETWORK_METRIC";
     public static final String URL_STORAGE_METRIC = "URL_STORAGE_METRIC";
     public static final String URL_RACKLOAD_METRIC = "URL_RACKLOAD_METRIC";
+    public static final String URL_VMS = "URL_VMS";
     
 }

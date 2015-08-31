@@ -43,7 +43,6 @@ public class DCMain {
     private static final String ENV_VAR_MANAGER_IP = "MODACLOUDS_TOWER4CLOUDS_MANAGER_IP";
     private static final String ENV_VAR_MANAGER_PORT = "MODACLOUDS_TOWER4CLOUDS_MANAGER_PORT";
     private static final String ENV_VAR_URL_CONFIG_FILE = "MODACLOUDS_TOWER4CLOUDS_FLEXDC_CONFIG_FILE";
-    private static final String ENV_VAR_URL_RULES_FILE = "MODACLOUDS_TOWER4CLOUDS_FLEXDC_RULES_FILE";
     
     public static void main(String[] args) throws Exception {
         
@@ -102,6 +101,7 @@ public class DCMain {
         flexDCProp.put(DCProperty.URL_RXNETWORK_METRIC, "https://cp.sd1.flexiant.net/nodenet10/");
         flexDCProp.put(DCProperty.URL_STORAGE_METRIC, "https://cp.sd1.flexiant.net/storage10/");
         flexDCProp.put(DCProperty.URL_RACKLOAD_METRIC, "https://cp.sd1.flexiant.net/rackload10/upsload.csv");
+        flexDCProp.put(DCProperty.URL_VMS, "https://cp.sd1.flexiant.net/VMPlacement/FCOVMPlacement.csv");
         */
         
 	ManagerAPI manager = new ManagerAPI(managerIP, managerPort);
