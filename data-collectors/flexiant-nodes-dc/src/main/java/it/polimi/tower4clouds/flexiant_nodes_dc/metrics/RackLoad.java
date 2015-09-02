@@ -40,7 +40,7 @@ public class RackLoad extends Metric{
     }
 
     @Override
-    protected Number getSample(CsvFileParser fileParser, Resource resource) {
+    public Number getSample(CsvFileParser fileParser, Resource resource) {
         return retrieveSample(fileParser, getUrl(resource), resource);
     }
     

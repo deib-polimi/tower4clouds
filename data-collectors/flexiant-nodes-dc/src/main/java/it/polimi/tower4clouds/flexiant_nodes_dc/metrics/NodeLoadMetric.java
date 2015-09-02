@@ -32,7 +32,7 @@ public class NodeLoadMetric extends Metric{
     }
 
     @Override
-    protected Number getSample(CsvFileParser fileParser, Resource resource) {
+    public Number getSample(CsvFileParser fileParser, Resource resource) {
         fileParser.setFileUrl(getUrl(resource));
         fileParser.readLastUpdate(2);
         double sample;

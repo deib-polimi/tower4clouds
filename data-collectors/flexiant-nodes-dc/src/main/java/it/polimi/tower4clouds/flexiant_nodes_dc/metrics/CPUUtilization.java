@@ -38,7 +38,7 @@ public class CPUUtilization extends Metric{
     }
     
     @Override
-    protected Number getSample(CsvFileParser fileParser, Resource resource) {
+    public Number getSample(CsvFileParser fileParser, Resource resource) {
         
         fileParser.setFileUrl(getUrl(resource));
         if(!fileParser.readLastUpdate(0)){

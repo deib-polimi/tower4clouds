@@ -160,7 +160,7 @@ public abstract class Metric implements Observer {
         return url;
     }
     
-    protected abstract Number getSample(CsvFileParser fileParser, Resource resource);
+    public abstract Number getSample(CsvFileParser fileParser, Resource resource);
     
     protected Map<String, String> getParameters(Resource resource) {
         if (this.dcAgent != null)
