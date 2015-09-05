@@ -37,8 +37,7 @@ Below you find the structure of the file with actual working url:
 
 ```
 #Flexiant DC Properties
-URL_NODES_FILE1=https://cp.sd1.flexiant.net/nodeid/Cluster1.csv
-URL_NODES_FILE2=https://cp.sd1.flexiant.net/nodeid/Cluster2.csv
+URL_NODES=https://cp.sd1.flexiant.net/nodeid/
 URL_CPU_METRIC=https://cp.sd1.flexiant.net/nodecpu10/
 URL_RAM_METRIC=https://cp.sd1.flexiant.net/noderam10/
 URL_NODELOAD_METRIC=https://cp.sd1.flexiant.net/nodeload10/
@@ -49,7 +48,7 @@ URL_RACKLOAD_METRIC=https://cp.sd1.flexiant.net/rackload10/upsload.csv
 URL_VMS=https://cp.sd1.flexiant.net/VMPlacement/FCOVMPlacement.csv
 ```
 
-The first two properties specify URLs of two files which contain the target nodes.<br/>
+The first property specify URL where the DC can find files which contain nodes of every cluster.<br/>
 The other properties specify URL of files which contain metrics' samples.
 
 ###XML rules structure

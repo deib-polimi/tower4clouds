@@ -92,8 +92,7 @@ public class DCMain {
         }
         
         /* Commented code for debug use only: manual set properties without configuration file
-        flexDCProp.put(DCProperty.URL_NODES_FILE1, "https://cp.sd1.flexiant.net/nodeid/Cluster1.csv");
-        flexDCProp.put(DCProperty.URL_NODES_FILE2, "https://cp.sd1.flexiant.net/nodeid/Cluster2.csv");
+        flexDCProp.put(DCProperty.URL_NODES, "https://cp.sd1.flexiant.net/nodeid/");
         flexDCProp.put(DCProperty.URL_CPU_METRIC, "https://cp.sd1.flexiant.net/nodecpu10/");
         flexDCProp.put(DCProperty.URL_RAM_METRIC, "https://cp.sd1.flexiant.net/noderam10/");
         flexDCProp.put(DCProperty.URL_NODELOAD_METRIC, "https://cp.sd1.flexiant.net/nodeload10/");
@@ -121,6 +120,7 @@ public class DCMain {
         manager.registerHttpObserver("StorageMetric", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
         manager.registerHttpObserver("RackLoadMetric", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
         */
+        
         
         Registry.initialize(managerIP, managerPort, flexDCProp);
         Registry.startMonitoring();

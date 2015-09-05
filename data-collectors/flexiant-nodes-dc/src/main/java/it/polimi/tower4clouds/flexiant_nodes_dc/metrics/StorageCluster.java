@@ -35,9 +35,10 @@ public class StorageCluster extends Metric{
     public Number getSample(CsvFileParser fileParser, Resource resource) {
         fileParser.setFileUrl(getUrl(resource));
         fileParser.readLastUpdate(0);
-        long sample;
-        List<String> values = fileParser.getData(1);
-        sample = Long.parseLong(values.get(0));
+        double sample;
+        List<String> usedStorage = fileParser.getData(1);
+        List<String> availableStorage = fileParser.getData(2);
+        sample = (Double.parseDouble(usedStorage.get(0))/Double.parseDouble(availableStorage.get(0)))*100.0;
         return sample;
         
     }

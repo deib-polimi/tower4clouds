@@ -42,8 +42,8 @@ public class FlexiantDCTest {
     private static final double EXPECTED_NODE_LOAD_SAMPLE = 1.620;
     private static final double EXPECTED_RX_NET_SAMPLE = 2.68;
     private static final double EXPECTED_TX_NET_SAMPLE = 4.39;
-    private static final int EXPECTED_RAM_SAMPLE = 100319;
-    private static final long EXPECTED_STORAGE_SAMPLE = 226944303104L;
+    private static final double EXPECTED_RAM_SAMPLE = 1.0;
+    private static final double EXPECTED_STORAGE_SAMPLE = 1.0;
     private static final int EXPECTED_RACK_LOAD_SAMPLE = 8;
     
     @Test
@@ -110,7 +110,7 @@ public class FlexiantDCTest {
         Resource testNode = new Node("type1", "testIdNodeRAM");
         CsvFileParser fileParser = new CsvFileParser(TEST_URL , null);
         
-        int sample = (int)metric.getSample(fileParser, testNode);
+        double sample = (double)metric.getSample(fileParser, testNode);
         
         Assert.assertTrue(sample == EXPECTED_RAM_SAMPLE);
         
@@ -124,7 +124,7 @@ public class FlexiantDCTest {
         Resource testCluster = new Node("type1", "testCluster");
         CsvFileParser fileParser = new CsvFileParser(TEST_URL , null);
         
-        long sample = (long)metric.getSample(fileParser, testCluster);
+        double sample = (double)metric.getSample(fileParser, testCluster);
 
         Assert.assertTrue(sample == EXPECTED_STORAGE_SAMPLE);
         

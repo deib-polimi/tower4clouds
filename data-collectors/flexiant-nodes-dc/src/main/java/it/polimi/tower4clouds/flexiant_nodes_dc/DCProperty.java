@@ -23,8 +23,7 @@ package it.polimi.tower4clouds.flexiant_nodes_dc;
  */
 public final class DCProperty {
     
-    public static final String URL_NODES_FILE1 = "URL_NODES_FILE1";
-    public static final String URL_NODES_FILE2 = "URL_NODES_FILE2";
+    public static final String URL_NODES = "URL_NODES";
     public static final String URL_CPU_METRIC = "URL_CPU_METRIC";
     public static final String URL_RAM_METRIC = "URL_RAM_METRIC";
     public static final String URL_NODELOAD_METRIC = "URL_NODELOAD_METRIC";

@@ -41,9 +41,10 @@ public class RamUsage extends Metric{
     public Number getSample(CsvFileParser fileParser, Resource resource) {
         fileParser.setFileUrl(getUrl(resource));
         fileParser.readLastUpdate(0);
-        int sample;
-        List<String> values = fileParser.getData(1);
-        sample = Integer.parseInt(values.get(0));
+        double sample;
+        List<String> usedRam = fileParser.getData(1);
+        List<String> totalRam = fileParser.getData(2);
+        sample = (Double.parseDouble(usedRam.get(0))/Double.parseDouble(totalRam.get(0)))*100.0;
         return sample;
     }
     

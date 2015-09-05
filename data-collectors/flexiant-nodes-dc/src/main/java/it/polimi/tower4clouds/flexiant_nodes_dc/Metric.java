@@ -152,11 +152,7 @@ public abstract class Metric implements Observer {
     protected String getUrl(Resource resource){
         String url;
         String nodeIp = resource.getId().replaceAll("_", "\\.");
-        url = getUrlFileLocation();
-        if(resource.getType().equals("cluster2"))
-            url += resource.getType()+"-"+nodeIp+".csv";
-        else
-            url += nodeIp+".csv";
+        url = getUrlFileLocation() + nodeIp + ".csv";
         return url;
     }
     
