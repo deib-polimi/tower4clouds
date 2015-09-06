@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author davide
  */
-public class Registry implements Observer{
+public class Registry {
     
     private static final Logger logger = LoggerFactory.getLogger(Registry.class);
     
@@ -71,7 +71,7 @@ public class Registry implements Observer{
         
     protected Registry(){}
     
-    public synchronized void init(String managerIP, int managerPort, Properties dcProperties){
+    public void init(String managerIP, int managerPort, Properties dcProperties){
         
         if (registryInitialized)
             throw new RuntimeException("Registry was already initialized");
@@ -97,7 +97,6 @@ public class Registry implements Observer{
         
         //Build the DCAgent
         dcAgent = new DCAgent(new ManagerAPI(managerIP, managerPort));
-        dcAgent.addObserver(this);
         
         //Add observers of nodes metrics to the DCAgent
         for (Metric metric : nodeMetrics) {
@@ -135,7 +134,7 @@ public class Registry implements Observer{
         
     }
     
-    private synchronized void start() {
+    private void start() {
         if (!registryInitialized)
             throw new RuntimeException("Registry was not initialized");
         if (!monitoringStarted) {
@@ -148,7 +147,7 @@ public class Registry implements Observer{
         }
     }
 
-    private synchronized void stop() {
+    private void stop() {
         if (monitoringStarted) {
             logger.info("Stopping monitoring");
             dcAgent.stop();
@@ -330,11 +329,6 @@ public class Registry implements Observer{
     
     Set<Resource> getRacks() {
         return new HashSet<Resource>(racksById.values());
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        //Nothing to do
     }
     
     public static void initialize(String managerIP, int managerPort, Properties dcProperties){

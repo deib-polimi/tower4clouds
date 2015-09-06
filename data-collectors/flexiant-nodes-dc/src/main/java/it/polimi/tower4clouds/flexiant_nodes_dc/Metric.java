@@ -64,7 +64,8 @@ public abstract class Metric implements Observer {
         }
         return dcAgent.shouldMonitor(resource, getName());
     }
-
+    
+    @Override
     public void update(Observable o, Object arg) {
         this.dcAgent = (DCAgent) o;
         Set<Resource> resources;
@@ -120,8 +121,8 @@ public abstract class Metric implements Observer {
       
     //Abstract method which create a task (one for each node) that will acquire and 
     //send the sample periodically.
-    private void createTask(Timer timer, Resource node, int samplingTime){
-        timer.scheduleAtFixedRate(new MetricSender(node), 
+    private void createTask(Timer timer, Resource resource, int samplingTime){
+        timer.scheduleAtFixedRate(new MetricSender(resource), 
                         0, samplingTime * 1000);
     }
     
