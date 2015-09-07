@@ -1,4 +1,9 @@
-[Documentation table of contents](../../toc.md) / [API Reference](../../api.md) / DELETE-model
+---
+currentMenu: historydb-api-delete-resources
+parentMenu: historydb-api
+parent2Menu: historydb
+parent3Menu: observers
+---
 
 # Models
 

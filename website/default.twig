@@ -58,7 +58,7 @@
                         {{ item.text|raw }}
                     </a>
                 </li>
-                {% if itemId == currentMenu or itemId == parentMenu %}
+                {% if itemId == currentMenu or itemId == parentMenu or itemId == parent2Menu or itemId == parent3Menu %}
                 <ul class="submenu nav nav-stacked nav-pills">
                     {% for item2Id, item2 in item.submenu.items %}
                     <li class="{{ item2Id == currentMenu ? 'active' }}">
@@ -66,6 +66,32 @@
                             {{ item2.text|raw }}
                         </a>
                     </li>
+
+                    {% if item2Id == currentMenu or item2Id == parentMenu or item2Id == parent2Menu or item2Id == parent3Menu %}
+                    <ul class="submenu nav nav-stacked nav-pills">
+                        {% for item3Id, item3 in item2.submenu.items %}
+                        <li class="{{ item3Id == currentMenu ? 'active' }}">
+                            <a href="{{ item3.absoluteUrl|default(baseUrl ~ '/' ~ item3.relativeUrl) }}">
+                                {{ item3.text|raw }}
+                            </a>
+                        </li>
+
+                        {% if item3Id == currentMenu or item3Id == parentMenu or item3Id == parent2Menu or item3Id == parent3Menu %}
+                        <ul class="submenu nav nav-stacked nav-pills">
+                            {% for item4Id, item4 in item3.submenu.items %}
+                            <li class="{{ item4Id == currentMenu ? 'active' }}">
+                                <a href="{{ item4.absoluteUrl|default(baseUrl ~ '/' ~ item4.relativeUrl) }}">
+                                    {{ item4.text|raw }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+
                     {% endfor %}
                 </ul>
                 {% endif %}

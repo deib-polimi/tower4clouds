@@ -1,4 +1,9 @@
-[Documentation table of contents](../../toc.md) / [API Reference](../../api.md) / POST-model
+---
+currentMenu: historydb-api-post-resources
+parentMenu: historydb-api
+parent2Menu: historydb
+parent3Menu: observers
+---
 
 # Models
 

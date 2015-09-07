@@ -1,8 +1,13 @@
-[Documentation table of contents](../toc.md) / [DataStore Reference](../datastore.md) / update-model
+---
+currentMenu: historydb-datastore-put-resources
+parentMenu: historydb-datastore
+parent2Menu: historydb
+parent3Menu: observers
+---
 
 # Update Model
 
-When updating a model in the system (using the REST API [POST-model](../rest/model/POST-model.md)), a number of triples are inserted in the datastore.
+When updating a model in the system (using the REST API [POST-model](../api/POST-model.md)), a number of triples are inserted in the datastore.
 
 Let's assume that the sub-component that has to save the model in the datastore received it in a certain time (e.g. with a timestamp `1425399022110`, corresponding to the date *Tue, 03 Mar 2015 17:10:22 GMT+1:00*).
 

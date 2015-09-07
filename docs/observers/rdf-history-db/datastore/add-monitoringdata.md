@@ -1,8 +1,13 @@
-[Documentation table of contents](../toc.md) / [DataStore Reference](../datastore.md) / add-monitoringdata
+---
+currentMenu: historydb-datastore-post-monitoring-data
+parentMenu: historydb-datastore
+parent2Menu: historydb
+parent3Menu: observers
+---
 
 # Add Monitoring Data
 
-When adding a new monitoring datum to the system (using the REST API [POST-monitoring-data](../rest/monitoring-data/POST-monitoring-data.md)), a number of triples are inserted in the datastore.
+When adding a new monitoring datum to the system (using the REST API [POST-monitoring-data](../api/POST-monitoring-data.md)), a number of triples are inserted in the datastore.
 
 Let's assume that the element exposes:
 

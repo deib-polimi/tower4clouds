@@ -1,4 +1,9 @@
-[Documentation table of contents](../../toc.md) / [API Reference](../../api.md) / POST-monitoring-data
+---
+currentMenu: historydb-api-post-monitoring-data
+parentMenu: historydb-api
+parent2Menu: historydb
+parent3Menu: observers
+---
 
 # Results
 
