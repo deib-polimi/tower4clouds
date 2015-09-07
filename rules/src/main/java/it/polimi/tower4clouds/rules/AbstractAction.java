@@ -35,6 +35,7 @@ public abstract class AbstractAction {
 			.getLogger(AbstractAction.class);
 	private Map<String, String> parameters;
 	private String ruleId;
+	private int mmPort;
 
 	protected Logger getLogger() {
 		return LoggerFactory.getLogger(this.getClass().getName());
@@ -167,6 +168,14 @@ public abstract class AbstractAction {
 	
 	public String getRuleId() {
 		return ruleId;
+	}
+	
+	public void setMmPort(int mmPort) {
+		this.mmPort = mmPort;
+	}
+	
+	public int getMmPort() {
+		return mmPort;
 	}
 
 }
