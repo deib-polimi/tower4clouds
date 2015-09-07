@@ -91,7 +91,12 @@ public class DCMain {
             throw new RuntimeException("Error while parsing properties file");
         }
         
-        /* Commented code for debug use only: manual set properties without configuration file
+        //check if there is relations file path in the arguments
+        if(args.length == 2 && args[0].equals("--relations-file")){
+            flexDCProp.put(DCProperty.RELATIONS_FILE_PATH, args[1]);
+        }
+        
+        /* Commented code for debug use only: manual set properties without configuration file 
         flexDCProp.put(DCProperty.URL_NODES, "https://cp.sd1.flexiant.net/nodeid/");
         flexDCProp.put(DCProperty.URL_CPU_METRIC, "https://cp.sd1.flexiant.net/nodecpu10/");
         flexDCProp.put(DCProperty.URL_RAM_METRIC, "https://cp.sd1.flexiant.net/noderam10/");
@@ -108,6 +113,10 @@ public class DCMain {
         /* Commented code for debug use only: use the rules.xml file inside the resources folder to install rules
 	manager.installRules(XMLHelper.deserialize(DCMain.class
 			.getResourceAsStream("/rules.xml"),
+			MonitoringRules.class));
+        
+        manager.installRules(XMLHelper.deserialize(DCMain.class
+			.getResourceAsStream("/rulesGroupByCluster.xml"),
 			MonitoringRules.class));
         */
         

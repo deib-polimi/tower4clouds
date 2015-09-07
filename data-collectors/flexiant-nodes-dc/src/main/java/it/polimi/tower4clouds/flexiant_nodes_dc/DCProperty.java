@@ -33,4 +33,5 @@ public final class DCProperty {
     public static final String URL_RACKLOAD_METRIC = "URL_RACKLOAD_METRIC";
     public static final String URL_VMS = "URL_VMS";
     
+    public static final String RELATIONS_FILE_PATH = "RELATIONS_FILE_PATH";
 }

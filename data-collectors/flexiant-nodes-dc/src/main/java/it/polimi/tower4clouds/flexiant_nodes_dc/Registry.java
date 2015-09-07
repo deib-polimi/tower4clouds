@@ -175,7 +175,12 @@ public class Registry {
         Map<String, Rack> map = new HashMap<String, Rack>();
         
         //retrieve nodes of every rack
-        CsvFileParser nodesFileParser = new CsvFileParser("file://"+Registry.class.getResource("/").getPath()+"RackNodes.csv", "Rack,Node,Cluster");
+        String urlRelationsFile = "file://"+Registry.class.getResource("/").getPath()+"RackNodes.csv";
+        if(dcProperties.containsKey(DCProperty.RELATIONS_FILE_PATH)){
+            urlRelationsFile = "file://"+dcProperties.getProperty(DCProperty.RELATIONS_FILE_PATH);
+        }
+
+        CsvFileParser nodesFileParser = new CsvFileParser(urlRelationsFile, "Rack,Node,Cluster");
         nodesFileParser.readUntilTerminationString();
         
         CsvFileParser fileParser = new CsvFileParser(dcProperties.getProperty(DCProperty.URL_RACKLOAD_METRIC),null);

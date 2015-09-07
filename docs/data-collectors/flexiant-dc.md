@@ -17,6 +17,14 @@ parentMenu: data-collectors
 |StorageCluster|Cluster|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the used storage of every cluster. Unlike nodes, clusters are not retrived from a remote file, they are fixed in the source code of DC (there are Cluster1 and Cluster2). <br/> The samples are collected in the same way of CPUUtilization metric.|
 |RackLoad|Rack|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the measured energy load of every rack. To retrieve racks ids the DC parse the same remote file that contains values of the metric. <br/> The samples are collected in the same way of CPUUtilization metric.|
 
+##Resources Identification
+Every resource in the DC has an id in order to identificate it, the following table shows how the id is determined and the related resources of any kind of resrouce.
+
+|Resource type|ID|Related resources|
+|-----------|---------------|--------------------------|
+|Node|IP of the node where dots are replaced with the underscores (For example 127.0.0.1 becomes 127_0_0_1)|A node has a set of its related VMs. The id of a VM is its IP (like the node dots are replaced with underscores) |
+|Cluster|The id is the word "Cluster" followed by the id number (For example: Cluster1, Custer2...)|A cluster has a set of its related Nodes which ids structure is specficied above.|
+|Rack|The id is name of the rack found in the rack load metric's file.|A rack has a set of its related Nodes which ids structure is specficied above.|
 
 ## Usage
 Flexiant DC is executable but you first have set a few environment variables and create a properties file (specified below) in order to configure the DC.
@@ -50,6 +58,24 @@ URL_VMS=https://cp.sd1.flexiant.net/VMPlacement/FCOVMPlacement.csv
 
 The first property specify URL where the DC can find files which contain nodes of every cluster.<br/>
 The other properties specify URL of files which contain metrics' samples.
+
+###Rack/node relations file
+If you want you can specify the relationships between racks and nodes you can create a .CSV file which contains that information.
+Below there is an example of the structure of the file:
+
+```
+Rack,Node,Cluster
+A5,10.158.128.15,Cluster2
+A5,10.157.128.31,Cluster1
+A5,10.158.128.11,Cluster2
+A5,10.158.128.16,Cluster2
+```
+When you run the DC you have to specficy the path of this file as an arguments like the example below:
+
+```
+java -jar DC.jar --relations-file pathofthefile
+```
+
 
 ###XML rules structure
 In order to monitor metrics the remote Manager should has a rule (in its configuration) for every metric you want to collect.<br/>
