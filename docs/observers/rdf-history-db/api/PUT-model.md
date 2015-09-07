@@ -1,15 +1,12 @@
 ---
-currentMenu: historydb-api-put-resources
-parentMenu: historydb-api
-parent2Menu: historydb
-parent3Menu: observers
+currentMenu: historydb-api
+parentMenu: historydb
+parent2Menu: observers
 ---
 
-# Models
+[&#9664; Back to API list](.)
 
-```
-PUT /resources
-```
+# `PUT` /resources
 
 ## Description
 

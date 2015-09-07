@@ -25,4 +25,4 @@ The REST endpoing is accessible at the [configured][Configuration] manager port 
 
 [To be completed]
 
-[Configuration]: ../configuration.html
+[Configuration]: ../configuration.md

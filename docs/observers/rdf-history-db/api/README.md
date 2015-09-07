@@ -10,13 +10,13 @@ parent2Menu: observers
 
 ### Monitoring Data
 
-- **[<code>POST</code> /monitoringdata](POST-monitoring-data.md)**
+- **[`POST` /monitoringdata](POST-monitoring-data.md)**
 
 ### Model
 
-- **[<code>POST</code> /resources](POST-model.md)**
-- **[<code>PUT</code> /resources](PUT-model.md)**
-- **[<code>DELETE</code> /resources/:id](DELETE-model.md)**
+- **[`POST` /resources](POST-model.md)**
+- **[`PUT` /resources](PUT-model.md)**
+- **[`DELETE` /resources/:id](DELETE-model.md)**
 
 ## Java API
 

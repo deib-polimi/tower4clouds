@@ -1,15 +1,12 @@
 ---
-currentMenu: historydb-api-post-resources
-parentMenu: historydb-api
-parent2Menu: historydb
-parent3Menu: observers
+currentMenu: historydb-api
+parentMenu: historydb
+parent2Menu: observers
 ---
 
-# Models
+[&#9664; Back to API list](.)
 
-```
-POST /resources
-```
+# `POST` /resources
 
 ## Description
 

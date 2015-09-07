@@ -41,6 +41,7 @@ First official release of the new Tower 4Clouds platform.
 
 [keep-a-changelog]: https://github.com/olivierlacan/keep-a-changelog
 [unreleased]: https://github.com/deib-polimi/tower4clouds/compare/v0.2.3...develop
+[0.3]: https://github.com/deib-polimi/tower4clouds/compare/v0.2.3...v0.3
 [0.2.3]: https://github.com/deib-polimi/tower4clouds/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/deib-polimi/tower4clouds/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/deib-polimi/tower4clouds/compare/v0.2...v0.2.1

@@ -1,15 +1,12 @@
 ---
-currentMenu: historydb-api-post-monitoring-data
-parentMenu: historydb-api
-parent2Menu: historydb
-parent3Menu: observers
+currentMenu: historydb-api
+parentMenu: historydb
+parent2Menu: observers
 ---
 
-# Results
+[&#9664; Back to API list](.)
 
-```
-POST /monitoringdata
-```
+# `POST` /monitoringdata
 
 ## Description
 

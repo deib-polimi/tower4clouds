@@ -1,9 +1,10 @@
 ---
-currentMenu: historydb-datastore-post-monitoring-data
-parentMenu: historydb-datastore
-parent2Menu: historydb
-parent3Menu: observers
+currentMenu: historydb-datastore
+parentMenu: historydb
+parent2Menu: observers
 ---
+
+[&#9664; Back to list](.)
 
 # Add Monitoring Data
 

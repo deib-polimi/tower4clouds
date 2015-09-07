@@ -130,37 +130,9 @@ menu:
                                 historydb-api:
                                     text: API Reference
                                     relativeUrl: docs/observers/rdf-history-db/api/
-                                    submenu:
-                                        items:
-                                            historydb-api-post-monitoring-data:
-                                                text: POST /monitoringdata
-                                                relativeUrl: docs/observers/rdf-history-db/api/POST-monitoring-data.html
-                                            historydb-api-post-resources:
-                                                text: POST /resources
-                                                relativeUrl: docs/observers/rdf-history-db/api/POST-model.html
-                                            historydb-api-put-resources:
-                                                text: PUT /resources
-                                                relativeUrl: docs/observers/rdf-history-db/api/PUT-model.html
-                                            historydb-api-delete-resources:
-                                                text: DELETE /resources/:id
-                                                relativeUrl: docs/observers/rdf-history-db/api/DELETE-model.html
                                 historydb-datastore:
                                     text: DataStore Reference
                                     relativeUrl: docs/observers/rdf-history-db/datastore/
-                                    submenu:
-                                        items:
-                                            historydb-datastore-post-monitoring-data:
-                                                text: POST /monitoringdata
-                                                relativeUrl: docs/observers/rdf-history-db/datastore/add-monitoring-data.html
-                                            historydb-datastore-post-resources:
-                                                text: POST /resources
-                                                relativeUrl: docs/observers/rdf-history-db/datastore/add-model.html
-                                            historydb-datastore-put-resources:
-                                                text: PUT /resources
-                                                relativeUrl: docs/observers/rdf-history-db/datastore/update-model.html
-                                            historydb-datastore-delete-resources:
-                                                text: DELETE /resources
-                                                relativeUrl: docs/observers/rdf-history-db/datastore/delete-model.html
                                 historydb-install:
                                     text: Install Guide
                                     relativeUrl: docs/observers/rdf-history-db/install.html
