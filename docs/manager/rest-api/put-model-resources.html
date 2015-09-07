@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Tower 4Clouds</title>
+
+    <link rel="stylesheet" href="http://deib-polimi.github.io/tower4clouds/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://deib-polimi.github.io/tower4clouds/css/highlight.dark.css">
+    <link rel="stylesheet" href="http://deib-polimi.github.io/tower4clouds/css/main.css">
+</head>
+<body class="">
+
+<header class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="http://deib-polimi.github.io/tower4clouds/" class="navbar-brand"><img src="http://deib-polimi.github.io/tower4clouds/img/logo-small.png" alt=""></a>
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+
+        <div class="navbar-collapse collapse" id="navbar-main">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://deib-polimi.github.io/tower4clouds/">Home</a></li>
+                <li><a href="http://deib-polimi.github.io/tower4clouds/docs/get-started.html">Get started</a></li>
+                <li><a href="http://deib-polimi.github.io/tower4clouds/docs/">Documentation</a></li>
+                                <li>
+                    <a href="https://github.com/deib-polimi/tower4clouds">
+                        <i class="fa fa-github"></i> GitHub
+                    </a>
+                </li>
+                            </ul>
+        </div>
+    </div>
+</header>
+
+
+<main class="container-fluid">
+    <div class="row">
+
+        
+
+        <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+            <ul class="nav nav-pills nav-stacked">
+                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/">
+                        Documentation Index
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/overview.html">
+                        Overview
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/get-started.html">
+                        Get started
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/mosaic-installation.html">
+                        Installation on mOSAIC
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/data-collectors/">
+                        Data Collectors
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/">
+                        Manager
+                    </a>
+                </li>
+                                <ul class="submenu nav nav-stacked nav-pills">
+                                        <li class="">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/configuration.html">
+                            Configuration
+                        </a>
+                    </li>
+
+                    
+                                        <li class="">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/webapp.html">
+                            Webapp
+                        </a>
+                    </li>
+
+                    
+                                        <li class="">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/java-api.html">
+                            Java API
+                        </a>
+                    </li>
+
+                    
+                                        <li class="active">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/rest-api/">
+                            REST API
+                        </a>
+                    </li>
+
+                                        <ul class="submenu nav nav-stacked nav-pills">
+                                            </ul>
+                    
+                                    </ul>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/data-analyzer/">
+                        Data Analyzer
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/model/">
+                        The Model
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/rules/">
+                        Rules
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/observers/">
+                        Observers
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/CHANGELOG.html">
+                        Change log
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/CONTRIBUTING.html">
+                        Contributing
+                    </a>
+                </li>
+                                            </ul>
+
+        </nav>
+
+        
+        <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+            <p><a href=".">&#9664; Back to API list</a></p>
+<h1><code>PUT</code> /model/resources</h1>
+<h2 id="description">Description</h2>
+<p>Upload a new model on the knowledge base. If a previous model existed, the existing model is replaced.
+A new resource is created for each resource in the uploaded model with the id specified.
+The Java representation of the model is available <a href="https://github.com/deib-polimi/modaclouds-monitoring-manager/blob/master/src/main/java/it/polimi/modaclouds/monitoring/monitoring_manager/server/Model.java">here</a>.
+The Java representation of resources are available <a href="https://github.com/deib-polimi/modaclouds-qos-models/tree/master/src/main/java/it/polimi/modaclouds/qos_models/monitoring_ontology">here</a>.
+A graphical representation of resources and their relations is available <a href="https://github.com/deib-polimi/modaclouds-qos-models/blob/master/doc/user-manual.html#the-monitoring-ontology">here</a>.</p>
+<hr />
+<h2 id="url-parameters">URL Parameters</h2>
+<p>None</p>
+<hr />
+<h2 id="data-parameters">Data Parameters</h2>
+<p>A JSON containing the new model that must be uploaded on the knowledge base</p>
+<hr />
+<h2 id="response">Response</h2>
+<p><strong>Status:</strong> <strong>204 No Content</strong></p>
+<hr />
+<h2 id="errors">Errors</h2>
+<ul>
+<li><strong>400 Bad Request</strong> - The model was not valid</li>
+</ul>
+<hr />
+<h2 id="example">Example</h2>
+<p><strong>Request</strong></p>
+<pre><code>PUT v1/model/resources</code></pre>
+<pre><code class="language-json">{
+  "cloudProviders": [
+    {
+      "id": "amazon", 
+      "type": "IaaS"
+    }
+  ], 
+  "internalComponents": [
+    {
+      "id": "mic1", 
+      "providedMethods": [
+        "mic1-register", 
+        "mic1-answerQuestions", 
+        "mic1-saveAnswers"
+      ], 
+      "requiredComponents": [
+        "frontend1"
+      ], 
+      "type": "Mic"
+    },
+    {
+      "id": "mic2", 
+      "providedMethods": [
+        "mic2-register", 
+        "mic2-answerQuestions", 
+        "mic2-saveAnswers"
+      ], 
+      "requiredComponents": [
+        "frontend2"
+      ], 
+      "type": "Mic"
+    }
+  ], 
+  "methods": [
+    {
+      "id": "mic1-answerQuestions", 
+      "type": "answerQuestions"
+    }, 
+    {
+      "id": "mic1-saveAnswers", 
+      "type": "saveAnswers"
+    }, 
+    {
+      "id": "mic1-register", 
+      "type": "register"
+    },
+    {
+      "id": "mic2-answerQuestions", 
+      "type": "answerQuestions"
+    }, 
+    {
+      "id": "mic2-saveAnswers", 
+      "type": "saveAnswers"
+    }, 
+    {
+      "id": "mic2-register", 
+      "type": "register"
+    }
+  ], 
+  "vMs": [
+    {
+      "cloudProvider": "amazon", 
+      "id": "frontend1", 
+      "numberOfCPUs": 2, 
+      "type": "Frontend"
+    },
+    {
+      "cloudProvider": "amazon", 
+      "id": "frontend2", 
+      "numberOfCPUs": 2, 
+      "type": "Frontend"
+    }
+  ]
+}</code></pre>
+<p><strong>Response</strong></p>
+<pre><code>Status: 204 No Content</code></pre>
+        </section>
+
+    </div>
+</main>
+
+
+
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="http://yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+<script>
+    $(function() {
+        $("section>h1").wrap('<div class="page-header" />');
+        // Syntax highlighting
+        hljs.initHighlightingOnLoad();
+    });
+</script>
+
+
+</body>
+</html>
