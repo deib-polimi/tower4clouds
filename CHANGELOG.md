@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 This document adheres to [keep-a-changelog].
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3] - to be released
+### Added
+- The CloudML action is officially working; it is now possible to scale up or down inside of the same cloud provider or bust to another one, in response to a condition on a monitored resource
+### Fixed
+- The HistoryDB documentation has been updated to the new format, and is now available on the new website
+
 ## [0.2.3] - 2015-07-29
 ### Fixed
 - Problem with data collectors configuration when multiple rules with same input metrics were installed
