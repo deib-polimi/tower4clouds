@@ -84,21 +84,31 @@
                             Configuration
                         </a>
                     </li>
+
+                    
                                         <li class="">
                         <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/webapp.html">
                             Webapp
                         </a>
                     </li>
+
+                    
                                         <li class="">
                         <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/java-api.html">
                             Java API
                         </a>
                     </li>
+
+                    
                                         <li class="active">
                         <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/rest-api/">
                             REST API
                         </a>
                     </li>
+
+                                        <ul class="submenu nav nav-stacked nav-pills">
+                                            </ul>
+                    
                                     </ul>
                                                 <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/docs/data-analyzer/">
@@ -138,22 +148,22 @@
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
             <p><a href=".">&#9664; Back to API list</a></p>
 <h1><code>DELETE</code> /monitoring-rules/:id</h1>
-<h2>Description</h2>
+<h2 id="description">Description</h2>
 <p>Deletes a monitoring rule.</p>
 <hr />
-<h2>URL Parameters</h2>
+<h2 id="url-parameters">URL Parameters</h2>
 <p>None.</p>
 <hr />
-<h2>Response</h2>
+<h2 id="response">Response</h2>
 <p><strong>Status:</strong> <strong>204 No Content</strong></p>
 <hr />
-<h2>Errors</h2>
+<h2 id="errors">Errors</h2>
 <p>All known errors cause the resource to return HTTP error code header together with a description of the error.</p>
 <ul>
 <li><strong>404 Resource not found</strong> - Rule does not exist: ...</li>
 </ul>
 <hr />
-<h2>Example</h2>
+<h2 id="example">Example</h2>
 <p><strong>Request</strong></p>
 <pre><code>DELETE v1/monitoring-rules/CPURule</code></pre>
         </section>

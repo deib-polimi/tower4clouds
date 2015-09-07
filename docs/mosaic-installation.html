@@ -116,10 +116,10 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>Installation on mOSAIC</h1>
+            <h1 id="installation-on-mosaic">Installation on mOSAIC</h1>
 <p>Set current MODAClouds version number:</p>
 <pre><code class="language-bash">MODACLOUDS_RELEASE=0.7.0.13</code></pre>
-<h2>Requirements</h2>
+<h2 id="requirements">Requirements</h2>
 <p>Dependencies:</p>
 <ul>
 <li>mosaic-rt-jre-7</li>
@@ -179,7 +179,7 @@ nohup /opt/modaclouds-services-metric-explorer-${MODACLOUDS_RELEASE}/bin/modaclo
 <pre><code class="language-bash">???</code></pre></li>
 </ul></li>
 </ul>
-<h2>Installation of Tower 4Clouds</h2>
+<h2 id="installation-of-tower-4clouds">Installation of Tower 4Clouds</h2>
 <pre><code class="language-bash">sudo zypper \
         --non-interactive --no-refresh \
         --no-gpg-checks --gpg-auto-import-keys \
@@ -187,7 +187,7 @@ nohup /opt/modaclouds-services-metric-explorer-${MODACLOUDS_RELEASE}/bin/modaclo
         modaclouds-services-tower4clouds-manager \
         modaclouds-services-tower4clouds-data-analyzer \
         modaclouds-services-tower4clouds-rdf-history-db</code></pre>
-<h2>Start Tower 4Clouds</h2>
+<h2 id="start-tower-4clouds">Start Tower 4Clouds</h2>
 <p>On a single machine in one go:</p>
 <pre><code class="language-bash">components=(data-analyzer manager rdf-history-db)
 MOS_NODE_PUBLIC_IP="${mos_node_public_ip}" # CHECK THIS VAR IS ASSIGNED

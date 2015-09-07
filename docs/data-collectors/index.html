@@ -79,11 +79,15 @@
                             Java App Data Collector
                         </a>
                     </li>
+
+                    
                                         <li class="">
                         <a href="http://deib-polimi.github.io/tower4clouds/docs/data-collectors/byodc.html">
                             Bring Your Own Data Collector
                         </a>
                     </li>
+
+                    
                                     </ul>
                                                 <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/">
@@ -126,14 +130,14 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>Data Collectors</h1>
+            <h1 id="data-collectors">Data Collectors</h1>
 <p>Data Collectors are <em>client-side</em> <em>self-registering</em> agents responsible of sending monitoring data to the <a href="../data-analyzer/">Data Analyzer</a>. They are built with the Cloud in mind, which is dynamic and heterogeneous. A resource being monitored (e.g. a virtual machine) can be shut down as a result of scale down activity, or a new resource can be started as a result of a scale up activity. In both cases, Tower 4Clouds is able to keep its <a href="../model/">Model</a> of the system updated. Data Collectors automatically register and periodically notify their existence and the existence of the resource they monitor. Once a resource is shut down, the <a href="../manager/">Manager</a> will take care of unregistering expired resources after the timeout (keep alive period) defined by the data collector itself. Moreover, data collectors are client-side, which means communication is mono-directional, so that really few requirements are requested on the location where they run and collect data. Finally, in order to save traffic (and therefore money) and reduce the overhead, data collectors collect data only when and how requested by the <a href="../manager/">Manager</a> according to the <a href="../rules/">Rules</a> installed by the user.</p>
 <p>Two kind of data collectors have been implemented so far:</p>
 <ul>
 <li>the <a href="java-app-dc.html">Java App Data Collector</a>, which is a Java library that uses aspect oriented programming for collecting application level metrics of your Java application such as Response Time and Throughput,</li>
 <li>a data collector built by another MODAClouds partner (Imperial University), which is an executable Java application able to collect both infrastructure and application level metrics such as CPU Utilization and Application Availability. This data collector can be found <a href="https://github.com/imperial-modaclouds/modaclouds-data-collectors">here</a>.</li>
 </ul>
-<p>If you want to build your data collector feel free to contribute. You can find instructions on how to build a data collector <a href="byodc.html">here</a> and instructions on how to contribute <a href="/CONTRIBUTING.html">here</a>.</p>
+<p>If you want to build your data collector feel free to contribute. You can find instructions on how to build a data collector <a href="byodc.html">here</a> and instructions on how to contribute <a href="/CONTRIBUTING.md">here</a>.</p>
 <p>What a data collector actually does:</p>
 <ol>
 <li>Once started, it contacts the <a href="../manager/">Manager</a> registering:

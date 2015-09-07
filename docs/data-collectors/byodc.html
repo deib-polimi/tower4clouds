@@ -79,11 +79,17 @@
                             Java App Data Collector
                         </a>
                     </li>
+
+                    
                                         <li class="active">
                         <a href="http://deib-polimi.github.io/tower4clouds/docs/data-collectors/byodc.html">
                             Bring Your Own Data Collector
                         </a>
                     </li>
+
+                                        <ul class="submenu nav nav-stacked nav-pills">
+                                            </ul>
+                    
                                     </ul>
                                                 <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/">
@@ -126,9 +132,9 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>Bring Your Own Data Collector</h1>
+            <h1 id="bring-your-own-data-collector">Bring Your Own Data Collector</h1>
 <p>Please read instructions on how to <a href="/Contributing.html">contribute</a> first.</p>
-<h2>Build a Java Data Collector</h2>
+<h2 id="build-a-java-data-collector">Build a Java Data Collector</h2>
 <p>If you plan to build a Java Data Collector you can easily create one by using the provided data-collector-library.</p>
 <p>Data Collector Library maven dependency:</p>
 <pre><code class="language-xml">&lt;dependency&gt;
@@ -143,7 +149,7 @@
 &lt;/repository&gt;</code></pre>
 <p>The communication with Tower 4Clouds platform is throughly managed by the <code>DCAgent</code>. Once started, the <code>DCAgent</code> will first contact the <a href="../manager/">Manager</a>, registering itself by sending a <code>DCDescriptor</code> object, and then it will keep updating its configuration by periodically contacting the <a href="../manager/">Manager</a>, with a period specified by the <code>configSyncPeriod</code> in the <code>DCDescriptor</code> object. The <code>DCDescriptor</code> also contains the list of <code>resources</code> the data collector is responsible for (i.e., the <a href="../model/">data collector sub-model</a>), which contains both the monitored resources and any other resource related to it, and the <code>monitoredResourcesByMetric</code> map, which contains the list of metrics that can be collected by the data collector and the relative resources for which the given metric can be monitored. Finally, the <code>DCDescriptor</code> contains a <code>keepAlive</code> period which is going to tell the <a href="../manager/">Manager</a> the maximum period of time, in seconds, to wait between two subsequent communications with the data collector, after which all <code>resources</code> specified by the data collector will expire. If the <code>configSyncPeriod</code> is not long enough to prevent <code>resources</code> to expire, the <code>DCAgent</code> will use the <a href="../manager/rest-api/">Keep Alive API</a> provided by the <a href="../manager/">Manager</a>, which allows to consume less data traffic then the <a href="../manager/rest-api/">Data Collector Configuration API</a> used to retrieve the configuration.</p>
 <p>If you want to see examples of data collectors developed using the Data Collector Library, checkout the <a href="https://github.com/deib-polimi/tower4clouds/tree/master/data-collectors/java-app-dc">Java App DC</a> and the <a href="https://github.com/imperial-modaclouds/modaclouds-data-collectors">Imperial Data Collector</a> source code.</p>
-<h2>Build a non-Java Data Collector</h2>
+<h2 id="build-a-non-java-data-collector">Build a non-Java Data Collector</h2>
 <p>[TODO]</p>
         </section>
 

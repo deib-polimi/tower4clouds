@@ -84,21 +84,31 @@
                             Configuration
                         </a>
                     </li>
+
+                    
                                         <li class="active">
                         <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/webapp.html">
                             Webapp
                         </a>
                     </li>
+
+                                        <ul class="submenu nav nav-stacked nav-pills">
+                                            </ul>
+                    
                                         <li class="">
                         <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/java-api.html">
                             Java API
                         </a>
                     </li>
+
+                    
                                         <li class="">
                         <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/rest-api/">
                             REST API
                         </a>
                     </li>
+
+                    
                                     </ul>
                                                 <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/docs/data-analyzer/">
@@ -136,12 +146,12 @@
 
         
         <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-            <h1>Webapp</h1>
+            <h1 id="webapp">Webapp</h1>
 <p>The Webapp is accessible at the <a href="configuration.html">configured</a> manager port under the url path <code>/webapp</code>.</p>
-<h2>The Rules Tab</h2>
+<h2 id="the-rules-tab">The Rules Tab</h2>
 <p>From this view the user can explore all installed <a href="../rules/">Rules</a>, as well as disable, enable or delete them. The user can also install new ones by means of the &quot;Add a new Rule&quot; box, where rules can be either copy pasted in the text area or uploaded from an xml file.</p>
 <p><img src="../../img/webapp-rules.png" alt="Rules Tab" /></p>
-<h2>The Metrics Tab</h2>
+<h2 id="the-metrics-tab">The Metrics Tab</h2>
 <p>Here the user can explore all <a href="../rules/actions.html#output-metric">Output Metrics</a> as well as view, delete and attach new <a href="../observers">Observers</a> to them. If your observer listens on a Socket TCP or UDP port then you should specify only the following fields:</p>
 <ul>
 <li>Observer Host, with the IP address of the observer</li>
@@ -156,7 +166,7 @@
 <li>Protocol, with <code>HTTP</code></li>
 </ul>
 <p><img src="../../img/webapp-metrics.png" alt="Metrics Tab" /></p>
-<h2>The Model Tab</h2>
+<h2 id="the-model-tab">The Model Tab</h2>
 <p>In this Tab the user can explore the current <a href="../model">Model</a>, as well as add resources to or remove resources from the model. Consider that <a href="../data-collectors">Data Collectors</a> are in charge of keeping their respective sub graph alive, therefore if you try to delete a resource which is kept alive by a running data collector, it will be restored. On the other side, if you add new resources from this tab, those resources will have an infinite keep alive period, i.e., they won't ever expire unless manually deleted through the webapp or through the <a href="../manager/rest-api.html">REST API</a>. </p>
 <p><img src="../../img/webapp-model.png" alt="Model Tab" /></p>
         </section>
