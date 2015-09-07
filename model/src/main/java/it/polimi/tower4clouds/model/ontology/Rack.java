@@ -15,11 +15,16 @@
  */
 package it.polimi.tower4clouds.model.ontology;
 
+import java.util.Set;
+
 /**
  *
  * @author davide
  */
 public class Rack extends Resource{
+    
+    //set that contains all id of nodes inside the rack
+    private Set<String> nodes;
     
     public Rack(String type, String id) {
         super(type, id);
@@ -32,6 +37,22 @@ public class Rack extends Resource{
     public String toString() {
         return "Method [clazz=" + getClazz() + ", type=" + getType() + ", id="
                 + getId() + "]";
+    }
+    
+     //add nodes to the rack
+    public void addNodes(Set<String> nodes){
+        if(this.nodes == null)
+            setNodes(nodes);
+        else
+            this.nodes.addAll(nodes);
+    }
+
+    public Set<String> getNodes() {
+        return nodes;
+    }
+
+    public void setNodes(Set<String> nodes) {
+        this.nodes = nodes;
     }
     
 }

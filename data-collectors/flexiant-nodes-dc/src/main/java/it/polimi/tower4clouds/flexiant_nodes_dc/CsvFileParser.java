@@ -117,12 +117,16 @@ public class CsvFileParser {
                 itemsArray[i] = new ArrayList<String>();
             
             while(parts[positionColumn].equals(delimiter)){
-                for(int i = 0; i < parts.length; i++)
+                for(int i = 0; i < itemsArray.length; i++){
+                    if(i > parts.length-1)
+                        break;
                     itemsArray[i].add(parts[i]);
+                }//for
                 if(fileLines.empty())
                     break;
                 line = fileLines.pop();
                 parts = line.split(",");
+                
             }//while
             return true;
         }

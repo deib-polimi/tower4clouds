@@ -15,11 +15,16 @@
  */
 package it.polimi.tower4clouds.model.ontology;
 
+import java.util.Set;
+
 /**
  *
  * @author davide
  */
 public class Cluster extends Resource{
+    
+    //set that contains all id of nodes inside the cluster
+    private Set<String> nodes;
     
     public Cluster(String type, String id) {
         super(type, id);
@@ -33,5 +38,22 @@ public class Cluster extends Resource{
         return "Method [clazz=" + getClazz() + ", type=" + getType() + ", id="
                 + getId() + "]";
     }
+    
+    //add nodes to the cluster
+    public void addNodes(Set<String> nodes){
+        if(this.nodes == null)
+            setNodes(nodes);
+        else
+            this.nodes.addAll(nodes);
+    }
+
+    public Set<String> getNodes() {
+        return nodes;
+    }
+
+    public void setNodes(Set<String> nodes) {
+        this.nodes = nodes;
+    }
+    
     
 }

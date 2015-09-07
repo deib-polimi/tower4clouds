@@ -111,7 +111,7 @@ public class DCMain {
 			MonitoringRules.class));
         */
         
-        /* Commented code for debug use only: create HTTP observer to monitor sent datas     
+        /* Commented code for debug use only: create HTTP observer to monitor sent datas  
         manager.registerHttpObserver("CpuUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
         manager.registerHttpObserver("RamUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
         manager.registerHttpObserver("NodeLoad", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");

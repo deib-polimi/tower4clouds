@@ -174,12 +174,25 @@ public class Registry {
     private Map<String, Rack> buildRacksById(){
         Map<String, Rack> map = new HashMap<String, Rack>();
         
+        //retrieve nodes of every rack
+        CsvFileParser nodesFileParser = new CsvFileParser("file://"+Registry.class.getResource("/").getPath()+"RackNodes.csv", "Rack,Node,Cluster");
+        nodesFileParser.readUntilTerminationString();
+        
         CsvFileParser fileParser = new CsvFileParser(dcProperties.getProperty(DCProperty.URL_RACKLOAD_METRIC),null);
         fileParser.readLastUpdate(0);
         List<String> racks = fileParser.getData(1);
+        List<String> nodes = nodesFileParser.getData(1);
+        List<String> racksId = nodesFileParser.getData(0);
         
         for(String rack:racks){
-            map.put(rack, new Rack("BigRack", rack));
+            Rack newRack = new Rack("BigRack", rack);
+            map.put(rack, newRack);
+            Set<String> nodesRack = new HashSet<String>();
+            for(int i = 0; i < racksId.size(); i++){
+                if(racksId.get(i).equals(rack))
+                    nodesRack.add(nodes.get(i).replaceAll("\\.", "_"));
+            }
+            newRack.addNodes(nodesRack);
         }
         
         return map;
@@ -190,8 +203,11 @@ public class Registry {
         if(!fileParser.readUntilTerminationString())
             return false; //return false if cluster doesn't exist
         
+        Set<String> clusterNodes = new HashSet<String>();
+        Cluster cluster = new Cluster("BigCluster", type);
+        
         //add cluster
-        clustersById.put(type, new Cluster("BigCluster", type));
+        clustersById.put(type, cluster);
         
         //add nodes
         List<String> nodes = fileParser.getData(1);
@@ -200,7 +216,11 @@ public class Registry {
             String nodeId = node.replaceAll("\\.", "_");
             logger.info("Node added: "+nodeId);
             map.put(nodeId, new Node(type, nodeId));
+            clusterNodes.add(nodeId);
         }
+        
+        //add nodes to the cluster
+        cluster.addNodes(clusterNodes);
         
         return true;
     }

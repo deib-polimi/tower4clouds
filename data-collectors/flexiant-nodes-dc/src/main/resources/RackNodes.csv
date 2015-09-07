@@ -1,0 +1,12 @@
+Rack,Node,Cluster
+A5,10.158.128.15,Cluster2
+A5,10.157.128.31,Cluster1
+A5,10.158.128.11,Cluster2
+A5,10.158.128.16,Cluster2
+A6,10.157.128.30,Cluster1
+A6,10.158.128.17,Cluster2
+A7,10.158.128.13,Cluster2
+A7,10.158.128.12,Cluster2
+A7,10.158.128.14,Cluster2
+A7,10.158.128.18,Cluster2
+A7,10.157.128.32,Cluster1
