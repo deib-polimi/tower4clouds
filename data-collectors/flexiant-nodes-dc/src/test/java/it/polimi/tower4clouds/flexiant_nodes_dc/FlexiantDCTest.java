@@ -15,19 +15,9 @@
  */
 package it.polimi.tower4clouds.flexiant_nodes_dc;
 
-import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.CPUUtilization;
-import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.NodeLoadMetric;
-import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.RXNetworkMetric;
-import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.RackLoad;
-import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.RamUsage;
-import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.StorageCluster;
-import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.TXNetworkMetric;
-import it.polimi.tower4clouds.model.ontology.Node;
-import it.polimi.tower4clouds.model.ontology.Resource;
-import org.junit.Assert;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import it.polimi.modaclouds.qos_models.util.XMLHelper;
+import it.polimi.tower4clouds.manager.api.ManagerAPI;
+import it.polimi.tower4clouds.rules.MonitoringRules;
 
 /**
  *
@@ -35,113 +25,52 @@ import org.slf4j.LoggerFactory;
  */
 public class FlexiantDCTest {
     
-    private static final Logger logger = LoggerFactory.getLogger(FlexiantDCTest.class);
-    private static final String TEST_URL = "file://"+FlexiantDCTest.class.getResource("/").getPath();
+    private static final String DEFAULT_GRAPHITE_IP = "localhost";
+    private static final int DEFAULT_GRAPHITE_PORT = 8001;
+    private static final String DEFAULT_MANAGER_IP = "localhost";
+    private static final int DEFAULT_MANAGER_PORT = 8170;
     
-    private static final double EXPECTED_CPU_SAMPLE = 1.0;
-    private static final double EXPECTED_NODE_LOAD_SAMPLE = 1.620;
-    private static final double EXPECTED_RX_NET_SAMPLE = 2.68;
-    private static final double EXPECTED_TX_NET_SAMPLE = 4.39;
-    private static final double EXPECTED_RAM_SAMPLE = 1.0;
-    private static final double EXPECTED_STORAGE_SAMPLE = 1.0;
-    private static final int EXPECTED_RACK_LOAD_SAMPLE = 8;
-    
-    @Test
-    public void testCPUUtilization() {
+    public static void main(String[] args) throws Exception {
         
-        CPUUtilization metric = new CPUUtilization();
-        metric.setUrlFileLocation(TEST_URL);
-        Resource testNode = new Node("type1", "testIdNodeCPU");
-        CsvFileParser fileParser = new CsvFileParser(TEST_URL , null);
-        
-        double sample = (double)metric.getSample(fileParser, testNode);
-        
-        Assert.assertTrue(sample == EXPECTED_CPU_SAMPLE);
-        
-    }
-    
-    @Test
-    public void testNodeLoadMetric() {
-        
-        NodeLoadMetric metric = new NodeLoadMetric();
-        metric.setUrlFileLocation(TEST_URL);
-        Resource testNode = new Node("type1", "testIdNodeLOAD");
-        CsvFileParser fileParser = new CsvFileParser(TEST_URL , null);
-        
-        double sample = (double)metric.getSample(fileParser, testNode);
-        
-        Assert.assertTrue(sample == EXPECTED_NODE_LOAD_SAMPLE);
-        
-    }
-    
-    @Test
-    public void testRXNetworkMetric() {
-        
-        RXNetworkMetric metric = new RXNetworkMetric();
-        metric.setUrlFileLocation(TEST_URL);
-        Resource testNode = new Node("type1", "testIdNodeNET");
-        CsvFileParser fileParser = new CsvFileParser(TEST_URL , null);
-        
-        double sample = (double)metric.getSample(fileParser, testNode);
-        
-        Assert.assertTrue(sample == EXPECTED_RX_NET_SAMPLE);
-        
-    }
-    
-    @Test
-    public void testTXNetworkMetric() {
-        
-        TXNetworkMetric metric = new TXNetworkMetric();
-        metric.setUrlFileLocation(TEST_URL);
-        Resource testNode = new Node("type1", "testIdNodeNET");
-        CsvFileParser fileParser = new CsvFileParser(TEST_URL , null);
-        
-        double sample = (double)metric.getSample(fileParser, testNode);
-        
-        Assert.assertTrue(sample == EXPECTED_TX_NET_SAMPLE);
-        
-    }
-    
-    @Test
-    public void testRamUsage() {
-        
-        RamUsage metric = new RamUsage();
-        metric.setUrlFileLocation(TEST_URL);
-        Resource testNode = new Node("type1", "testIdNodeRAM");
-        CsvFileParser fileParser = new CsvFileParser(TEST_URL , null);
-        
-        double sample = (double)metric.getSample(fileParser, testNode);
-        
-        Assert.assertTrue(sample == EXPECTED_RAM_SAMPLE);
-        
-    }
-    
-    @Test
-    public void testStorageCluster() {
-        
-        StorageCluster metric = new StorageCluster();
-        metric.setUrlFileLocation(TEST_URL);
-        Resource testCluster = new Node("type1", "testCluster");
-        CsvFileParser fileParser = new CsvFileParser(TEST_URL , null);
-        
-        double sample = (double)metric.getSample(fileParser, testCluster);
+        String graphiteIP = DEFAULT_GRAPHITE_IP;
+        int graphitePort = DEFAULT_GRAPHITE_PORT;
 
-        Assert.assertTrue(sample == EXPECTED_STORAGE_SAMPLE);
+        String managerIP = DEFAULT_MANAGER_IP;
+        int managerPort = DEFAULT_MANAGER_PORT;
+                
+        /* Commented code for debug use only: manual set properties without configuration file 
+        flexDCProp.put(DCProperty.URL_NODES, "https://cp.sd1.flexiant.net/nodeid/");
+        flexDCProp.put(DCProperty.URL_CPU_METRIC, "https://cp.sd1.flexiant.net/nodecpu10/");
+        flexDCProp.put(DCProperty.URL_RAM_METRIC, "https://cp.sd1.flexiant.net/noderam10/");
+        flexDCProp.put(DCProperty.URL_NODELOAD_METRIC, "https://cp.sd1.flexiant.net/nodeload10/");
+        flexDCProp.put(DCProperty.URL_TXNETWORK_METRIC, "https://cp.sd1.flexiant.net/nodenet10/");
+        flexDCProp.put(DCProperty.URL_RXNETWORK_METRIC, "https://cp.sd1.flexiant.net/nodenet10/");
+        flexDCProp.put(DCProperty.URL_STORAGE_METRIC, "https://cp.sd1.flexiant.net/storage10/");
+        flexDCProp.put(DCProperty.URL_RACKLOAD_METRIC, "https://cp.sd1.flexiant.net/rackload10/upsload.csv");
+        flexDCProp.put(DCProperty.URL_VMS, "https://cp.sd1.flexiant.net/VMPlacement/FCOVMPlacement.csv");
+        */
         
-    }
-    
-    @Test
-    public void testRackLoad() {
+	ManagerAPI manager = new ManagerAPI(managerIP, managerPort);
+        /*
+        //install rules on manager
+	manager.installRules(XMLHelper.deserialize(DCMain.class
+			.getResourceAsStream("/rules.xml"),
+			MonitoringRules.class));
         
-        RackLoad metric = new RackLoad();
-        metric.setUrlFileLocation(TEST_URL + "upsload.csv");
-        Resource testRack = new Node("type1", "A4");
-        CsvFileParser fileParser = new CsvFileParser(TEST_URL + "upsload.csv" , null);
+        manager.installRules(XMLHelper.deserialize(DCMain.class
+			.getResourceAsStream("/rulesGroupByCluster.xml"),
+			MonitoringRules.class));
+        */
+        // Create HTTP observer to monitor sent datas  
+        manager.registerHttpObserver("CpuUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+        manager.registerHttpObserver("RamUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+        manager.registerHttpObserver("NodeLoad", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+        manager.registerHttpObserver("TXNetwork", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+        manager.registerHttpObserver("RXNetwork", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+        manager.registerHttpObserver("StorageMetric", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+        manager.registerHttpObserver("RackLoadMetric", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
         
-        int sample = (int)metric.getSample(fileParser, testRack);
-
-        Assert.assertTrue(sample == EXPECTED_RACK_LOAD_SAMPLE);
-        
+        DCMain.main(args);
     }
     
 }

@@ -27,19 +27,40 @@ Every resource in the DC has an id in order to identificate it, the following ta
 |Rack|The id is name of the rack found in the rack load metric's file.|A rack has a set of its related Nodes which ids structure is specficied above.|
 
 ## Usage
-Flexiant DC is executable but you first have set a few environment variables and create a properties file (specified below) in order to configure the DC.
+Flexiant DC can be configured by means of different options (latters replaces the formers):
+<ul>
+<li>Default configuration</li>
+<li>Environment Variables</li>
+<li>CLI arguments</li>
+</ul>
 
 ###Environment Variables
-If these variables aren't setted the DC will use tge default value specified in the table.
+If these variables aren't setted the DC will use the default values specified in the table.
 
-|Variable Name|Default value (if not setted)|Description|
+|Variable Name|Default value|Description|
 |-----------|----------------|-------------------|
 |MODACLOUDS_TOWER4CLOUDS_MANAGER_IP|localhost|Specify the IP of the Manager which the DC use to estabilish a link to it.|
 |MODACLOUDS_TOWER4CLOUDS_MANAGER_PORT|8170|Specify the PORT of the Manager.|
-|MODACLOUDS_TOWER4CLOUDS_FLEXDC_CONFIG_FILE|/etc/opt/flexiant-nodes-dc/config|Specify the URL of the config file that you must create in order to configure the DC properties.|
+|MODACLOUDS_TOWER4CLOUDS_FLEXDC_CONFIG_FILE|Internal file|Specify the path of the config file that you must create in order to configure the DC properties (Structure of the file explained below).|
+|MODACLOUDS_TOWER4CLOUDS_FLEXDC_CLUSTER_CONFIG_FILE|Internal file|Specify the path of the cluster config file which determine relationships between racks and nodes (Structure of the file explained below).|
 
-###Configuration File
-This file must be created before execute DC.
+###CLI Arguments
+CLI Arguments overwrite default value or environment variable for any parameter.
+
+```
+Usage: java -jar DC.jar [options]
+  Options:
+    -managerip
+      Manager IP address
+    -managerport
+      Manager port
+    -config-file
+      Config file path
+    -cluster-config-file
+      Cluster config file path
+```
+
+###Configuration File (config-file)
 The config file contains a lot of properties that specify URLs of some remote files.<br/>
 Below you find the structure of the file with actual working url:
 
@@ -59,7 +80,7 @@ URL_VMS=https://cp.sd1.flexiant.net/VMPlacement/FCOVMPlacement.csv
 The first property specify URL where the DC can find files which contain nodes of every cluster.<br/>
 The other properties specify URL of files which contain metrics' samples.
 
-###Rack/node relations file
+###Rack/node relations file (cluster-config-file)
 If you want you can specify the relationships between racks and nodes you can create a .CSV file which contains that information.
 Below there is an example of the structure of the file:
 
@@ -69,11 +90,6 @@ A5,10.158.128.15,Cluster2
 A5,10.157.128.31,Cluster1
 A5,10.158.128.11,Cluster2
 A5,10.158.128.16,Cluster2
-```
-When you run the DC you have to specficy the path of this file as an arguments like the example below:
-
-```
-java -jar DC.jar --relations-file pathofthefile
 ```
 
 

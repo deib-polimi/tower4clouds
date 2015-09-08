@@ -38,7 +38,7 @@ public class RamUsage extends Metric{
     }
     
     @Override
-    public Number getSample(CsvFileParser fileParser, Resource resource) {
+    public Number getSample(CsvFileParser fileParser, Resource resource) throws Exception {
         fileParser.setFileUrl(getUrl(resource));
         fileParser.readLastUpdate(0);
         double sample;

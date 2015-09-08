@@ -127,14 +127,14 @@ public abstract class Metric implements Observer {
     }
     
     private class MetricSender extends TimerTask{
-        private Resource node;
+        private Resource resource;
         private CsvFileParser fileParser;
         
         //constructor: initialize a CsvFileParser object which handle the reading
         //of the remote file
-        public MetricSender(Resource node) {
-            this.node = node;
-            String url = getUrl(node);
+        public MetricSender(Resource resource) {
+            this.resource = resource;
+            String url = getUrl(resource);
             logger.info("URL: "+url);
             fileParser = new CsvFileParser(url, null);  
         }
@@ -143,8 +143,23 @@ public abstract class Metric implements Observer {
         public void run() {
             logger.info("Getting Sample...");
             long first = System.currentTimeMillis();
-            send(getSample(fileParser, node), node);
-            logger.info("Sample retrieved and sent in: "+(System.currentTimeMillis()-first)+ "ms");
+            boolean sampleRetrieved = false;
+            
+            do{
+                try{
+                    send(getSample(fileParser, resource), resource);
+                    sampleRetrieved = true;
+                    logger.info("Sample retrieved and sent in: "+(System.currentTimeMillis()-first)+ "ms");
+                }
+                catch(Exception ex){
+                    logger.warn("Unable to get sample (ID:"+resource.getId()+" - "+ex.getMessage());
+                    try{
+                        Thread.sleep(200);
+                    }
+                    catch(Exception ex1){logger.error(ex.getMessage());}
+                }
+            }while(!sampleRetrieved);
+            
 	}
         
     }
@@ -157,7 +172,7 @@ public abstract class Metric implements Observer {
         return url;
     }
     
-    public abstract Number getSample(CsvFileParser fileParser, Resource resource);
+    public abstract Number getSample(CsvFileParser fileParser, Resource resource) throws Exception;
     
     protected Map<String, String> getParameters(Resource resource) {
         if (this.dcAgent != null)

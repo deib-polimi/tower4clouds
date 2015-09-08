@@ -15,12 +15,16 @@
  */
 package it.polimi.tower4clouds.flexiant_nodes_dc;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterDescription;
 import it.polimi.modaclouds.qos_models.util.XMLHelper;
 import it.polimi.tower4clouds.manager.api.ManagerAPI;
 import it.polimi.tower4clouds.rules.MonitoringRules;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import org.slf4j.Logger;
@@ -34,56 +38,61 @@ public class DCMain {
     
     private static final Logger logger = LoggerFactory.getLogger(DCMain.class);
     
-    private static final String DEFAULT_GRAPHITE_IP = "localhost";
-    private static final int DEFAULT_GRAPHITE_PORT = 8001;
+    @Parameter(names = "-managerip", description = "Manager IP address")
+    public String managerIp = null;
+	
+    @Parameter(names = "-managerport", description = "Manager port")
+    public String managerPort = null;
+    
+    @Parameter(names = "-config-file", description = "Config file path")
+    public String configFilePath = null;
+	
+    @Parameter(names = "-cluster-config-file", description = "Cluster config file path")
+    public String clusterConfigFilePath = null;
+    
     private static final String DEFAULT_MANAGER_IP = "localhost";
-    private static final int DEFAULT_MANAGER_PORT = 8170;
-    private static final String DEFAULT_CONFIG_FILE_LOCATION = "/etc/opt/flexiant-nodes-dc/config";
+    private static final String DEFAULT_MANAGER_PORT = "8170";
+    private static final String DEFAULT_CONFIG_FILE_PATH = DCMain.class.getResource("/").getPath()+"config.properties";
+    private static final String DEFAULT_CLUSTER_CONFIG_FILE_PATH = DCMain.class.getResource("/").getPath()+"cluster-config.csv";
     
     private static final String ENV_VAR_MANAGER_IP = "MODACLOUDS_TOWER4CLOUDS_MANAGER_IP";
     private static final String ENV_VAR_MANAGER_PORT = "MODACLOUDS_TOWER4CLOUDS_MANAGER_PORT";
     private static final String ENV_VAR_URL_CONFIG_FILE = "MODACLOUDS_TOWER4CLOUDS_FLEXDC_CONFIG_FILE";
+    private static final String ENV_VAR_URL_CLUSTER_CONFIG_FILE = "MODACLOUDS_TOWER4CLOUDS_FLEXDC_CLUSTER_CONFIG_FILE";
     
     public static void main(String[] args) throws Exception {
         
+        DCMain mainInstance = new DCMain();
+        
         Properties flexDCProp = new Properties();
-                
-        //retrieve env variables
-        Map<String, String> env = System.getenv();
         
-        String managerIP = DEFAULT_MANAGER_IP;
-        int managerPort = DEFAULT_MANAGER_PORT;
-        String urlFileProperties = DEFAULT_CONFIG_FILE_LOCATION;
+        //load default values
+        mainInstance.loadDefaultValues();
         
-        String graphiteIP = DEFAULT_GRAPHITE_IP;
-        int graphitePort = DEFAULT_GRAPHITE_PORT;
+        //try to load from environment variables
+        mainInstance.loadFromEnrivonmentVariables();
         
-        //set the manager IP
-        if(env.containsKey(ENV_VAR_MANAGER_IP)){
-            managerIP = env.get(ENV_VAR_MANAGER_IP);
-        }
+        //try yo load form arguments
+        JCommander jc = new JCommander(mainInstance, args);
         
-        //set the manager port
-        if(env.containsKey(ENV_VAR_MANAGER_PORT)){
-            try{
-                managerPort = Integer.parseInt(env.get(ENV_VAR_MANAGER_PORT));
+        HashMap<String, String> paramsMap = new HashMap<String, String>();
+		
+	for (ParameterDescription param : jc.getParameters())
+            if (param.isAssigned()) {
+                String name = param.getLongestName().replaceAll("-", "");
+		String value = null;
+		try {
+                    value = DCMain.class.getField(name).get(mainInstance).toString();
+		} catch (Exception e) { }
+                paramsMap.put(name, value);
             }
-            catch(NumberFormatException ex){
-                logger.warn("The property "+ENV_VAR_MANAGER_PORT+" must be integer");
-            }
-        }
         
-        //set url of the configuration file
-        if(env.containsKey(ENV_VAR_URL_CONFIG_FILE)){
-            urlFileProperties = env.get(ENV_VAR_URL_CONFIG_FILE);
-        }
+        mainInstance.loadFromArguments(paramsMap);
         
         //load properties from the config file
         try{
-//            flexDCProp.load(new FileInputStream(urlFileProperties));
-        	
-        	// Marco temp fix
-        	flexDCProp.load(DCMain.class.getResourceAsStream("/config.properties"));
+            // Marco temp fix
+            flexDCProp.load(new FileInputStream(mainInstance.configFilePath));
         }
         catch(FileNotFoundException ex){
             logger.error("Properties file not found");
@@ -94,47 +103,56 @@ public class DCMain {
             throw new RuntimeException("Error while parsing properties file");
         }
         
-        //check if there is relations file path in the arguments
-        if(args.length == 2 && args[0].equals("--relations-file")){
-            flexDCProp.put(DCProperty.RELATIONS_FILE_PATH, args[1]);
+        int port;
+        
+        //convert manager port
+        try{
+            port = Integer.parseInt(mainInstance.managerPort);
+        }
+        catch(NumberFormatException ex){
+            logger.error("Error while converting manager port - must be an integer");
+            throw new RuntimeException("Error while parsing properties file");
         }
         
-        /* Commented code for debug use only: manual set properties without configuration file 
-        flexDCProp.put(DCProperty.URL_NODES, "https://cp.sd1.flexiant.net/nodeid/");
-        flexDCProp.put(DCProperty.URL_CPU_METRIC, "https://cp.sd1.flexiant.net/nodecpu10/");
-        flexDCProp.put(DCProperty.URL_RAM_METRIC, "https://cp.sd1.flexiant.net/noderam10/");
-        flexDCProp.put(DCProperty.URL_NODELOAD_METRIC, "https://cp.sd1.flexiant.net/nodeload10/");
-        flexDCProp.put(DCProperty.URL_TXNETWORK_METRIC, "https://cp.sd1.flexiant.net/nodenet10/");
-        flexDCProp.put(DCProperty.URL_RXNETWORK_METRIC, "https://cp.sd1.flexiant.net/nodenet10/");
-        flexDCProp.put(DCProperty.URL_STORAGE_METRIC, "https://cp.sd1.flexiant.net/storage10/");
-        flexDCProp.put(DCProperty.URL_RACKLOAD_METRIC, "https://cp.sd1.flexiant.net/rackload10/upsload.csv");
-        flexDCProp.put(DCProperty.URL_VMS, "https://cp.sd1.flexiant.net/VMPlacement/FCOVMPlacement.csv");
-        */
-        
-//	ManagerAPI manager = new ManagerAPI(managerIP, managerPort);
-
-        // Commented code for debug use only: use the rules.xml file inside the resources folder to install rules
-//	manager.installRules(XMLHelper.deserialize(DCMain.class
-//			.getResourceAsStream("/rules.xml"),
-//			MonitoringRules.class));
-        
-//        manager.installRules(XMLHelper.deserialize(DCMain.class
-//			.getResourceAsStream("/rulesGroupByCluster.xml"),
-//			MonitoringRules.class));
-        
-        // Commented code for debug use only: create HTTP observer to monitor sent datas  
-//        manager.registerHttpObserver("CpuUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-//        manager.registerHttpObserver("RamUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-//        manager.registerHttpObserver("NodeLoad", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-//        manager.registerHttpObserver("TXNetwork", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-//        manager.registerHttpObserver("RXNetwork", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-//        manager.registerHttpObserver("StorageMetric", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-//        manager.registerHttpObserver("RackLoadMetric", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-        
-        
-        
-        Registry.initialize(managerIP, managerPort, flexDCProp);
+        Registry.initialize(mainInstance.managerIp, port, flexDCProp, mainInstance.clusterConfigFilePath);
         Registry.startMonitoring();
+    }
+    
+    private void loadDefaultValues(){
+        managerIp = DEFAULT_MANAGER_IP;
+        managerPort = DEFAULT_MANAGER_PORT;
+        configFilePath = DEFAULT_CONFIG_FILE_PATH;
+        clusterConfigFilePath = DEFAULT_CLUSTER_CONFIG_FILE_PATH;
+    }
+    
+    private void loadFromEnrivonmentVariables(){
+        
+        if(System.getenv(ENV_VAR_MANAGER_IP) != null)
+            managerIp = System.getenv(ENV_VAR_MANAGER_IP);
+        
+        if(System.getenv(ENV_VAR_MANAGER_PORT) != null)
+            managerPort = System.getenv(ENV_VAR_MANAGER_PORT);
+        
+        if(System.getenv(ENV_VAR_URL_CONFIG_FILE) != null)
+            configFilePath = System.getenv(ENV_VAR_URL_CONFIG_FILE);
+        
+        if(System.getenv(ENV_VAR_URL_CLUSTER_CONFIG_FILE) != null)
+            clusterConfigFilePath = System.getenv(ENV_VAR_URL_CLUSTER_CONFIG_FILE);
+        
+    }
+    
+    private void loadFromArguments(Map<String, String> paramsMap) {
+	if (paramsMap == null)
+            return;
+		
+	if (paramsMap.get("managerip") != null)
+            managerIp = paramsMap.get("managerip");
+        if (paramsMap.get("managerport") != null)
+            managerPort = paramsMap.get("managerport");
+        if (paramsMap.get("configfile") != null)
+            configFilePath = paramsMap.get("configfile");
+        if (paramsMap.get("clusterconfigfile") != null)
+            clusterConfigFilePath = paramsMap.get("clusterconfigfile");
     }
     
 }
