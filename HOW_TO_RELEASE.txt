@@ -16,9 +16,11 @@
 
 # RELEASE
 
+# From the develop branch do
 mvn clean release:prepare -DdryRun=true
 mvn release:clean release:prepare release:perform
 # manually add artifacts to the github release until u fix github release plugin
+# Then merge the new created tag with the master so that the master has the most recent stable version
 
 # IF SOMETHING GOES WRONG (WARNING: ALL RECENT COMMITS IN THE CURRENT BRANCH WILL BE LOST!)
 git reset --hard <id of the commit you want to reset to>
