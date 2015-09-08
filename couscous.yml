@@ -112,9 +112,33 @@ menu:
                     actions:
                         text: Actions
                         relativeUrl: docs/rules/actions.html
+                        submenu:
+                            items:
+                                cloudmlcall:
+                                    text: CloudML Call
+                                    relativeUrl: docs/rules/cloudmlcall.html
         observers:
             text: Observers
             relativeUrl: docs/observers/
+            submenu:
+                items:
+                    historydb:
+                        text: HistoryDB
+                        relativeUrl: docs/observers/rdf-history-db/
+                        submenu:
+                            items:
+                                historydb-manual:
+                                    text: User Manual
+                                    relativeUrl: docs/observers/rdf-history-db/user-manual.html
+                                historydb-api:
+                                    text: API Reference
+                                    relativeUrl: docs/observers/rdf-history-db/api/
+                                historydb-datastore:
+                                    text: DataStore Reference
+                                    relativeUrl: docs/observers/rdf-history-db/datastore/
+                                historydb-install:
+                                    text: Install Guide
+                                    relativeUrl: docs/observers/rdf-history-db/install.html
         changelog:
             text: Change log
             relativeUrl: CHANGELOG.html

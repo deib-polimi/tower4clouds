@@ -1,4 +1,8 @@
-[Documentation table of contents](toc.md) / User Manual
+---
+currentMenu: historydb-manual
+parentMenu: historydb
+parent2Menu: observers
+---
 
 # User Manual
 

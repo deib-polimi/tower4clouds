@@ -1,8 +1,14 @@
-[Documentation table of contents](../toc.md) / [DataStore Reference](../datastore.md) / add-model
+---
+currentMenu: historydb-datastore
+parentMenu: historydb
+parent2Menu: observers
+---
+
+[&#9664; Back to list](.)
 
 # Add Model
 
-When adding a new model to the system (using the REST API [PUT-model](../rest/model/PUT-model.md)), a number of triples are inserted in the datastore.
+When adding a new model to the system (using the REST API [PUT-model](../api/PUT-model.md)), a number of triples are inserted in the datastore.
 
 Let's assume that the sub-component that has to save the model in the datastore received it in a certain time (e.g. with a timestamp `1425399022110`, corresponding to the date *Tue, 03 Mar 2015 17:10:22 GMT+1:00*).
 

@@ -1,10 +1,12 @@
-[Documentation table of contents](../../toc.md) / [API Reference](../../api.md) / PUT-model
+---
+currentMenu: historydb-api
+parentMenu: historydb
+parent2Menu: observers
+---
 
-# Models
+[&#9664; Back to API list](.)
 
-```
-PUT /resources
-```
+# `PUT` /resources
 
 ## Description
 

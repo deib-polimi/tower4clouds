@@ -1,8 +1,14 @@
-[Documentation table of contents](../toc.md) / [DataStore Reference](../datastore.md) / delete-model
+---
+currentMenu: historydb-datastore
+parentMenu: historydb
+parent2Menu: observers
+---
+
+[&#9664; Back to list](.)
 
 # Delete Model
 
-When deleting a model from the system (using the REST API [DELETE-model](../rest/model/DELETE-model.md)), a number of triples are inserted in the datastore.
+When deleting a model from the system (using the REST API [DELETE-model](../api/DELETE-model.md)), a number of triples are inserted in the datastore.
 
 Let's assume that:
 
