@@ -16,6 +16,8 @@
 
 # RELEASE
 
+# REMEMBER to change maven configuration to force it to use java 7. Example in OS X:
+cat 'export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home' > ~/.mavenrc
 # From the develop branch do
 mvn clean release:prepare -DdryRun=true
 mvn release:clean release:prepare release:perform
