@@ -33,12 +33,6 @@ public class Rack extends Resource{
     public Rack() {
     }
     
-    @Override
-    public String toString() {
-        return "Method [clazz=" + getClazz() + ", type=" + getType() + ", id="
-                + getId() + "]";
-    }
-    
      //add nodes to the rack
     public void addNodes(Set<String> nodes){
         if(this.nodes == null)
@@ -54,6 +48,41 @@ public class Rack extends Resource{
     public void setNodes(Set<String> nodes) {
         this.nodes = nodes;
     }
+
+	@Override
+	public String toString() {
+		return "Rack [nodes=" + nodes + ", type=" + getType()
+				+ ", id=" + getId() + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((nodes == null) ? 0 : nodes.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Rack other = (Rack) obj;
+		if (nodes == null) {
+			if (other.nodes != null)
+				return false;
+		} else if (!nodes.equals(other.nodes))
+			return false;
+		return true;
+	}
+	
+	
+    
+    
     
 }
 

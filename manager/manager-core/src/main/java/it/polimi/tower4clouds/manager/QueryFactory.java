@@ -153,7 +153,8 @@ public class QueryFactory {
 
 		query.getBody()
 				.selectFunction("?resourceId", null, outputResourceId)
-				.selectFunction("?metric", null, "\"" + outputMetricName + "\"^^xsd:string")
+				.selectFunction("?metric", null,
+						"\"" + outputMetricName + "\"^^xsd:string")
 				.selectFunction("?value", aggregateFunction,
 						aggregateParameters)
 				.selectFunction(
@@ -239,6 +240,42 @@ public class QueryFactory {
 						.add("?" + MOVocabulary.Location + "_1", MO.id,
 								"?" + MOVocabulary.Location + "Id_1");
 				break;
+			case MOVocabulary.Node:
+				graph.addTransitive(
+						"?" + MOVocabulary.InternalComponent + "_1",
+						MO.requiredComponents,
+						"?" + MOVocabulary.ExternalComponent + "_1")
+						.add("?" + MOVocabulary.Node + "_1", MO.vms,
+								"?" + MOVocabulary.ExternalComponent + "_1")
+						.add("?" + MOVocabulary.Node + "_1", MO.id,
+								"?" + MOVocabulary.Node + "Id_1");
+				break;
+			case MOVocabulary.Cluster:
+				graph.addTransitive(
+						"?" + MOVocabulary.InternalComponent + "_1",
+						MO.requiredComponents,
+						"?" + MOVocabulary.ExternalComponent + "_1")
+						.add("?" + MOVocabulary.Node + "_1", MO.vms,
+								"?" + MOVocabulary.ExternalComponent + "_1")
+						.add("?" + MOVocabulary.Cluster + "_1", MO.nodes,
+								"?" + MOVocabulary.Node + "_1")
+						.add("?" + MOVocabulary.Cluster + "_1", MO.id,
+								"?" + MOVocabulary.Cluster + "Id_1")
+						.add("?" + MOVocabulary.Cluster + "_1", RDF.type,
+								MO.Cluster);
+				break;
+			case MOVocabulary.Rack:
+				graph.addTransitive(
+						"?" + MOVocabulary.InternalComponent + "_1",
+						MO.requiredComponents,
+						"?" + MOVocabulary.ExternalComponent + "_1")
+						.add("?" + MOVocabulary.Node + "_1", MO.vms,
+								"?" + MOVocabulary.ExternalComponent + "_1")
+						.add("?" + MOVocabulary.Rack + "_1", MO.nodes,
+								"?" + MOVocabulary.Node + "_1")
+						.add("?" + MOVocabulary.Rack + "_1", MO.id,
+								"?" + MOVocabulary.Rack + "Id_1")
+						.add("?" + MOVocabulary.Rack + "_1", RDF.type, MO.Rack);
 			default:
 				throw new RuntimeException("Unknown class " + toClass);
 			}
@@ -285,6 +322,42 @@ public class QueryFactory {
 						.add("?" + MOVocabulary.Location + "_1", MO.id,
 								"?" + MOVocabulary.Location + "Id_1");
 				break;
+			case MOVocabulary.Node:
+				graph.addTransitive(
+						"?" + MOVocabulary.InternalComponent + "_1",
+						MO.requiredComponents,
+						"?" + MOVocabulary.ExternalComponent + "_1")
+						.add("?" + MOVocabulary.Node + "_1", MO.vms,
+								"?" + MOVocabulary.ExternalComponent + "_1")
+						.add("?" + MOVocabulary.Node + "_1", MO.id,
+								"?" + MOVocabulary.Node + "Id_1");
+				break;
+			case MOVocabulary.Cluster:
+				graph.addTransitive(
+						"?" + MOVocabulary.InternalComponent + "_1",
+						MO.requiredComponents,
+						"?" + MOVocabulary.ExternalComponent + "_1")
+						.add("?" + MOVocabulary.Node + "_1", MO.vms,
+								"?" + MOVocabulary.ExternalComponent + "_1")
+						.add("?" + MOVocabulary.Cluster + "_1", MO.nodes,
+								"?" + MOVocabulary.Node + "_1")
+						.add("?" + MOVocabulary.Cluster + "_1", MO.id,
+								"?" + MOVocabulary.Cluster + "Id_1")
+						.add("?" + MOVocabulary.Cluster + "_1", RDF.type,
+								MO.Cluster);
+				break;
+			case MOVocabulary.Rack:
+				graph.addTransitive(
+						"?" + MOVocabulary.InternalComponent + "_1",
+						MO.requiredComponents,
+						"?" + MOVocabulary.ExternalComponent + "_1")
+						.add("?" + MOVocabulary.Node + "_1", MO.vms,
+								"?" + MOVocabulary.ExternalComponent + "_1")
+						.add("?" + MOVocabulary.Rack + "_1", MO.nodes,
+								"?" + MOVocabulary.Node + "_1")
+						.add("?" + MOVocabulary.Rack + "_1", MO.id,
+								"?" + MOVocabulary.Rack + "Id_1")
+						.add("?" + MOVocabulary.Rack + "_1", RDF.type, MO.Rack);
 			default:
 				throw new RuntimeException("Unknown class " + toClass);
 			}
@@ -332,12 +405,66 @@ public class QueryFactory {
 						"?" + MOVocabulary.Location + "_1", MO.id,
 						"?" + MOVocabulary.Location + "Id_1");
 				break;
+			case MOVocabulary.Node:
+				graph.add("?" + MOVocabulary.Node + "_1", MO.vms,
+						"?" + MOVocabulary.VM + "_1").add(
+						"?" + MOVocabulary.Node + "_1", MO.id,
+						"?" + MOVocabulary.Node + "Id_1");
+				break;
+			case MOVocabulary.Cluster:
+				graph.add("?" + MOVocabulary.Node + "_1", MO.vms,
+						"?" + MOVocabulary.VM + "_1")
+						.add("?" + MOVocabulary.Cluster + "_1", MO.nodes,
+								"?" + MOVocabulary.Node + "_1")
+						.add("?" + MOVocabulary.Cluster + "_1", MO.id,
+								"?" + MOVocabulary.Cluster + "Id_1")
+						.add("?" + MOVocabulary.Cluster + "_1", RDF.type,
+								MO.Cluster);
+				break;
+			case MOVocabulary.Rack:
+				graph.add("?" + MOVocabulary.Node + "_1", MO.vms,
+						"?" + MOVocabulary.VM + "_1")
+						.add("?" + MOVocabulary.Rack + "_1", MO.nodes,
+								"?" + MOVocabulary.Node + "_1")
+						.add("?" + MOVocabulary.Rack + "_1", MO.id,
+								"?" + MOVocabulary.Rack + "Id_1")
+						.add("?" + MOVocabulary.Rack + "_1", RDF.type, MO.Rack);
 			default:
 				throw new RuntimeException("Unknown class " + toClass);
 			}
 			break;
+		case MOVocabulary.Node:
+			switch (toClass) {
+			case MOVocabulary.Method:
+			case MOVocabulary.InternalComponent:
+			case MOVocabulary.PaaSService:
+			case MOVocabulary.VM:
+			case MOVocabulary.CloudProvider:
+			case MOVocabulary.Location:
+				throw new RuntimeException("Cannot group by " + toClass
+						+ " when monitoring " + fromClass);
+			case MOVocabulary.Cluster:
+				graph.add("?" + MOVocabulary.Cluster + "_1", MO.nodes,
+						"?" + MOVocabulary.Node + "_1")
+						.add("?" + MOVocabulary.Cluster + "_1", MO.id,
+								"?" + MOVocabulary.Cluster + "Id_1")
+						.add("?" + MOVocabulary.Cluster + "_1", RDF.type,
+								MO.Cluster);
+				break;
+			case MOVocabulary.Rack:
+				graph.add("?" + MOVocabulary.Rack + "_1", MO.nodes,
+						"?" + MOVocabulary.Node + "_1")
+						.add("?" + MOVocabulary.Rack + "_1", MO.id,
+								"?" + MOVocabulary.Rack + "Id_1")
+						.add("?" + MOVocabulary.Rack + "_1", RDF.type, MO.Rack);
+			default:
+				throw new RuntimeException("Cannot group by " + toClass
+						+ " when monitoring " + fromClass);
+			}
+			break;
 		default:
-			throw new RuntimeException("Unknown class " + fromClass);
+			throw new RuntimeException("Cannot group by " + toClass
+					+ " when monitoring " + fromClass);
 		}
 	}
 

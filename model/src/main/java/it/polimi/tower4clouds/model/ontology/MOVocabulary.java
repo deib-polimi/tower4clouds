@@ -42,6 +42,8 @@ public class MOVocabulary {
     public static final String clazz = "clazz";
     public static final String type = "type";
     public static final String id = "id";
+    public static final String vms = "nodes";
+    public static final String nodes = "nodes";
     
     public static final String idParameterName = id;
     

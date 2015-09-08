@@ -80,7 +80,10 @@ public class DCMain {
         
         //load properties from the config file
         try{
-            flexDCProp.load(new FileInputStream(urlFileProperties));
+//            flexDCProp.load(new FileInputStream(urlFileProperties));
+        	
+        	// Marco temp fix
+        	flexDCProp.load(DCMain.class.getResourceAsStream("/config.properties"));
         }
         catch(FileNotFoundException ex){
             logger.error("Properties file not found");
@@ -108,27 +111,26 @@ public class DCMain {
         flexDCProp.put(DCProperty.URL_VMS, "https://cp.sd1.flexiant.net/VMPlacement/FCOVMPlacement.csv");
         */
         
-	ManagerAPI manager = new ManagerAPI(managerIP, managerPort);
+//	ManagerAPI manager = new ManagerAPI(managerIP, managerPort);
 
-        /* Commented code for debug use only: use the rules.xml file inside the resources folder to install rules
-	manager.installRules(XMLHelper.deserialize(DCMain.class
-			.getResourceAsStream("/rules.xml"),
-			MonitoringRules.class));
+        // Commented code for debug use only: use the rules.xml file inside the resources folder to install rules
+//	manager.installRules(XMLHelper.deserialize(DCMain.class
+//			.getResourceAsStream("/rules.xml"),
+//			MonitoringRules.class));
         
-        manager.installRules(XMLHelper.deserialize(DCMain.class
-			.getResourceAsStream("/rulesGroupByCluster.xml"),
-			MonitoringRules.class));
-        */
+//        manager.installRules(XMLHelper.deserialize(DCMain.class
+//			.getResourceAsStream("/rulesGroupByCluster.xml"),
+//			MonitoringRules.class));
         
-        /* Commented code for debug use only: create HTTP observer to monitor sent datas  
-        manager.registerHttpObserver("CpuUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-        manager.registerHttpObserver("RamUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-        manager.registerHttpObserver("NodeLoad", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-        manager.registerHttpObserver("TXNetwork", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-        manager.registerHttpObserver("RXNetwork", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-        manager.registerHttpObserver("StorageMetric", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-        manager.registerHttpObserver("RackLoadMetric", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-        */
+        // Commented code for debug use only: create HTTP observer to monitor sent datas  
+//        manager.registerHttpObserver("CpuUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+//        manager.registerHttpObserver("RamUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+//        manager.registerHttpObserver("NodeLoad", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+//        manager.registerHttpObserver("TXNetwork", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+//        manager.registerHttpObserver("RXNetwork", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+//        manager.registerHttpObserver("StorageMetric", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+//        manager.registerHttpObserver("RackLoadMetric", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+        
         
         
         Registry.initialize(managerIP, managerPort, flexDCProp);

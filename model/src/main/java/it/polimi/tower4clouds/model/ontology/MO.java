@@ -38,8 +38,8 @@ public class MO {
 	public static OntClass ExternalComponent = makeClass(MOVocabulary.ExternalComponent);
 	public static OntClass Method = makeClass(MOVocabulary.Method);
 	public static OntClass Node = makeClass(MOVocabulary.Node);
-        public static OntClass Cluster = makeClass(MOVocabulary.Cluster);
-        public static OntClass Rack = makeClass(MOVocabulary.Rack);
+    public static OntClass Cluster = makeClass(MOVocabulary.Cluster);
+    public static OntClass Rack = makeClass(MOVocabulary.Rack);
 
 	public static Property IDRef = makeProperty(MOVocabulary.IDRef);
 	public static Property cloudProvider = makeProperty(MOVocabulary.cloudProvider);
@@ -48,7 +48,8 @@ public class MO {
 	public static Property providedMethods = makeProperty(MOVocabulary.providedMethods);
 	public static Property type = makeProperty(MOVocabulary.type);
 	public static Property id = makeProperty(MOVocabulary.id);
-//	public static Property numberOfCPUs = makeProperty(MOVocabulary.numberOfCPUs);
+	public static Property vms = makeProperty(MOVocabulary.vms);
+	public static Property nodes = makeProperty(MOVocabulary.nodes);
 
 	public static OntClass Resource = makeClass(MOVocabulary.Resource);
 	
@@ -71,9 +72,9 @@ public class MO {
 		CloudProvider.addProperty(RDFS.subClassOf, Resource);
 		Location.addProperty(RDFS.subClassOf, Resource);
 		Node.addProperty(RDFS.subClassOf, Resource);
-                Cluster.addProperty(RDFS.subClassOf, Resource);
-                Rack.addProperty(RDFS.subClassOf, Resource);
-		
+        Cluster.addProperty(RDFS.subClassOf, Resource);
+        Rack.addProperty(RDFS.subClassOf, Resource);
+                
 		IDRef.addProperty(RDFS.domain, Resource);
 		IDRef.addProperty(RDFS.range, RDFS.Literal);
 		cloudProvider.addProperty(RDFS.domain, ExternalComponent);
@@ -84,17 +85,25 @@ public class MO {
 		location.addProperty(RDFS.range, Location);
 		providedMethods.addProperty(RDFS.domain, InternalComponent);
 		providedMethods.addProperty(RDFS.range, Method);
+		vms.addProperty(RDFS.domain, Node);
+		vms.addProperty(RDFS.range, VM);
+
+		// Domain for nodes is not specified since used by multiple domains... temporary ok 
+//		nodes.addProperty(RDFS.domain, Rack);
+//		nodes.addProperty(RDFS.domain, Cluster);
+		
+		nodes.addProperty(RDFS.range, Node);
 		type.addProperty(RDFS.domain, Resource);
 		type.addProperty(RDFS.range, RDFS.Literal);
 		id.addProperty(RDFS.domain, Resource);
 		id.addProperty(RDFS.range, RDFS.Literal);
-//		numberOfCPUs.addProperty(RDFS.domain, VM);
-//		numberOfCPUs.addProperty(RDFS.range, RDFS.Literal);
 		
 		cloudProvider.addProperty(RDFS.subPropertyOf, IDRef);
 		requiredComponents.addProperty(RDFS.subPropertyOf, IDRef);
 		location.addProperty(RDFS.subPropertyOf, IDRef);
 		providedMethods.addProperty(RDFS.subPropertyOf, IDRef);
+		nodes.addProperty(RDFS.subPropertyOf, IDRef);
+		vms.addProperty(RDFS.subPropertyOf, IDRef);
 	}
 
 	public static Property makeProperty(String string) {
