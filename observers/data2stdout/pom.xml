@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>it.polimi.tower4clouds</groupId>
 		<artifactId>observers</artifactId>
-		<version>0.3-SNAPSHOT</version>
+		<version>0.3</version>
 	</parent>
 	<artifactId>data2stdout</artifactId>
 	<name>MODAClouds - Tower4Clouds - Data2STDOUT Observer</name>

@@ -21,7 +21,7 @@
 	<parent>
 		<artifactId>observers</artifactId>
 		<groupId>it.polimi.tower4clouds</groupId>
-		<version>0.3-SNAPSHOT</version>
+		<version>0.3</version>
 	</parent>
 	<artifactId>rdf-history-db</artifactId>
 	<packaging>pom</packaging>
