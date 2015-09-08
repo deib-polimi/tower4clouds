@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 This document adheres to [keep-a-changelog].
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.3] - to be released
+## [0.3] - 2015-09-08
 ### Added
 - CloudML action added to rules. It is now possible to scale up or down inside of the same cloud provider or bust to another one, in response to a condition on a monitored resource.
 
