@@ -20,7 +20,7 @@
   <parent>
     <groupId>it.polimi.tower4clouds</groupId>
     <artifactId>tower4clouds</artifactId>
-    <version>0.3</version>
+    <version>0.4-SNAPSHOT</version>
   </parent>
   <artifactId>use-cases</artifactId>
   <name>MODAClous - Tower4Clouds - Use Cases Parent Pom</name>
