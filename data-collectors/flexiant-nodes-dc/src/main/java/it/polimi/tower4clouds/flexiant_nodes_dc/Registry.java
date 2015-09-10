@@ -245,11 +245,14 @@ public class Registry {
         List<String> vmsId = fileParser.getData(2);
         
         for(int i = 0; i < vmsId.size(); i++){
-            String vmId = vmsId.get(i).replaceAll("\\.", "_").replaceAll("\\:", "_");
-            String nodeId = nodesId.get(i).replaceAll("\\.", "_");
-            if(vmsByNodeId.containsKey(nodeId))
-                vmsByNodeId.get(nodeId).add(vmId);
-            logger.info("Added VM: "+vmId+" to node: "+nodeId);
+            //if VMs hasn't an IPv6 address load it in the node
+            if(!vmsId.get(i).contains(":")){
+                String vmId = vmsId.get(i).replaceAll("\\.", "_");
+                String nodeId = nodesId.get(i).replaceAll("\\.", "_");
+                if(vmsByNodeId.containsKey(nodeId))
+                    vmsByNodeId.get(nodeId).add(vmId);
+                logger.info("Added VM: "+vmId+" to node: "+nodeId);
+            }
         }
         
         //add vms to the nodes
