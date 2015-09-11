@@ -276,6 +276,7 @@ public class QueryFactory {
 						.add("?" + MOVocabulary.Rack + "_1", MO.id,
 								"?" + MOVocabulary.Rack + "Id_1")
 						.add("?" + MOVocabulary.Rack + "_1", RDF.type, MO.Rack);
+				break;
 			default:
 				throw new RuntimeException("Unknown class " + toClass);
 			}
@@ -358,6 +359,7 @@ public class QueryFactory {
 						.add("?" + MOVocabulary.Rack + "_1", MO.id,
 								"?" + MOVocabulary.Rack + "Id_1")
 						.add("?" + MOVocabulary.Rack + "_1", RDF.type, MO.Rack);
+				break;
 			default:
 				throw new RuntimeException("Unknown class " + toClass);
 			}
@@ -429,6 +431,7 @@ public class QueryFactory {
 						.add("?" + MOVocabulary.Rack + "_1", MO.id,
 								"?" + MOVocabulary.Rack + "Id_1")
 						.add("?" + MOVocabulary.Rack + "_1", RDF.type, MO.Rack);
+				break;
 			default:
 				throw new RuntimeException("Unknown class " + toClass);
 			}
@@ -457,6 +460,7 @@ public class QueryFactory {
 						.add("?" + MOVocabulary.Rack + "_1", MO.id,
 								"?" + MOVocabulary.Rack + "Id_1")
 						.add("?" + MOVocabulary.Rack + "_1", RDF.type, MO.Rack);
+				break;
 			default:
 				throw new RuntimeException("Cannot group by " + toClass
 						+ " when monitoring " + fromClass);
