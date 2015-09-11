@@ -9,22 +9,22 @@ parentMenu: data-collectors
 
 |Metric Name|Target Class|Required Parameters|Description|
 |-----------|------------|-------------------|-----------|
-|CPUUtilization|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the CPU Utilization of every node by parsing a remote file which url is specified in the configuration properties file.<br/>The time interval between two samples is specified by the parameter sampling time. |
-|RamUsage|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the Ram Utilization of every node.<br/>Like the CPUUtilization metric, this metrics parse a remote file to retrive the data sample.|
-|NodeLoadMetric|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the load of every node.<br/>Like the CPUUtilization metric, this metrics parse a remote file to retrive the data sample.|
-|TXNetworkMetric|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the band usage of TX network of every node.<br/>Like the CPUUtilization metric, this metrics parse a remote file to retrive the data sample.|
-|RXNetworkMetric|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the band usage of RX network of every node.<br/>Like the CPUUtilization metric, this metrics parse a remote file to retrive the data sample.|
-|StorageCluster|Cluster|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the used storage of every cluster. Unlike nodes, clusters are not retrived from a remote file, they are fixed in the source code of DC (there are Cluster1 and Cluster2). <br/> The samples are collected in the same way of CPUUtilization metric.|
-|RackLoad|Rack|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the measured energy load of every rack. To retrieve racks ids the DC parse the same remote file that contains values of the metric. <br/> The samples are collected in the same way of CPUUtilization metric.|
+|CPUUtilization|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the CPU Utilization (in [0,1]) for the target node specified in the rule with the given sampling time (in seconds). |
+|RamUsage|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the Ram Utilization (in MB) for the target node specified in the rule with the given sampling time (in seconds).|
+|Load|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the Load (# of running processes) for the target node specified in the rule with the given sampling time (in seconds).|
+|TXNetwork|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the band usage of TX network for the target node specified in the rule with the given sampling time (in seconds).|
+|RXNetwork|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the band usage of RX network for the target node specified in the rule with the given sampling time (in seconds).|
+|StorageCluster|Cluster|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the used storage of every cluster for the target cluster specified in the rule with the given sampling time (in seconds).|
+|RackLoad|Rack|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the measured energy load for the target Rack specified in the rule with the given sampling time (in seconds).|
 
-##Resources Identification
-Every resource in the DC has an id in order to identificate it, the following table shows how the id is determined and the related resources of any kind of resrouce.
+## Resources information and relationships
 
-|Resource type|ID|Related resources|
-|-----------|---------------|--------------------------|
-|Node|IP of the node where dots are replaced with the underscores (For example 127.0.0.1 becomes 127_0_0_1)|A node has a set of its related VMs. The id of a VM is its IP (like the node dots are replaced with underscores) |
-|Cluster|The id is the word "Cluster" followed by the id number (For example: Cluster1, Custer2...)|A cluster has a set of its related Nodes which ids structure is specficied above.|
-|Rack|The id is name of the rack found in the rack load metric's file.|A rack has a set of its related Nodes which ids structure is specficied above.|
+The information about resources in the Flexiant Testbed (Nodes, Racks and Clusters) are contained in configuration files packaged together the data collector and available [here](https://github.com/deib-polimi/tower4clouds/tree/master/data-collectors/flexiant-nodes-dc/src/main/resources). Such files also contain information about their relationships according to the Tower 4Clouds [meta-model][model]. Custom files can be provided as described in this documentation.
+
+The following conventions were used in the development of this data collectors when the [model] is created:
+* Nodes are given their own IP as id, with dots replaced by underscores. Type is provided by the configuration.
+* The updated list of VMs contained in a Node is retrieved via the Flexiant provided API. **The important assumption here is that VMs ids in the Tower 4Clouds [model] are equal to their IP address, with dots replaced by underscores**. If such assumption is not valid, higher level metrics such as Response Time, collected by other data collectors, cannot be grouped by resources monitored by this data collector (e.g. by Cluster).
+* Clusters and Racks are given the id provided by the Flexiant provided API.
 
 ## Usage
 Flexiant DC can be configured by means of different options (latters replaces the formers):
@@ -62,7 +62,7 @@ Usage: java -jar DC.jar [options]
 
 ###Configuration File (config-file)
 The config file contains a lot of properties that specify URLs of some remote files.<br/>
-Below you find the structure of the file with actual working url:
+Below you find the structure of the file with currently used url:
 
 ```
 #Flexiant DC Properties
@@ -93,9 +93,8 @@ A5,10.158.128.16,Cluster2
 ```
 
 
-###XML rules structure
-In order to monitor metrics the remote Manager should has a rule (in its configuration) for every metric you want to collect.<br/>
-Below you can see an example of this xml file with one metric configured:
+### An example of rule
+Here we provide an example of [rule][rules] that can be used to monitor the average CPU utilization of all nodes in the Flexiant clusters grouped by Cluster.
 
 ```xml
 <monitoringRules xmlns="http://www.modaclouds.eu/xsd/1.0/monitoring_rules_schema">
@@ -106,22 +105,18 @@ Below you can see an example of this xml file with one metric configured:
         <collectedMetric metricName="CPUUtilization">
             <parameter name="samplingTime">10</parameter>
         </collectedMetric>
+        <metricAggregation aggregateFunction="Average" groupingClass="Cluster"/>
         <actions>
             <action name="OutputMetric">
                 <parameter name="resourceId">ID</parameter>
-                <parameter name="metric">CpuUtilization</parameter>
+                <parameter name="metric">AverageCPUUtilization</parameter>
                 <parameter name="value">METRIC</parameter>
             </action>
         </actions>
     </monitoringRule>
 </monitoringRules>
+
 ```
 
-In the example the configured rule is CPUUtilization with a samplingTime of 10 seconds.
-
-## Developers
-
-The source code of the latest release of the Flexiant DC can be found [here](...). 
-
-[type]: ../model/
-[manager]: ../manager/
+[model]: ../model/
+[rules]: ../rules/
