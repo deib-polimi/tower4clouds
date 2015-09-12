@@ -48,6 +48,7 @@ public class RackLoad extends Metric{
         if(lastSamples.containsKey(resource.getId()))
             return lastSamples.remove(resource.getId());
         
+        lastSamples.clear();
         fileParser.setFileUrl(url);
         fileParser.readLastUpdate(0);
         List<String> rackIds = fileParser.getData(1);

@@ -15,6 +15,7 @@
  */
 package it.polimi.tower4clouds.model.ontology;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -39,6 +40,12 @@ public class Cluster extends Resource{
             setNodes(nodes);
         else
             this.nodes.addAll(nodes);
+    }
+    
+    public void addNode(String node){
+        if(this.nodes == null)
+            nodes = new HashSet<String>();
+        nodes.add(node);
     }
 
     public Set<String> getNodes() {

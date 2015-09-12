@@ -9,13 +9,13 @@ parentMenu: data-collectors
 
 |Metric Name|Target Class|Required Parameters|Description|
 |-----------|------------|-------------------|-----------|
-|CPUUtilization|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the CPU Utilization (in [0,1]) for the target node specified in the rule with the given sampling time (in seconds). |
-|RamUsage|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the Ram Utilization (in MB) for the target node specified in the rule with the given sampling time (in seconds).|
+|CPUUtilization|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the CPU Utilization (in [0,100]) for the target node specified in the rule with the given sampling time (in seconds). |
+|RamUsage|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the Ram Utilization (percentage use [0,100]) for the target node specified in the rule with the given sampling time (in seconds).|
 |Load|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the Load (# of running processes) for the target node specified in the rule with the given sampling time (in seconds).|
-|TXNetwork|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the band usage of TX network for the target node specified in the rule with the given sampling time (in seconds).|
-|RXNetwork|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the band usage of RX network for the target node specified in the rule with the given sampling time (in seconds).|
-|StorageCluster|Cluster|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the used storage of every cluster for the target cluster specified in the rule with the given sampling time (in seconds).|
-|RackLoad|Rack|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the measured energy load for the target Rack specified in the rule with the given sampling time (in seconds).|
+|TXNetwork|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the band usage (in bytes/s) of TX network for the target node specified in the rule with the given sampling time (in seconds).|
+|RXNetwork|Node|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the band usage (in bytes/s) of RX network for the target node specified in the rule with the given sampling time (in seconds).|
+|StorageCluster|Cluster|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the used storage (percentage use [0,100]) of every cluster for the target cluster specified in the rule with the given sampling time (in seconds).|
+|RackLoad|Rack|<ul><li>samplingTime (default: 60 sec)</li></ul>|Collect the measured energy load (in Ampere) for the target Rack specified in the rule with the given sampling time (in seconds).|
 
 ## Resources information and relationships
 
@@ -42,7 +42,10 @@ If these variables aren't setted the DC will use the default values specified in
 |MODACLOUDS_TOWER4CLOUDS_MANAGER_IP|localhost|Specify the IP of the Manager which the DC use to estabilish a link to it.|
 |MODACLOUDS_TOWER4CLOUDS_MANAGER_PORT|8170|Specify the PORT of the Manager.|
 |MODACLOUDS_TOWER4CLOUDS_FLEXDC_CONFIG_FILE|Internal file|Specify the path of the config file that you must create in order to configure the DC properties (Structure of the file explained below).|
-|MODACLOUDS_TOWER4CLOUDS_FLEXDC_CLUSTER_CONFIG_FILE|Internal file|Specify the path of the cluster config file which determine relationships between racks and nodes (Structure of the file explained below).|
+|MODACLOUDS_TOWER4CLOUDS_FLEXDC_NODES_FILE|Internal file|Specify the path of the nodes file which contains target nodes. (Structure of the file explained below).|
+|MODACLOUDS_TOWER4CLOUDS_FLEXDC_CLUSTERS_FILE|Internal file|Specify the path of the clusters file which contains target clusters. (Structure of the file explained below).|
+|MODACLOUDS_TOWER4CLOUDS_FLEXDC_RACKS_FILE|Internal file|Specify the path of the racks file which contains target racks. (Structure of the file explained below).|
+|MODACLOUDS_TOWER4CLOUDS_FLEXDC_PLACEMENT_FILE|Internal file|Specify the path of the placement file which determine relationships between racks and nodes, clusters and nodes (Structure of the file explained below).|
 
 ###CLI Arguments
 CLI Arguments overwrite default value or environment variable for any parameter.
@@ -56,8 +59,14 @@ Usage: java -jar DC.jar [options]
       Manager port
     -config-file
       Config file path
-    -cluster-config-file
-      Cluster config file path
+    -nodes-file
+      Nodes file path
+    -clusters-file
+      Clusters file path
+    -racks-file
+      Racks file path
+    -placement-file
+      Placement file path
 ```
 
 ###Configuration File (config-file)
@@ -66,7 +75,6 @@ Below you find the structure of the file with currently used url:
 
 ```
 #Flexiant DC Properties
-URL_NODES=https://cp.sd1.flexiant.net/nodeid/
 URL_CPU_METRIC=https://cp.sd1.flexiant.net/nodecpu10/
 URL_RAM_METRIC=https://cp.sd1.flexiant.net/noderam10/
 URL_NODELOAD_METRIC=https://cp.sd1.flexiant.net/nodeload10/
@@ -77,11 +85,28 @@ URL_RACKLOAD_METRIC=https://cp.sd1.flexiant.net/rackload10/upsload.csv
 URL_VMS=https://cp.sd1.flexiant.net/VMPlacement/FCOVMPlacement.csv
 ```
 
-The first property specify URL where the DC can find files which contain nodes of every cluster.<br/>
-The other properties specify URL of files which contain metrics' samples.
+The properties specify URL of files which contain metrics' samples.
 
-###Rack/node relations file (cluster-config-file)
-If you want you can specify the relationships between racks and nodes you can create a .CSV file which contains that information.
+###Nodes, Clusters and Racks file
+You can specify the resources which DC have to monitor by create three csv file (nodes, clusters and racks).
+Once files are created you have to pass the path of files using one of the ways exaplined above.
+Below there is an example of the structure of the files:
+
+```
+Id,Type
+nodeId,NodeType
+```
+```
+Id,Type
+rackId,RackType
+```
+```
+Id,Type
+clusterId,ClusterType
+```
+
+###Rack/node, Cluster/node relations file (placement-file)
+If you want you can specify the relationships between racks and nodes and between clusters and nodes, you can create a .CSV file which contains that information.
 Below there is an example of the structure of the file:
 
 ```
