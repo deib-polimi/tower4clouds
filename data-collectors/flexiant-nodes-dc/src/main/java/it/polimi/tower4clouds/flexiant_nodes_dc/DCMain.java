@@ -47,18 +47,33 @@ public class DCMain {
     @Parameter(names = "-config-file", description = "Config file path")
     public String configFilePath = null;
 	
-    @Parameter(names = "-cluster-config-file", description = "Cluster config file path")
-    public String clusterConfigFilePath = null;
+    @Parameter(names = "-placement-file", description = "Placement file path")
+    public String placementFilePath = null;
+    
+    @Parameter(names = "-nodes-file", description = "nodes.csv file path")
+    public String nodesFilePath = null;
+    
+    @Parameter(names = "-clusters-file", description = "clusters.csv file path")
+    public String clustersFilePath = null;
+    
+    @Parameter(names = "-racks-file", description = "racks.csv file path")
+    public String racksFilePath = null;
     
     private static final String DEFAULT_MANAGER_IP = "localhost";
     private static final String DEFAULT_MANAGER_PORT = "8170";
     private static final String DEFAULT_CONFIG_FILE_PATH = DCMain.class.getResource("/").getPath()+"config.properties";
-    private static final String DEFAULT_CLUSTER_CONFIG_FILE_PATH = DCMain.class.getResource("/").getPath()+"cluster-config.csv";
+    private static final String DEFAULT_PLACEMENT_FILE_PATH = DCMain.class.getResource("/").getPath()+"placement.csv";
+    private static final String DEFAULT_NODES_FILE_PATH = DCMain.class.getResource("/").getPath()+"nodes.csv";
+    private static final String DEFAULT_CLUSTERS_FILE_PATH = DCMain.class.getResource("/").getPath()+"clusters.csv";
+    private static final String DEFAULT_RACKS_FILE_PATH = DCMain.class.getResource("/").getPath()+"racks.csv";
     
     private static final String ENV_VAR_MANAGER_IP = "MODACLOUDS_TOWER4CLOUDS_MANAGER_IP";
     private static final String ENV_VAR_MANAGER_PORT = "MODACLOUDS_TOWER4CLOUDS_MANAGER_PORT";
     private static final String ENV_VAR_URL_CONFIG_FILE = "MODACLOUDS_TOWER4CLOUDS_FLEXDC_CONFIG_FILE";
-    private static final String ENV_VAR_URL_CLUSTER_CONFIG_FILE = "MODACLOUDS_TOWER4CLOUDS_FLEXDC_CLUSTER_CONFIG_FILE";
+    private static final String ENV_VAR_URL_PLACEMENT_FILE = "MODACLOUDS_TOWER4CLOUDS_FLEXDC_PLACEMENT_FILE";
+    private static final String ENV_VAR_URL_NODES_FILE = "MODACLOUDS_TOWER4CLOUDS_FLEXDC_NODES_FILE";
+    private static final String ENV_VAR_URL_CLUSTERS_FILE = "MODACLOUDS_TOWER4CLOUDS_FLEXDC_CLUSTERS_FILE";
+    private static final String ENV_VAR_URL_RACKS_FILE = "MODACLOUDS_TOWER4CLOUDS_FLEXDC_RACKS_FILE";
     
     public static void main(String[] args) throws Exception {
         
@@ -114,7 +129,12 @@ public class DCMain {
             throw new RuntimeException("Error while parsing properties file");
         }
         
-        Registry.initialize(mainInstance.managerIp, port, flexDCProp, mainInstance.clusterConfigFilePath);
+        DCProperty.placementFilePath = mainInstance.placementFilePath;
+        DCProperty.nodesFilePath = mainInstance.nodesFilePath;
+        DCProperty.clustersFilePath = mainInstance.clustersFilePath;
+        DCProperty.racksFilePath = mainInstance.racksFilePath;
+        
+        Registry.initialize(mainInstance.managerIp, port, flexDCProp);
         Registry.startMonitoring();
     }
     
@@ -122,7 +142,10 @@ public class DCMain {
         managerIp = DEFAULT_MANAGER_IP;
         managerPort = DEFAULT_MANAGER_PORT;
         configFilePath = DEFAULT_CONFIG_FILE_PATH;
-        clusterConfigFilePath = DEFAULT_CLUSTER_CONFIG_FILE_PATH;
+        placementFilePath = DEFAULT_PLACEMENT_FILE_PATH;
+        nodesFilePath = DEFAULT_NODES_FILE_PATH;
+        clustersFilePath = DEFAULT_CLUSTERS_FILE_PATH;
+        racksFilePath = DEFAULT_RACKS_FILE_PATH;
     }
     
     private void loadFromEnrivonmentVariables(){
@@ -136,8 +159,17 @@ public class DCMain {
         if(System.getenv(ENV_VAR_URL_CONFIG_FILE) != null)
             configFilePath = System.getenv(ENV_VAR_URL_CONFIG_FILE);
         
-        if(System.getenv(ENV_VAR_URL_CLUSTER_CONFIG_FILE) != null)
-            clusterConfigFilePath = System.getenv(ENV_VAR_URL_CLUSTER_CONFIG_FILE);
+        if(System.getenv(ENV_VAR_URL_PLACEMENT_FILE) != null)
+            placementFilePath = System.getenv(ENV_VAR_URL_PLACEMENT_FILE);
+        
+        if(System.getenv(ENV_VAR_URL_NODES_FILE) != null)
+            nodesFilePath = System.getenv(ENV_VAR_URL_NODES_FILE);
+        
+        if(System.getenv(ENV_VAR_URL_CLUSTERS_FILE) != null)
+            clustersFilePath = System.getenv(ENV_VAR_URL_CLUSTERS_FILE);
+        
+        if(System.getenv(ENV_VAR_URL_RACKS_FILE) != null)
+            racksFilePath = System.getenv(ENV_VAR_URL_RACKS_FILE);
         
     }
     
@@ -151,8 +183,14 @@ public class DCMain {
             managerPort = paramsMap.get("managerport");
         if (paramsMap.get("configfile") != null)
             configFilePath = paramsMap.get("configfile");
-        if (paramsMap.get("clusterconfigfile") != null)
-            clusterConfigFilePath = paramsMap.get("clusterconfigfile");
+        if (paramsMap.get("placementfile") != null)
+            placementFilePath = paramsMap.get("placementfile");
+        if (paramsMap.get("nodesfile") != null)
+            nodesFilePath = paramsMap.get("nodesfile");
+        if (paramsMap.get("clustersfile") != null)
+            clustersFilePath = paramsMap.get("clustersfile");
+        if (paramsMap.get("racksfile") != null)
+            racksFilePath = paramsMap.get("racksfile");
     }
     
 }

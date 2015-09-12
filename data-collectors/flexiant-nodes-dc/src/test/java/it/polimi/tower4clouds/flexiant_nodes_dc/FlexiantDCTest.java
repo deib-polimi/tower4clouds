@@ -37,9 +37,8 @@ public class FlexiantDCTest {
 
         String managerIP = DEFAULT_MANAGER_IP;
         int managerPort = DEFAULT_MANAGER_PORT;
-                
+         
         /* Commented code for debug use only: manual set properties without configuration file 
-        flexDCProp.put(DCProperty.URL_NODES, "https://cp.sd1.flexiant.net/nodeid/");
         flexDCProp.put(DCProperty.URL_CPU_METRIC, "https://cp.sd1.flexiant.net/nodecpu10/");
         flexDCProp.put(DCProperty.URL_RAM_METRIC, "https://cp.sd1.flexiant.net/noderam10/");
         flexDCProp.put(DCProperty.URL_NODELOAD_METRIC, "https://cp.sd1.flexiant.net/nodeload10/");

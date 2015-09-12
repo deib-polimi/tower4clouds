@@ -50,9 +50,9 @@ public class Registry {
     
     private Properties dcProperties;
     
-    private Map<String, Node> nodesById;
-    private Map<String, Cluster> clustersById;
-    private Map<String, Rack> racksById;
+    private Map<String, Resource> nodesById;
+    private Map<String, Resource> clustersById;
+    private Map<String, Resource> racksById;
     
     private Set<Metric> nodeMetrics;
     private Set<Metric> clusterMetrics;
@@ -68,34 +68,30 @@ public class Registry {
     public static Integer CONFIG_SYNC_PERIOD = null;
     public static Integer KEEP_ALIVE = null;
     private static final int DEFAULT_CONFIG_SYNC_PERIOD = 30;
-    
-    private String clusterConfFilePath;
-        
+            
     protected Registry(){}
     
-    public void init(String managerIP, int managerPort, Properties dcProperties, String clusterConfFilePath){
+    public void init(String managerIP, int managerPort, Properties dcProperties){
         
         if (registryInitialized)
             throw new RuntimeException("Registry was already initialized");
         
         this.dcProperties = dcProperties;
-        this.clusterConfFilePath = clusterConfFilePath;
         
-        //create clusters map
-        clustersById = new HashMap<String, Cluster>();
-                
-        //Build nodes and metrics nodes
-        nodesById = buildNodesById();
-        nodeMetrics = buildNodeMetrics();
+        //Build resources
+        nodesById = buildResources(DCProperty.nodesFilePath, Node.class);
+        clustersById = buildResources(DCProperty.clustersFilePath, Cluster.class);
+        racksById = buildResources(DCProperty.racksFilePath, Rack.class);
+        
+        //buildRelations
+        buildRelations(DCProperty.placementFilePath);
         
         //add VMs to nodes
         retrieveVmsFromFile();   
 
-        //Build metrics clusters
+        //Build metrics
+        nodeMetrics = buildNodeMetrics();
         clusterMetrics = buildClusterMetrics();
-        
-        //Build clusters and metrics clusters
-        racksById = buildRacksById();
         rackMetrics = buildRackMetrics();
         
         //Build the DCAgent
@@ -160,74 +156,64 @@ public class Registry {
         }
     }
     
-    //Build nodes by parsing of remote files
-    private Map<String, Node> buildNodesById(){
-        Map<String, Node> map = new HashMap<String, Node>();
+    private Resource buildResource(String id, String type, Class resourceClass){
+                
+        if(resourceClass.equals(Node.class))
+            return new Node(type, id);
+        if(resourceClass.equals(Cluster.class))
+            return new Cluster(type, id);
+        if(resourceClass.equals(Rack.class))
+            return new Rack(type, id);
         
-        int i = 1;
+        return null;
+    }
+    
+    private Map<String, Resource> buildResources(String path, Class resourceClass){
+        Map<String, Resource> map = new HashMap<String, Resource>();
         
-        while(retrieveNodesFromFile(map, (String)this.dcProperties.get(DCProperty.URL_NODES)+"Cluster"+i+".csv", "Cluster"+i)){
-            i++;
+        //retrieve resources from file
+        CsvFileParser fileParser = new CsvFileParser("file://"+path, "Id,Type");
+        fileParser.readUntilTerminationString();
+        List<String> ids = fileParser.getData(0);
+        List<String> types = fileParser.getData(1);
+        
+        for(int i = 0; i < ids.size(); i++){
+            String id = ids.get(i).replaceAll("\\.", "_");
+            map.put(id, buildResource(id, types.get(i),resourceClass));
+            logger.info(resourceClass.getSimpleName()+" added: "+id);
         }
-        
+                
         return map;
     }
     
-    //Build racks
-    private Map<String, Rack> buildRacksById(){
-        Map<String, Rack> map = new HashMap<String, Rack>();
+    private void buildRelations(String path){
         
-        //retrieve nodes of every rack
-        CsvFileParser nodesFileParser = new CsvFileParser("file://"+clusterConfFilePath, "Rack,Node,Cluster");
-        nodesFileParser.readUntilTerminationString();
+        //retrieve relations between resources
+        CsvFileParser fileParser = new CsvFileParser("file://"+path, "Rack,Node,Cluster");
+        fileParser.readUntilTerminationString();
         
-        CsvFileParser fileParser = new CsvFileParser(dcProperties.getProperty(DCProperty.URL_RACKLOAD_METRIC),null);
-        fileParser.readLastUpdate(0);
-        List<String> racks = fileParser.getData(1);
-        List<String> nodes = nodesFileParser.getData(1);
-        List<String> racksId = nodesFileParser.getData(0);
-        
-        for(String rack:racks){
-            Rack newRack = new Rack("BigRack", rack);
-            map.put(rack, newRack);
-            Set<String> nodesRack = new HashSet<String>();
-            for(int i = 0; i < racksId.size(); i++){
-                if(racksId.get(i).equals(rack))
-                    nodesRack.add(nodes.get(i).replaceAll("\\.", "_"));
-            }
-            newRack.addNodes(nodesRack);
-        }
-        
-        return map;
-    }
-    
-    private boolean retrieveNodesFromFile(Map<String, Node> map, String url, String clusterId){
-        CsvFileParser fileParser = new CsvFileParser(url,"ID,IP");
-        if(!fileParser.readUntilTerminationString())
-            return false; //return false if cluster doesn't exist
-        
-        Set<String> clusterNodes = new HashSet<String>();
-        Cluster cluster = new Cluster("BigCluster", clusterId);
-        
-        //add cluster
-        clustersById.put(clusterId, cluster);
-        
-        //add nodes
+        List<String> racks = fileParser.getData(0);
         List<String> nodes = fileParser.getData(1);
-        
-        for(String node:nodes){
-            String nodeId = node.replaceAll("\\.", "_");
-            logger.info("Node added: "+nodeId);
-            map.put(nodeId, new Node("NodeType", nodeId));
-            clusterNodes.add(nodeId);
+        List<String> clusters = fileParser.getData(2);
+
+        for(int i = 0; i < nodes.size(); i++){
+            String clusterId = clusters.get(i).replaceAll("\\.", "_");
+            String rackId = racks.get(i).replaceAll("\\.", "_");
+            
+            if(clustersById.containsKey(clusterId)){
+                ((Cluster)clustersById.get(clusterId)).addNode(nodes.get(i).replaceAll("\\.", "_"));
+                logger.info("Cluster relation added: "+clusterId+" - "+nodes.get(i).replaceAll("\\.", "_"));
+            }
+            
+            if(racksById.containsKey(rackId)){
+                ((Rack)racksById.get(rackId)).addNode(nodes.get(i).replaceAll("\\.", "_"));
+                logger.info("Rack relation added: "+rackId+" - "+nodes.get(i).replaceAll("\\.", "_"));
+            }        
+            
         }
         
-        //add nodes to the cluster
-        cluster.addNodes(clusterNodes);
-        
-        return true;
     }
-    
+        
     private void retrieveVmsFromFile(){
         
         Map<String, Set<String>> vmsByNodeId;
@@ -256,8 +242,8 @@ public class Registry {
         }
         
         //add vms to the nodes
-        for(Node node:nodesById.values()){
-            node.addVms(vmsByNodeId.get(node.getId()));
+        for(Resource resource:nodesById.values()){
+            ((Node)resource).addVms(vmsByNodeId.get(resource.getId()));
         }
         
         
@@ -358,8 +344,8 @@ public class Registry {
         return new HashSet<Resource>(racksById.values());
     }
     
-    public static void initialize(String managerIP, int managerPort, Properties dcProperties, String clusterConfFilePath){
-        _INSTANCE.init(managerIP, managerPort, dcProperties, clusterConfFilePath);
+    public static void initialize(String managerIP, int managerPort, Properties dcProperties){
+        _INSTANCE.init(managerIP, managerPort, dcProperties);
     }
     
     public static void startMonitoring(){
