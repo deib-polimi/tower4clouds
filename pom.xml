@@ -84,6 +84,16 @@
 			</roles>
 			<timezone>Europe/Rome</timezone>
 		</contributor>
+                <contributor>
+			<name>Davide Verzotto</name>
+			<email>davide.verzotto@mail.polimi.it</email>
+			<organization>Politecnico di Milano</organization>
+			<organizationUrl>http://www.polimi.it</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>Europe/Rome</timezone>
+		</contributor>
 	</contributors>
 
 	<scm>
