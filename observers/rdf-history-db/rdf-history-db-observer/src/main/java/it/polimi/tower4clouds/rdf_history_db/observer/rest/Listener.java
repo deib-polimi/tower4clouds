@@ -52,7 +52,7 @@ public class Listener extends Thread {
     }
     
     public Listener() {
-        this(Configuration.DEFAULT_PORT);
+        this(Configuration.PORT);
     }
     
     public static int RUNNING_TIME = 100000;
