@@ -16,12 +16,12 @@
 package it.polimi.tower4clouds.flexiant_nodes_dc;
 
 import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.CPUUtilization;
-import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.NodeLoadMetric;
-import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.RXNetworkMetric;
+import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.Load;
+import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.RXNetwork;
 import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.RackLoad;
 import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.RamUsage;
 import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.StorageCluster;
-import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.TXNetworkMetric;
+import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.TXNetwork;
 import it.polimi.tower4clouds.model.ontology.Node;
 import it.polimi.tower4clouds.model.ontology.Resource;
 import org.junit.Assert;
@@ -63,7 +63,7 @@ public class FlexiantDCGetSampleTest {
     @Test
     public void testNodeLoadMetric() throws Exception {
         
-        NodeLoadMetric metric = new NodeLoadMetric();
+        Load metric = new Load();
         metric.setUrlFileLocation(TEST_URL);
         Resource testNode = new Node("type1", "testIdNodeLOAD");
         CsvFileParser fileParser = new CsvFileParser(TEST_URL , null);
@@ -77,7 +77,7 @@ public class FlexiantDCGetSampleTest {
     @Test
     public void testRXNetworkMetric() throws Exception {
         
-        RXNetworkMetric metric = new RXNetworkMetric();
+        RXNetwork metric = new RXNetwork();
         metric.setUrlFileLocation(TEST_URL);
         Resource testNode = new Node("type1", "testIdNodeNET");
         CsvFileParser fileParser = new CsvFileParser(TEST_URL , null);
@@ -91,7 +91,7 @@ public class FlexiantDCGetSampleTest {
     @Test
     public void testTXNetworkMetric() throws Exception {
         
-        TXNetworkMetric metric = new TXNetworkMetric();
+        TXNetwork metric = new TXNetwork();
         metric.setUrlFileLocation(TEST_URL);
         Resource testNode = new Node("type1", "testIdNodeNET");
         CsvFileParser fileParser = new CsvFileParser(TEST_URL , null);

@@ -1,5 +1,5 @@
 <monitoringRules xmlns="http://www.modaclouds.eu/xsd/1.0/monitoring_rules_schema">
-    <monitoringRule id="CpuUtilizationRule" startEnabled="true" timeStep="5" timeWindow="5">
+    <monitoringRule id="CpuUtilizationRuleByCluster" startEnabled="true" timeStep="5" timeWindow="5">
         <monitoredTargets>
             <monitoredTarget class="Node" />
         </monitoredTargets>
@@ -10,7 +10,7 @@
         <actions>
             <action name="OutputMetric">
                 <parameter name="resourceId">ID</parameter>
-                <parameter name="metric">CpuUtilization</parameter>
+                <parameter name="metric">AverageCpuUtilizationByCluster</parameter>
                 <parameter name="value">METRIC</parameter>
             </action>
         </actions>

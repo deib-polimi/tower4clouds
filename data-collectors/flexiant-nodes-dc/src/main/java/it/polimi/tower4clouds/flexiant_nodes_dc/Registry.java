@@ -17,12 +17,12 @@ package it.polimi.tower4clouds.flexiant_nodes_dc;
 
 import it.polimi.tower4clouds.data_collector_library.DCAgent;
 import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.CPUUtilization;
-import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.NodeLoadMetric;
-import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.RXNetworkMetric;
+import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.Load;
+import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.RXNetwork;
 import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.RackLoad;
 import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.RamUsage;
 import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.StorageCluster;
-import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.TXNetworkMetric;
+import it.polimi.tower4clouds.flexiant_nodes_dc.metrics.TXNetwork;
 import it.polimi.tower4clouds.manager.api.ManagerAPI;
 import it.polimi.tower4clouds.model.data_collectors.DCDescriptor;
 import it.polimi.tower4clouds.model.ontology.Cluster;
@@ -272,18 +272,18 @@ public class Registry {
         ramMetric.setUrlFileLocation((String)dcProperties.get(DCProperty.URL_RAM_METRIC));
         metrics.add(ramMetric);
 
-        //add NodeLoadMetric
-        Metric nodeLoadMetric = new NodeLoadMetric();
+        //add Load
+        Metric nodeLoadMetric = new Load();
         nodeLoadMetric.setUrlFileLocation((String)dcProperties.get(DCProperty.URL_NODELOAD_METRIC));
         metrics.add(nodeLoadMetric);
         
-        //add TXNetworkMetric
-        Metric txNetworkMetric = new TXNetworkMetric();
+        //add TXNetwork
+        Metric txNetworkMetric = new TXNetwork();
         txNetworkMetric.setUrlFileLocation((String)dcProperties.get(DCProperty.URL_TXNETWORK_METRIC));
         metrics.add(txNetworkMetric);
         
-        //add RXNetworkMetric
-        Metric rxNetworkMetric = new RXNetworkMetric();
+        //add RXNetwork
+        Metric rxNetworkMetric = new RXNetwork();
         rxNetworkMetric.setUrlFileLocation((String)dcProperties.get(DCProperty.URL_RXNETWORK_METRIC));
         metrics.add(rxNetworkMetric);
         

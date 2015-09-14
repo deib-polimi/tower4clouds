@@ -25,16 +25,16 @@ import java.util.List;
  *
  * @author davide
  */
-public class NodeLoadMetric extends Metric{
+public class RXNetwork extends Metric{
     
-    public NodeLoadMetric(){
+    public RXNetwork(){
         metricType = MetricsType.NODE_METRIC;
     }
 
     @Override
-    public Number getSample(CsvFileParser fileParser, Resource resource) throws Exception{
+    public Number getSample(CsvFileParser fileParser, Resource resource) throws Exception {
         fileParser.setFileUrl(getUrl(resource));
-        fileParser.readLastUpdate(2);
+        fileParser.readLastUpdate(0);
         double sample;
         List<String> values = fileParser.getData(1);
         sample = Double.parseDouble(values.get(0));

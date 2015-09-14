@@ -25,9 +25,9 @@ import java.util.List;
  *
  * @author davide
  */
-public class RXNetworkMetric extends Metric{
+public class TXNetwork extends Metric{
     
-    public RXNetworkMetric(){
+    public TXNetwork(){
         metricType = MetricsType.NODE_METRIC;
     }
 
@@ -36,7 +36,7 @@ public class RXNetworkMetric extends Metric{
         fileParser.setFileUrl(getUrl(resource));
         fileParser.readLastUpdate(0);
         double sample;
-        List<String> values = fileParser.getData(1);
+        List<String> values = fileParser.getData(2);
         sample = Double.parseDouble(values.get(0));
         return sample;
     }

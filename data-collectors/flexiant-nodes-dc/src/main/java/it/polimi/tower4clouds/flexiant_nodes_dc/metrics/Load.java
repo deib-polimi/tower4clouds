@@ -25,18 +25,18 @@ import java.util.List;
  *
  * @author davide
  */
-public class TXNetworkMetric extends Metric{
+public class Load extends Metric{
     
-    public TXNetworkMetric(){
+    public Load(){
         metricType = MetricsType.NODE_METRIC;
     }
 
     @Override
-    public Number getSample(CsvFileParser fileParser, Resource resource) throws Exception {
+    public Number getSample(CsvFileParser fileParser, Resource resource) throws Exception{
         fileParser.setFileUrl(getUrl(resource));
-        fileParser.readLastUpdate(0);
+        fileParser.readLastUpdate(2);
         double sample;
-        List<String> values = fileParser.getData(2);
+        List<String> values = fileParser.getData(1);
         sample = Double.parseDouble(values.get(0));
         return sample;
     }

@@ -9,7 +9,7 @@
         <actions>
             <action name="OutputMetric">
                 <parameter name="resourceId">ID</parameter>
-                <parameter name="metric">CpuUtilization</parameter>
+                <parameter name="metric">AverageCpuUtilization</parameter>
                 <parameter name="value">METRIC</parameter>
             </action>
         </actions>
@@ -24,22 +24,22 @@
         <actions>
             <action name="OutputMetric">
                 <parameter name="resourceId">ID</parameter>
-                <parameter name="metric">RamUtilization</parameter>
+                <parameter name="metric">AverageRamUtilization</parameter>
                 <parameter name="value">METRIC</parameter>
             </action>
         </actions>
     </monitoringRule>
-    <monitoringRule id="NodeLoadRule" startEnabled="true" timeStep="5" timeWindow="5">
+    <monitoringRule id="LoadRule" startEnabled="true" timeStep="5" timeWindow="5">
         <monitoredTargets>
             <monitoredTarget class="Node" />
         </monitoredTargets>
-        <collectedMetric metricName="NodeLoadMetric">
+        <collectedMetric metricName="Load">
             <parameter name="samplingTime">5</parameter>
         </collectedMetric>
         <actions>
             <action name="OutputMetric">
                 <parameter name="resourceId">ID</parameter>
-                <parameter name="metric">NodeLoad</parameter>
+                <parameter name="metric">AverageLoad</parameter>
                 <parameter name="value">METRIC</parameter>
             </action>
         </actions>
@@ -48,13 +48,13 @@
         <monitoredTargets>
             <monitoredTarget class="Node" />
         </monitoredTargets>
-        <collectedMetric metricName="TXNetworkMetric">
+        <collectedMetric metricName="TXNetwork">
             <parameter name="samplingTime">5</parameter>
         </collectedMetric>
         <actions>
             <action name="OutputMetric">
                 <parameter name="resourceId">ID</parameter>
-                <parameter name="metric">TXNetwork</parameter>
+                <parameter name="metric">AverageTXNetwork</parameter>
                 <parameter name="value">METRIC</parameter>
             </action>
         </actions>
@@ -63,13 +63,13 @@
         <monitoredTargets>
             <monitoredTarget class="Node" />
         </monitoredTargets>
-        <collectedMetric metricName="RXNetworkMetric">
+        <collectedMetric metricName="RXNetwork">
             <parameter name="samplingTime">5</parameter>
         </collectedMetric>
         <actions>
             <action name="OutputMetric">
                 <parameter name="resourceId">ID</parameter>
-                <parameter name="metric">RXNetwork</parameter>
+                <parameter name="metric">AverageRXNetwork</parameter>
                 <parameter name="value">METRIC</parameter>
             </action>
         </actions>
@@ -84,7 +84,7 @@
         <actions>
             <action name="OutputMetric">
                 <parameter name="resourceId">ID</parameter>
-                <parameter name="metric">StorageMetric</parameter>
+                <parameter name="metric">AverageStorage</parameter>
                 <parameter name="value">METRIC</parameter>
             </action>
         </actions>
@@ -99,7 +99,7 @@
         <actions>
             <action name="OutputMetric">
                 <parameter name="resourceId">ID</parameter>
-                <parameter name="metric">RackLoadMetric</parameter>
+                <parameter name="metric">AverageRackLoad</parameter>
                 <parameter name="value">METRIC</parameter>
             </action>
         </actions>
