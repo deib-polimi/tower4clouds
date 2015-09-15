@@ -52,10 +52,25 @@ github-release upload \
     --tag $LATEST_TAG \
     --name data2stdout-${LATEST_VERSION}.tar.gz \
     --file observers/data2stdout/target/data2stdout-${LATEST_VERSION}.tar.gz
+    
+# Release on modaclouds ftp
+ftp -n <<EOF
+open ftp.modaclouds.eu
+user ftp.polimi $(cat ~/.ftp/ftp.polimi@ftp.modaclouds.eu.key)
+mkdir /public/distributions/t4c-manager/${LATEST_VERSION}
+mkdir /public/distributions/t4c-data-analyzer/${LATEST_VERSION}
+mkdir /public/distributions/t4c-rdf-history-db/${LATEST_VERSION}
+put manager/manager-server/target/manager-server-${LATEST_VERSION}-jar-with-dependencies.jar /public/distributions/t4c-manager/${LATEST_VERSION}/service.jar
+put manager/manager-server/scripts/start-script-4-mosaic /public/distributions/t4c-manager/${LATEST_VERSION}/service-run.bash
+put data-analyzer/target/data-analyzer-${LATEST_VERSION}-jar-with-dependencies.jar /public/distributions/t4c-data-analyzer/${LATEST_VERSION}/service.jar
+put data-analyzer/scripts/start-script-4-mosaic /public/distributions/t4c-data-analyzer/${LATEST_VERSION}/service-run.bash
+put observers/rdf-history-db/rdf-history-db-main/target/rdf-history-db-main-${LATEST_VERSION}-jar-with-dependencies.jar /public/distributions/t4c-rdf-history-db/${LATEST_VERSION}/service.jar
+put observers/rdf-history-db/rdf-history-db-main/scripts/start-script-4-mosaic /public/distributions/t4c-rdf-history-db/${LATEST_VERSION}/service-run.bash
+EOF
 
 # Merge the new created tag with the master so that the master has the most recent stable version
 git checkout master
-git merge $LATEST_TAG
+git merge $LATEST_TAG --no-edit
 
 # RELEASE WEBSITE (see the doc: http://couscous.io)
 # "couscous preview" to see a preview
