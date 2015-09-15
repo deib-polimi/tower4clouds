@@ -103,7 +103,7 @@ public class MMServer extends Application {
 			}
 		} catch (ConfigurationException e) {
 			logger.error("Configuration problem: " + e.getMessage());
-			logger.error("Run \"" + APP_FILE_NAME + " -help\" for help");
+			logger.error("Run \"" + APP_FILE_NAME + " --help\" for help");
 			System.exit(1);
 		} catch (HttpException | IOException | ServerErrorException e) {
 			logger.error("Connection problem: {}", e.getMessage());

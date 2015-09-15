@@ -18,17 +18,72 @@
 
 # REMEMBER to change maven configuration to force it to use java 7. Example in OS X:
 echo 'export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home' > ~/.mavenrc
-# From the develop branch do
+
+# From the develop branch
+git checkout develop
+# do (without any local change):
 mvn clean release:prepare -DdryRun=true
 mvn release:clean release:prepare release:perform
-# manually add artifacts to the github release until u fix github release plugin
-# Then merge the new created tag with the master so that the master has the most recent stable version
 
-# IF SOMETHING GOES WRONG (WARNING: ALL RECENT COMMITS IN THE CURRENT BRANCH WILL BE LOST!)
-git reset --hard <id of the commit you want to reset to>
-git push origin <current branch name> --force
+# Add artifacts to the github release until u fix github release plugin using https://github.com/aktau/github-release
+export GITHUB_TOKEN=$(cat ~/.github/ReleaseT4C.token)
+export GITHUB_USER=deib-polimi
+export GITHUB_REPO=tower4clouds
+export LATEST_TAG=$(git describe --abbrev=0)
+export LATEST_VERSION=$(echo $LATEST_TAG | sed s/v//)
+github-release release --tag $LATEST_TAG
+github-release upload \
+    --tag $LATEST_TAG \
+    --name manager-server-${LATEST_VERSION}.tar.gz \
+    --file manager/manager-server/target/manager-server-${LATEST_VERSION}.tar.gz
+github-release upload \
+    --tag $LATEST_TAG \
+    --name data-analyzer-${LATEST_VERSION}.tar.gz \
+    --file data-analyzer/target/data-analyzer-${LATEST_VERSION}.tar.gz
+github-release upload \
+    --tag $LATEST_TAG \
+    --name rdf-history-db-main-${LATEST_VERSION}.tar.gz \
+    --file observers/rdf-history-db/rdf-history-db-main/target/rdf-history-db-main-${LATEST_VERSION}.tar.gz
+github-release upload \
+    --tag $LATEST_TAG \
+    --name rules-${LATEST_VERSION}-jar-with-dependencies.jar \
+    --file rules/target/rules-${LATEST_VERSION}-jar-with-dependencies.jar
+github-release upload \
+    --tag $LATEST_TAG \
+    --name flexiant-nodes-dc-${LATEST_VERSION}-jar-with-dependencies.jar \
+    --file data-collectors/flexiant-nodes-dc/target/flexiant-nodes-dc-${LATEST_VERSION}-jar-with-dependencies.jar
+github-release upload \
+    --tag $LATEST_TAG \
+    --name data2stdout-${LATEST_VERSION}.tar.gz \
+    --file observers/data2stdout/target/data2stdout-${LATEST_VERSION}.tar.gz
+    
+# Release on modaclouds ftp
+ftp -n <<EOF
+open ftp.modaclouds.eu
+user ftp.polimi $(cat ~/.ftp/ftp.polimi@ftp.modaclouds.eu.key)
+mkdir /public/distributions/t4c-manager/${LATEST_VERSION}
+mkdir /public/distributions/t4c-data-analyzer/${LATEST_VERSION}
+mkdir /public/distributions/t4c-rdf-history-db/${LATEST_VERSION}
+put manager/manager-server/target/manager-server-${LATEST_VERSION}-jar-with-dependencies.jar /public/distributions/t4c-manager/${LATEST_VERSION}/service.jar
+put manager/manager-server/scripts/start-script-4-mosaic /public/distributions/t4c-manager/${LATEST_VERSION}/service-run.bash
+put data-analyzer/target/data-analyzer-${LATEST_VERSION}-jar-with-dependencies.jar /public/distributions/t4c-data-analyzer/${LATEST_VERSION}/service.jar
+put data-analyzer/scripts/start-script-4-mosaic /public/distributions/t4c-data-analyzer/${LATEST_VERSION}/service-run.bash
+put observers/rdf-history-db/rdf-history-db-main/target/rdf-history-db-main-${LATEST_VERSION}-jar-with-dependencies.jar /public/distributions/t4c-rdf-history-db/${LATEST_VERSION}/service.jar
+put observers/rdf-history-db/rdf-history-db-main/scripts/start-script-4-mosaic /public/distributions/t4c-rdf-history-db/${LATEST_VERSION}/service-run.bash
+EOF
 
+# Merge the new created tag with the master so that the master has the most recent stable version
+git checkout master
+git merge $LATEST_TAG --no-edit
+git push origin master
+git checkout develop
 
 # RELEASE WEBSITE (see the doc: http://couscous.io)
-couscous preview
+# "couscous preview" to see a preview
 couscous deploy
+
+
+# IF SOMETHING GOES WRONG (WARNING: ALL RECENT COMMITS IN THE CURRENT BRANCH WILL BE LOST, ALSO ON THE REMOTE! DO IT ONLY IF YOU ARE SURE OF WHAT YOU ARE DOING)
+# BE CAREFUL TO THE BRANCH YOU ARE ON
+# "git reset --hard <id of the commit you want to reset to>"
+# "git push origin <current branch name> --force"

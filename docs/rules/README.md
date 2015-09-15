@@ -10,7 +10,7 @@ The metamodel of a monitoring rule is formally specified as an XML schema, avail
 
 Here is a graphical representation of the schema:
 
-![monitoring rule schema](/img/monitoring_rules_schema.png "monitoring_rules_schema")
+![monitoring rule schema](monitoring_rules_schema.png "monitoring_rules_schema")
 
 Here is a list of the attributes with a short description:
 - *metricName*: the name of the target metric
