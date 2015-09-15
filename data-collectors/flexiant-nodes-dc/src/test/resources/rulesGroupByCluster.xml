@@ -9,9 +9,7 @@
         <metricAggregation aggregateFunction="Average" groupingClass="Cluster"/>
         <actions>
             <action name="OutputMetric">
-                <parameter name="resourceId">ID</parameter>
                 <parameter name="metric">AverageCpuUtilizationByCluster</parameter>
-                <parameter name="value">METRIC</parameter>
             </action>
         </actions>
     </monitoringRule>

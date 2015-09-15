@@ -21,7 +21,7 @@
     <parent>
         <groupId>it.polimi.tower4clouds</groupId>
         <artifactId>data-collectors</artifactId>
-        <version>0.3-SNAPSHOT</version>
+        <version>0.4-SNAPSHOT</version>
     </parent>
     
     <artifactId>flexiant-nodes-dc</artifactId>

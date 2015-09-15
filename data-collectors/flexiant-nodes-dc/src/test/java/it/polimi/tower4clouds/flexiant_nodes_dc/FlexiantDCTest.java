@@ -50,14 +50,14 @@ public class FlexiantDCTest {
 			MonitoringRules.class));
         
         // Create HTTP observer to monitor sent datas  
-        manager.registerHttpObserver("AverageCpuUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-        manager.registerHttpObserver("AverageRamUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-        manager.registerHttpObserver("AverageLoad", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-        manager.registerHttpObserver("AverageTXNetwork", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-        manager.registerHttpObserver("AverageRXNetwork", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-        manager.registerHttpObserver("AverageStorage", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-        manager.registerHttpObserver("AverageRackLoad", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
-        manager.registerHttpObserver("AverageCpuUtilizationByCluster", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
+        manager.registerHttpObserver("AverageCpuUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "INFLUXDB");
+        manager.registerHttpObserver("AverageRamUtilization", "http://" + graphiteIP + ":" + graphitePort + "/data", "INFLUXDB");
+        manager.registerHttpObserver("AverageLoad", "http://" + graphiteIP + ":" + graphitePort + "/data", "INFLUXDB");
+        manager.registerHttpObserver("AverageTXNetwork", "http://" + graphiteIP + ":" + graphitePort + "/data", "INFLUXDB");
+        manager.registerHttpObserver("AverageRXNetwork", "http://" + graphiteIP + ":" + graphitePort + "/data", "INFLUXDB");
+        manager.registerHttpObserver("AverageStorage", "http://" + graphiteIP + ":" + graphitePort + "/data", "INFLUXDB");
+        manager.registerHttpObserver("AverageRackLoad", "http://" + graphiteIP + ":" + graphitePort + "/data", "INFLUXDB");
+        manager.registerHttpObserver("AverageCpuUtilizationByCluster", "http://" + graphiteIP + ":" + graphitePort + "/data", "INFLUXDB");
         
         DCMain.main(args);
     }
