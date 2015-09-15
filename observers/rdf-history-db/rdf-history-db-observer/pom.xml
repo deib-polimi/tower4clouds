@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>it.polimi.tower4clouds</groupId>
 		<artifactId>rdf-history-db</artifactId>
-		<version>0.4-SNAPSHOT</version>
+		<version>0.3.1</version>
 	</parent>
 	<artifactId>rdf-history-db-observer</artifactId>
 	<name>MODAClous - Tower4Clouds - RDF History DB Observer Library</name>

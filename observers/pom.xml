@@ -21,7 +21,7 @@
   <parent>
         <artifactId>tower4clouds</artifactId>
         <groupId>it.polimi.tower4clouds</groupId>
-        <version>0.4-SNAPSHOT</version>
+        <version>0.3.1</version>
     </parent>
   <artifactId>observers</artifactId>
   <packaging>pom</packaging>
