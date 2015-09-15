@@ -71,6 +71,8 @@ EOF
 # Merge the new created tag with the master so that the master has the most recent stable version
 git checkout master
 git merge $LATEST_TAG --no-edit
+git push origin master
+git checkout develop
 
 # RELEASE WEBSITE (see the doc: http://couscous.io)
 # "couscous preview" to see a preview
