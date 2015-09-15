@@ -106,8 +106,9 @@ public class DCMain {
         
         //load properties from the config file
         try{
-            // Marco temp fix
-            flexDCProp.load(new FileInputStream(mainInstance.configFilePath));
+            FileInputStream inStream = new FileInputStream(mainInstance.configFilePath);
+			flexDCProp.load(inStream);
+			inStream.close();
         }
         catch(FileNotFoundException ex){
             logger.error("Properties file not found");
