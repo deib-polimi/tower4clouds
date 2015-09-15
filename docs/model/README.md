@@ -4,4 +4,4 @@ currentMenu: model
 
 #The Model
 
-![Meta Model](../../img/model-metamodel.png)
+![Meta Model](model-metamodel.png)

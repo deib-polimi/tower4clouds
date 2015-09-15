@@ -6,4 +6,4 @@ currentMenu: overview
 
 Tower 4Clouds is a flexible monitoring platform built with modern multi-cloud applications in mind.
 
-![Architecture](../img/overview-architecture.png)
+![Architecture](overview-architecture.png)

@@ -50,6 +50,10 @@ github-release upload \
     --file rules/target/rules-${LATEST_VERSION}-jar-with-dependencies.jar
 github-release upload \
     --tag $LATEST_TAG \
+    --name flexiant-nodes-dc-${LATEST_VERSION}-jar-with-dependencies.jar \
+    --file data-collectors/flexiant-nodes-dc/target/flexiant-nodes-dc-${LATEST_VERSION}-jar-with-dependencies.jar
+github-release upload \
+    --tag $LATEST_TAG \
     --name data2stdout-${LATEST_VERSION}.tar.gz \
     --file observers/data2stdout/target/data2stdout-${LATEST_VERSION}.tar.gz
     
