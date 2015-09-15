@@ -21,6 +21,7 @@ import it.polimi.tower4clouds.rules.AbstractAction;
 import it.polimi.tower4clouds.rules.MonitoringRule;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -115,5 +116,10 @@ public class RestCall extends AbstractAction {
 			getLogger().error("Error executing rest call", e);
 		}
 
+	}
+
+	@Override
+	protected Map<String, String> getMyDefaultParameterValues() {
+		return new HashMap<String, String>();
 	}
 }

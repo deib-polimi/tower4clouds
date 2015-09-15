@@ -111,12 +111,18 @@ menu:
                 items:
                     actions:
                         text: Actions
-                        relativeUrl: docs/rules/actions.html
+                        relativeUrl: docs/rules/actions/
                         submenu:
                             items:
+                                outputmetric:
+                                    text: Output Metric
+                                    relativeUrl: docs/rules/actions/outputmetric.html
+                                restcall:
+                                    text: Rest Call
+                                    relativeUrl: docs/rules/actions/restcall.html
                                 cloudmlcall:
                                     text: CloudML Call
-                                    relativeUrl: docs/rules/cloudmlcall.html
+                                    relativeUrl: docs/rules/actions/cloudmlcall.html
         observers:
             text: Observers
             relativeUrl: docs/observers/

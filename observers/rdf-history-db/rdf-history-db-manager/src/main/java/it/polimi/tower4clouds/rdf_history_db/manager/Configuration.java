@@ -36,19 +36,28 @@ public abstract class Configuration {
 	
 	private static final Logger logger = LoggerFactory.getLogger(Configuration.class);
 	
-	public static int DEFAULT_PORT = 31337;
+	public static final int DEFAULT_PORT = 31337;
+	public static int PORT = DEFAULT_PORT;
 	
 	public static final String DEFAULT_PATH = "/monitoringdata";
 	public static final String DEFAULT_PATH_MODEL = "/resources";
 	
 	public static final String DEFAULT_BASEPATH = "http://localhost";
-	public static String QUEUE_HOST = "localhost:5672";
+	
+	public static final String DEFAULT_QUEUE_IP = "localhost";
+	public static final String DEFAULT_QUEUE_PORT = "5672";
+	public static String QUEUE_HOST = String.format("%s:%s", DEFAULT_QUEUE_IP, DEFAULT_QUEUE_PORT);
+	
 	public static final String QUEUE_RESULTS = "hdb_results";
 	public static final String QUEUE_MODELS = "hdb_models";
 	public static final String QUEUE_DELTA_MODELS = "hdb_delta_models";
 	public static final String QUEUE_MODELS_DELETE = "hdb_models_delete";
 	
-	public static String FUSEKI_HOST = "http://localhost:3030/ds";
+	public static final String DEFAULT_FUSEKI_IP = "localhost";
+	public static final String DEFAULT_FUSEKI_PORT = "3030";
+	public static final String DEFAULT_FUSEKI_PATH = "/ds";
+	public static String FUSEKI_HOST = String.format("http://%s:%s%s", DEFAULT_FUSEKI_IP, DEFAULT_FUSEKI_PORT, DEFAULT_FUSEKI_PATH);
+	
 	public static final String FUSEKI_BASEURI = "http://www.modaclouds.eu/historydb/";
 	public static final String FUSEKI_MONITORING = FUSEKI_BASEURI + "monitoring-data/";
 	public static final String FUSEKI_MODEL = FUSEKI_BASEURI + "model/";
@@ -65,24 +74,9 @@ public abstract class Configuration {
 		FileOutputStream fos = new FileOutputStream(filePath);
 		Properties prop = new Properties();
 		
-		prop.put("DEFAULT_PORT", Integer.toString(DEFAULT_PORT));
-//		prop.put("DEFAULT_PATH", DEFAULT_PATH);
-//		prop.put("DEFAULT_PATH_MODEL", DEFAULT_PATH_MODEL);
-//		prop.put("DEFAULT_BASEPATH", DEFAULT_BASEPATH);
-//		prop.put("QUEUE_RESULTS", QUEUE_RESULTS);
-//		prop.put("QUEUE_MODELS", QUEUE_MODELS);
-//		prop.put("QUEUE_DELTA_MODELS", QUEUE_DELTA_MODELS);
-//		prop.put("QUEUE_MODELS_DELETE", QUEUE_MODELS_DELETE);
+		prop.put("PORT", Integer.toString(PORT));
 		prop.put("QUEUE_HOST", QUEUE_HOST);
 		prop.put("FUSEKI_HOST", FUSEKI_HOST);
-//		prop.put("FUSEKI_BASEURI", FUSEKI_BASEURI);
-//		prop.put("FUSEKI_MONITORING", FUSEKI_MONITORING);
-//		prop.put("FUSEKI_MODEL", FUSEKI_MODEL);
-//		prop.put("FUSEKI_MODEL_DAILY", FUSEKI_MODEL_DAILY);
-//		prop.put("FUSEKI_DELTAS_MODEL", FUSEKI_DELTAS_MODEL);
-//		prop.put("FUSEKI_DELTAS_MODEL_DAILY", FUSEKI_DELTAS_MODEL_DAILY);
-//		prop.put("FUSEKI_MODELS_DELETE", FUSEKI_MODELS_DELETE);
-//		prop.put("FUSEKI_MODELS_DELETE_DAILY", FUSEKI_MODELS_DELETE_DAILY);
 
 		prop.store(fos, "HDB configuration properties");
 		fos.flush();
@@ -93,25 +87,10 @@ public abstract class Configuration {
 		FileInputStream fis = new FileInputStream(filePath);
 		prop.load(fis);
 		
-//		DEFAULT_PATH = prop.getProperty("DEFAULT_PATH", DEFAULT_PATH);
-//		DEFAULT_PATH_MODEL = prop.getProperty("DEFAULT_PATH_MODEL", DEFAULT_PATH_MODEL);
-//		DEFAULT_BASEPATH = prop.getProperty("DEFAULT_BASEPATH", DEFAULT_BASEPATH);
-//		QUEUE_RESULTS = prop.getProperty("QUEUE_RESULTS", QUEUE_RESULTS);
-//		QUEUE_MODELS = prop.getProperty("QUEUE_MODELS", QUEUE_MODELS);
-//		QUEUE_DELTA_MODELS = prop.getProperty("QUEUE_DELTA_MODELS", QUEUE_DELTA_MODELS);
-//		QUEUE_MODELS_DELETE = prop.getProperty("QUEUE_MODELS_DELETE", QUEUE_MODELS_DELETE);
 		QUEUE_HOST = prop.getProperty("QUEUE_HOST", QUEUE_HOST);
 		FUSEKI_HOST = prop.getProperty("FUSEKI_HOST", FUSEKI_HOST);
-//		FUSEKI_BASEURI = prop.getProperty("FUSEKI_BASEURI", FUSEKI_BASEURI);
-//		FUSEKI_MONITORING = prop.getProperty("FUSEKI_MONITORING", FUSEKI_MONITORING);
-//		FUSEKI_MODEL = prop.getProperty("FUSEKI_BASEURI_MODEL", FUSEKI_MODEL);
-//		FUSEKI_MODEL_DAILY = prop.getProperty("FUSEKI_BASEURI_MODEL_DAILY", FUSEKI_MODEL_DAILY);
-//		FUSEKI_DELTAS_MODEL = prop.getProperty("FUSEKI_DELTAS_MODEL", FUSEKI_DELTAS_MODEL);
-//		FUSEKI_DELTAS_MODEL_DAILY = prop.getProperty("FUSEKI_DELTAS_MODEL_DAILY", FUSEKI_DELTAS_MODEL_DAILY);
-//		FUSEKI_MODELS_DELETE = prop.getProperty("FUSEKI_MODELS_DELETE", FUSEKI_MODELS_DELETE);
-//		FUSEKI_MODELS_DELETE_DAILY = prop.getProperty("FUSEKI_MODELS_DELETE_DAILY", FUSEKI_MODELS_DELETE_DAILY);
 		try {
-			DEFAULT_PORT = Integer.parseInt(prop.getProperty("DEFAULT_PORT", Integer.toString(DEFAULT_PORT)));
+			PORT = Integer.parseInt(prop.getProperty("PORT", Integer.toString(PORT)));
 		} catch (NumberFormatException e) {
 			logger.error("Error while parsing the default port value!", e);
 		}
@@ -199,7 +178,7 @@ public abstract class Configuration {
 	private static void setPort(String port) {
 		if (port != null)
 			try {
-				DEFAULT_PORT = Integer.parseInt(port);
+				PORT = Integer.parseInt(port);
 			} catch (Exception e) { }
 	}
 	

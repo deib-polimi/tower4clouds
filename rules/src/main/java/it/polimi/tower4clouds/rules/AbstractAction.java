@@ -79,6 +79,8 @@ public abstract class AbstractAction {
 	 *         monitoring rule.
 	 */
 	protected abstract Set<String> getMyRequiredPars();
+	
+	protected abstract Map<String, String> getMyDefaultParameterValues();
 
 	/**
 	 * Action specific validation checks can be implemented here. Note that
@@ -133,7 +135,12 @@ public abstract class AbstractAction {
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
-				actionInstance.setParameters(extractParameters(action));
+				Map<String,String> pars = actionInstance.getMyDefaultParameterValues();
+				if (pars == null) {
+					pars = new HashMap<String, String>();
+				}
+				pars.putAll(extractParameters(action));
+				actionInstance.setParameters(pars);
 				break;
 			}
 		}
@@ -177,5 +184,6 @@ public abstract class AbstractAction {
 	public int getMmPort() {
 		return mmPort;
 	}
+
 
 }

@@ -61,23 +61,24 @@ public class CloudMLCall extends AbstractAction {
     public static final String COOLDOWN = "cooldown";
     
     public static final String DEFAULT_MANAGER_IP = "127.0.0.1";
-    
-    public static final String DEFAULT_CLOUDML_IP = "127.0.0.1";
-    public static final String DEFAULT_CLOUDML_PORT = "9030";
-    
-    public static final String DEFAULT_N = "1";
-    public static final String DEFAULT_COOLDOWN = "600";
 
     private final Set<String> requiredParameters;
+    private final Map<String, String> defaultParameterValues;
 
     private Map<String, CloudMLCall.CloudML> connectedClients;
     
     public CloudMLCall() {
         requiredParameters = new HashSet<String>();
+        defaultParameterValues = new HashMap<String, String>();
         connectedClients = new HashMap<String, CloudMLCall.CloudML>();
         
         requiredParameters.add(COMMAND);
         requiredParameters.add(TIER);
+        
+        defaultParameterValues.put(IP, "127.0.0.1");
+        defaultParameterValues.put(PORT, "9030");
+        defaultParameterValues.put(N, "1");
+        defaultParameterValues.put(COOLDOWN, "600");
     }
 
     @Override
@@ -90,15 +91,6 @@ public class CloudMLCall extends AbstractAction {
         String id = parameters.get(TIER);
         String n = parameters.get(N);
         String cooldown = parameters.get(COOLDOWN);
-        
-        if (ip == null)
-        	ip = DEFAULT_CLOUDML_IP;
-        if (port == null)
-        	port = DEFAULT_CLOUDML_PORT;
-        if (n == null)
-        	n = DEFAULT_N;
-        if (cooldown == null)
-        	cooldown = DEFAULT_COOLDOWN;
         
         int intCooldown = -1;
         try {
@@ -117,6 +109,11 @@ public class CloudMLCall extends AbstractAction {
     protected Set<String> getMyRequiredPars() {
         return requiredParameters;
     }
+    
+    @Override
+	protected Map<String, String> getMyDefaultParameterValues() {
+		return defaultParameterValues;
+	}
 
     @Override
     protected Collection<? extends Problem> validate(MonitoringRule rule,
@@ -141,11 +138,6 @@ public class CloudMLCall extends AbstractAction {
 
         String ip = parameters.get(IP);
         String port = parameters.get(PORT);
-
-        if (ip == null)
-        	ip = DEFAULT_CLOUDML_IP;
-        if (port == null)
-        	port = DEFAULT_CLOUDML_PORT;
 
         if (ip != null && port != null && !isServerAvailable(ip, port))
             problems.add(new Problem(rule.getId(),
@@ -1226,5 +1218,7 @@ public class CloudMLCall extends AbstractAction {
 			return name;
 		}
 	}
+
+	
 
 }

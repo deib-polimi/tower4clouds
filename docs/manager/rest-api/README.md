@@ -7,7 +7,7 @@ parentMenu: manager
 
 Version 1
 
-The REST endpoing is accessible at the [configured][Configuration] manager port under the url path /v1.
+The REST endpoint is accessible at the [configured][Configuration] manager port under the url path /v1.
 
 ### Monitoring Rules
 
@@ -25,4 +25,4 @@ The REST endpoing is accessible at the [configured][Configuration] manager port 
 
 [To be completed]
 
-[Configuration]: ../configuration.md
+[Configuration]: ../configuration

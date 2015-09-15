@@ -7,11 +7,17 @@ All notable changes to this project will be documented in this file.
 This document adheres to [keep-a-changelog].
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.3] - to be released
+## [0.3.1] - 2015-09-15
 ### Added
-- The CloudML action is officially working; it is now possible to scale up or down inside of the same cloud provider or bust to another one, in response to a condition on a monitored resource
-### Fixed
-- The HistoryDB documentation has been updated to the new format, and is now available on the new website
+- Support for cluster metrics by extending the model with new resources and relations (Node, Cluster, Rack).
+- Flexiant data collector for monitoring cluster level metrics on their physical servers.
+
+### Changed
+- Output Metric action parameters `value` and `resourceId` are not mandatory anymore, see the doc to know the default values used.
+
+## [0.3] - 2015-09-08
+### Added
+- CloudML action added to rules. It is now possible to scale up or down inside of the same cloud provider or bust to another one, in response to a condition on a monitored resource.
 
 ## [0.2.3] - 2015-07-29
 ### Fixed
@@ -40,7 +46,7 @@ First official release of the new Tower 4Clouds platform.
 - First intial migration and integration of the old MODAClouds Monitoring Platform projects
 
 [keep-a-changelog]: https://github.com/olivierlacan/keep-a-changelog
-[unreleased]: https://github.com/deib-polimi/tower4clouds/compare/v0.2.3...develop
+[0.3.1]: https://github.com/deib-polimi/tower4clouds/compare/v0.3...v0.3.1
 [0.3]: https://github.com/deib-polimi/tower4clouds/compare/v0.2.3...v0.3
 [0.2.3]: https://github.com/deib-polimi/tower4clouds/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/deib-polimi/tower4clouds/compare/v0.2.1...v0.2.2
