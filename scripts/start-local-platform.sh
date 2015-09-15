@@ -52,4 +52,4 @@ log 'Starting the Manager'
 cd ${TOWER_ROOT}/manager/manager-server/target/
 tar xf manager-server-*.tar.gz
 cd manager-server-*
-./tower4clouds-manager -mmip $IP -daip $IP -rdf-history-db-ip 127.0.0.1 > mgr.log 2>&1 &
+./tower4clouds-manager -manip $IP -daip $IP -rdf-history-db-ip 127.0.0.1 > mgr.log 2>&1 &
