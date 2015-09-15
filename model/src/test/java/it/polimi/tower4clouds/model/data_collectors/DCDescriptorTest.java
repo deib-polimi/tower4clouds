@@ -29,7 +29,8 @@ public class DCDescriptorTest {
 	public void test() {
 		Resource method = new Method();
 		method.setId("method1");
-		Resource ic = new InternalComponent();
+                method.setType("type1");
+		Resource ic = new InternalComponent("type1", "ic1");
 		((InternalComponent)ic).addProvidedMethod(method.getId());
 		DCDescriptor dc = new DCDescriptor();
 		dc.addMonitoredResource("ResponseTime", method);

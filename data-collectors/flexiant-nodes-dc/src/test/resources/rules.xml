@@ -1,0 +1,95 @@
+<monitoringRules xmlns="http://www.modaclouds.eu/xsd/1.0/monitoring_rules_schema">
+    <monitoringRule id="CpuUtilizationRule" startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Node" />
+        </monitoredTargets>
+        <collectedMetric metricName="CPUUtilization">
+            <parameter name="samplingTime">10</parameter>
+        </collectedMetric>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="metric">AverageCpuUtilization</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+    <monitoringRule id="RamUtilizationRule" startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Node" />
+        </monitoredTargets>
+        <collectedMetric metricName="RamUsage">
+            <parameter name="samplingTime">5</parameter>
+        </collectedMetric>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="metric">AverageRamUtilization</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+    <monitoringRule id="LoadRule" startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Node" />
+        </monitoredTargets>
+        <collectedMetric metricName="Load">
+            <parameter name="samplingTime">5</parameter>
+        </collectedMetric>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="metric">AverageLoad</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+    <monitoringRule id="TXNetworkRule" startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Node" />
+        </monitoredTargets>
+        <collectedMetric metricName="TXNetwork">
+            <parameter name="samplingTime">5</parameter>
+        </collectedMetric>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="metric">AverageTXNetwork</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+    <monitoringRule id="RXNetworkRule" startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Node" />
+        </monitoredTargets>
+        <collectedMetric metricName="RXNetwork">
+            <parameter name="samplingTime">5</parameter>
+        </collectedMetric>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="metric">AverageRXNetwork</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+    <monitoringRule id="StorageRule" startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Cluster" />
+        </monitoredTargets>
+        <collectedMetric metricName="StorageCluster">
+            <parameter name="samplingTime">5</parameter>
+        </collectedMetric>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="metric">AverageStorage</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+    <monitoringRule id="RackLoadRule" startEnabled="true" timeStep="5" timeWindow="5">
+        <monitoredTargets>
+            <monitoredTarget class="Rack" />
+        </monitoredTargets>
+        <collectedMetric metricName="RackLoad">
+            <parameter name="samplingTime">5</parameter>
+        </collectedMetric>
+        <actions>
+            <action name="OutputMetric">
+                <parameter name="metric">AverageRackLoad</parameter>
+            </action>
+        </actions>
+    </monitoringRule>
+</monitoringRules>
+
+

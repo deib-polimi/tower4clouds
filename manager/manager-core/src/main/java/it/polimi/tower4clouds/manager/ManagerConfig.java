@@ -26,35 +26,35 @@ public class ManagerConfig {
 
 	public static final String MODEL_GRAPH_NAME = "http://www.modaclouds.eu/graphs#model";
 
-	@Parameter(names = "-help", help = true, description = "Shows this message")
+	@Parameter(names = {"-h", "--help"}, help = true, description = "Shows this message")
 	private boolean help;
 
-	@Parameter(names = "-daip", description = "DA public endpoint IP address")
+	@Parameter(names = "-daip", description = "Data Analyzer public endpoint IP address")
 	private String daIP;
 
-	@Parameter(names = "-daport", description = "DA public endpoint port")
+	@Parameter(names = "-daport", description = "Data Analyzer public endpoint port")
 	private int daPort;
 
-	@Parameter(names = "-mmip", description = "Monitoring Manager public endpoint IP address")
+	@Parameter(names = "-manip", description = "Manager endpoint IP address")
 	private String mmIP;
 
-	@Parameter(names = "-mmport", description = "Monitoring Manager public endpoint port")
+	@Parameter(names = "-manport", description = "Manager endpoint port")
 	private int mmPort;
+	
+	@Parameter(names = "-rdf-history-db-ip", description = "RDF History DB endpoint IP address")
+	private String rdfHistoryDbIP;
 
 	@Parameter(names = "-rdf-history-db-port", description = "RDF History DB endpoint port")
 	private int rdfHistoryDbPort;
 
-	@Parameter(names = "-rdf-history-db-ip", description = "RDF History DB endpoint IP address")
-	private String rdfHistoryDbIP;
-
-	@Parameter(names = "-version", description = "Shows the version number")
+	@Parameter(names = {"-v","--version"}, description = "Shows the version number")
 	private boolean version = false;
 
 	@Override
 	public String toString() {
-		String toString = "\tDA URL: " + getDaUrl() + "\n"
-				+ "\tMonitoring Manager Port: " + mmPort + "\n"
-				+ "\tMonitoring Manager IP: " + mmIP;
+		String toString = "\tData Analyzer URL: " + getDaUrl() + "\n"
+				+ "\tManager Port: " + mmPort + "\n"
+				+ "\tManager IP: " + mmIP;
 		if (rdfHistoryDbIP != null) {
 			toString += "\n\tRDF History DB Port: " + rdfHistoryDbPort + "\n"
 					+ "\tRDF History DB IP: " + rdfHistoryDbIP;

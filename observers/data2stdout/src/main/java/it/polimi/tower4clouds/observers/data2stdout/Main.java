@@ -42,12 +42,12 @@ public class Main {
             BufferedReader in = new BufferedReader(new InputStreamReader(incomingData));
             String line = null;
             while ((line = in.readLine()) != null) {
-                dataBuilder.append(line);
+                dataBuilder.append(line+"\n");
             }
         } catch (Exception e) {
             System.out.println("Error Parsing: - ");
         }
-        System.out.println(dataBuilder.toString());
+        System.out.print(dataBuilder.toString());
  
         return Response.status(204).build();
     }

@@ -19,7 +19,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.polimi.tower4clouds</groupId>
-	<version>0.3</version>
+	<version>0.3.1</version>
 	<artifactId>tower4clouds</artifactId>
 	<packaging>pom</packaging>
 	<name>MODAClous - Tower4Clouds - Parent Pom</name>
@@ -84,12 +84,22 @@
 			</roles>
 			<timezone>Europe/Rome</timezone>
 		</contributor>
+                <contributor>
+			<name>Davide Verzotto</name>
+			<email>davide.verzotto@mail.polimi.it</email>
+			<organization>Politecnico di Milano</organization>
+			<organizationUrl>http://www.polimi.it</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>Europe/Rome</timezone>
+		</contributor>
 	</contributors>
 
 	<scm>
 		<connection>scm:git:git@github.com:deib-polimi/tower4clouds.git</connection>
 		<developerConnection>scm:git:git@github.com:deib-polimi/tower4clouds.git</developerConnection>
-		<tag>v0.3</tag>
+		<tag>v0.3.1</tag>
 		<url>https://github.com/deib-polimi/tower4clouds</url>
 	</scm>
 

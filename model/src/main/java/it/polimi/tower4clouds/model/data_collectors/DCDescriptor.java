@@ -129,10 +129,24 @@ public class DCDescriptor {
 	}
 
 	public void addResources(Set<Resource> resources) {
+		validate(resources);
 		getResources().addAll(resources);
 	}
 
+	private void validate(Set<Resource> resources) {
+		for (Resource resource : resources) {
+			validate(resource);
+		}
+	}
+
+	private void validate(Resource resource) {
+		if (resource.getType() == null || resource.getId() == null)
+			throw new NullPointerException(
+					"Resources in the model must have an Id and a Type");
+	}
+
 	public void addResource(Resource resource) {
+		validate(resource);
 		getResources().add(resource);
 	}
 

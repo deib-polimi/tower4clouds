@@ -20,13 +20,14 @@
 	<parent>
 		<groupId>it.polimi.tower4clouds</groupId>
 		<artifactId>tower4clouds</artifactId>
-		<version>0.3</version>
+		<version>0.3.1</version>
 	</parent>
 	<artifactId>data-collectors</artifactId>
 	<name>MODAClous - Tower4Clouds - Data Collectors Parent Pom</name>
 	<packaging>pom</packaging>
 	<modules>
 		<module>java-app-dc</module>
+	        <module>flexiant-nodes-dc</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>

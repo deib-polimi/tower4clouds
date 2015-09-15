@@ -5,5 +5,6 @@ parentMenu: rules
 
 # Actions
 
-## <a name="output-metric"></a> Output Metric
+## [Output Metric](outputmetric.md)
+## [Rest Call](restcall.md)
 ## [CloudML Call](cloudmlcall.md)

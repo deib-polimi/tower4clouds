@@ -34,39 +34,36 @@ public class Main {
 	@Parameter(names = { "-h", "--help", "-help" }, help = true, description = "Shows this help", hidden = true)
 	private boolean help = false;
 
-	@Parameter(names = "-queueip", description = "Queue endpoint IP address (Default: 127.0.0.1)")
-	public String queueip = null;
+	@Parameter(names = "-queueip", description = "Queue endpoint IP address")
+	public String queueip = it.polimi.tower4clouds.rdf_history_db.observer.Configuration.DEFAULT_QUEUE_IP;
 
-	@Parameter(names = "-queueport", description = "Queue endpoint port (Default: 5672)")
-	public String queueport = null;
+	@Parameter(names = "-queueport", description = "Queue endpoint port")
+	public String queueport = it.polimi.tower4clouds.rdf_history_db.observer.Configuration.DEFAULT_QUEUE_PORT;
 
-	@Parameter(names = "-dbip", description = "DB endpoint IP address (Default: 127.0.0.1)")
-	public String dbip = null;
+	@Parameter(names = "-dbip", description = "DB endpoint IP address")
+	public String dbip = it.polimi.tower4clouds.rdf_history_db.observer.Configuration.DEFAULT_FUSEKI_IP;
 
-	@Parameter(names = "-dbpath", description = "DB URL path (Default: /ds)")
-	public String dbpath = null;
+	@Parameter(names = "-dbpath", description = "DB URL path")
+	public String dbpath = it.polimi.tower4clouds.rdf_history_db.observer.Configuration.DEFAULT_FUSEKI_PATH;
 
-	@Parameter(names = "-dbport", description = "DB endpoint port (Default: 3030)")
-	public String dbport = null;
+	@Parameter(names = "-dbport", description = "DB endpoint port")
+	public String dbport = it.polimi.tower4clouds.rdf_history_db.observer.Configuration.DEFAULT_FUSEKI_PORT;
 
-	@Parameter(names = "-listenerport", description = "Listener endpoint port (Default: 31337)")
-	public String listenerport = null;
+	@Parameter(names = "-listenerport", description = "Listener endpoint port")
+	public String listenerport = Integer.toString(it.polimi.tower4clouds.rdf_history_db.observer.Configuration.DEFAULT_PORT);
 
-	@Parameter(names = "-fakemessages", description = "Test the tool by sending a number of fake messages (Default: 0)")
-	public String fakemessages = null;
+	@Parameter(names = "-fakemessages", description = "Test the tool by sending a number of fake messages")
+	public String fakemessages = Integer.toString(it.polimi.tower4clouds.rdf_history_db.observer.Configuration.DEFAULT_FAKE_MESSAGES);
 
-	@Parameter(names = "-waitfakemessages", description = "The ms to wait between each fake message (Default: 1000 ms == 1 second)")
-	public String waitfakemessages = null;
+	@Parameter(names = "-waitfakemessages", description = "The ms to wait between each fake message")
+	public String waitfakemessages = Integer.toString(it.polimi.tower4clouds.rdf_history_db.observer.Configuration.DEFAULT_WAIT_FAKE_MESSAGES);
 
 	public static String APP_NAME;
 	public static String APP_FILE_NAME;
 	public static String APP_VERSION;
 
 	public static void main(String[] args) {
-
-		// args = new String[] {"-fakemessages", "10", "-waitfakemessages",
-		// "1000" }; //, "-h", "-queueip", "109.231.121.52"}; // , "-queueport",
-		// "55672"});
+//		args = "-fakemessages 10 -waitfakemessages 1000".split(" ");
 
 		PropertiesConfiguration releaseProperties = null;
 		try {

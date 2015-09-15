@@ -50,7 +50,7 @@ public class Producer {
 	}
 	
 	public Producer() {
-		this(Configuration.DEFAULT_PORT);
+		this(Configuration.PORT);
 	}
 	
 	private void sendMessage(String path, Method method) {

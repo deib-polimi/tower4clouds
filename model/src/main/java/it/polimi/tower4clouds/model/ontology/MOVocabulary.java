@@ -28,6 +28,9 @@ public class MOVocabulary {
     public static final String VM = "VM";
     public static final String Method = "Method";
     public static final String Location = "Location";
+    public static final String Node = "Node";
+    public static final String Cluster = "Cluster";
+    public static final String Rack = "Rack";
     
     public static final String IDRef = "IDRef";
     public static final String cloudProvider = "cloudProvider";
@@ -39,6 +42,8 @@ public class MOVocabulary {
     public static final String clazz = "clazz";
     public static final String type = "type";
     public static final String id = "id";
+    public static final String vms = "nodes";
+    public static final String nodes = "nodes";
     
     public static final String idParameterName = id;
     
