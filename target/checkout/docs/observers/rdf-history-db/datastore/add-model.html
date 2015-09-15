@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Tower 4Clouds</title>
+
+    <link rel="stylesheet" href="http://deib-polimi.github.io/tower4clouds/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://deib-polimi.github.io/tower4clouds/css/highlight.dark.css">
+    <link rel="stylesheet" href="http://deib-polimi.github.io/tower4clouds/css/main.css">
+</head>
+<body class="">
+
+<header class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="http://deib-polimi.github.io/tower4clouds/" class="navbar-brand"><img src="http://deib-polimi.github.io/tower4clouds/img/logo-small.png" alt=""></a>
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+
+        <div class="navbar-collapse collapse" id="navbar-main">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://deib-polimi.github.io/tower4clouds/">Home</a></li>
+                <li><a href="http://deib-polimi.github.io/tower4clouds/docs/get-started.html">Get started</a></li>
+                <li><a href="http://deib-polimi.github.io/tower4clouds/docs/">Documentation</a></li>
+                                <li>
+                    <a href="https://github.com/deib-polimi/tower4clouds">
+                        <i class="fa fa-github"></i> GitHub
+                    </a>
+                </li>
+                            </ul>
+        </div>
+    </div>
+</header>
+
+
+<main class="container-fluid">
+    <div class="row">
+
+        
+
+        <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+            <ul class="nav nav-pills nav-stacked">
+                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/">
+                        Documentation Index
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/overview.html">
+                        Overview
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/get-started.html">
+                        Get started
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/mosaic-installation.html">
+                        Installation on mOSAIC
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/data-collectors/">
+                        Data Collectors
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/">
+                        Manager
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/data-analyzer/">
+                        Data Analyzer
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/model/">
+                        The Model
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/rules/">
+                        Rules
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/observers/">
+                        Observers
+                    </a>
+                </li>
+                                <ul class="submenu nav nav-stacked nav-pills">
+                                        <li class="">
+                        <a href="http://deib-polimi.github.io/tower4clouds/docs/observers/rdf-history-db/">
+                            HistoryDB
+                        </a>
+                    </li>
+
+                                        <ul class="submenu nav nav-stacked nav-pills">
+                                                <li class="">
+                            <a href="http://deib-polimi.github.io/tower4clouds/docs/observers/rdf-history-db/user-manual.html">
+                                User Manual
+                            </a>
+                        </li>
+
+                        
+                                                <li class="">
+                            <a href="http://deib-polimi.github.io/tower4clouds/docs/observers/rdf-history-db/api/">
+                                API Reference
+                            </a>
+                        </li>
+
+                        
+                                                <li class="active">
+                            <a href="http://deib-polimi.github.io/tower4clouds/docs/observers/rdf-history-db/datastore/">
+                                DataStore Reference
+                            </a>
+                        </li>
+
+                                                <ul class="submenu nav nav-stacked nav-pills">
+                                                    </ul>
+                        
+                                                <li class="">
+                            <a href="http://deib-polimi.github.io/tower4clouds/docs/observers/rdf-history-db/install.html">
+                                Install Guide
+                            </a>
+                        </li>
+
+                        
+                                            </ul>
+                    
+                                    </ul>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/CHANGELOG.html">
+                        Change log
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/CONTRIBUTING.html">
+                        Contributing
+                    </a>
+                </li>
+                                            </ul>
+
+        </nav>
+
+        
+        <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+            <p><a href=".">&#9664; Back to list</a></p>
+<h1 id="add-model">Add Model</h1>
+<p>When adding a new model to the system (using the REST API <a href="../api/put-model.html">PUT-model</a>), a number of triples are inserted in the datastore.</p>
+<p>Let's assume that the sub-component that has to save the model in the datastore received it in a certain time (e.g. with a timestamp <code>1425399022110</code>, corresponding to the date <em>Tue, 03 Mar 2015 17:10:22 GMT+1:00</em>).</p>
+<p>The assumption that no other model is considered at the exact same time is done. Then, a graph with the name containing the timestamp above is created (e.g. <code>http://www.modaclouds.eu/historydb/model/1425400773874</code>).</p>
+<p>The graph will contain a number of triples, and these are created using the <a href="https://github.com/deib-polimi/modaclouds-knowledge-base-api">modaclouds-knowledge-base-api</a>. All the subjects will have the base prefix <code>http://www.modaclouds.eu/rdfs/1.0/entities#</code>.</p>
+<p>Another graph with the name associated to the hour in which the timestamp is contained (e.g. <code>http://www.modaclouds.eu/historydb/meta/model/1425340800000</code> for the example above, where <code>1425340800000</code> corresponds to the date <em>Tue, 03 Mar 2015 00:00:00 GMT+1:00</em>) is created or used if it already exists.
+Only one triple is added, and this has as the subject the name of the graph considered before (e.g. <code>http://www.modaclouds.eu/historydb/model/1425400773874</code>), the predicate <code>&lt;mo:timestamp&gt;</code> and the actual timestamp as the object of the triple (e.g. <code>1425400773874</code>).</p>
+<p>Lastly, in the <code>default</code> graph, one tuple is added, with:</p>
+<ul>
+<li>the subject that is the URI of the graph (e.g. <code>http://www.modaclouds.eu/historydb/model/1425400773874</code>),</li>
+<li>the predicate is the constant <code>mo:timestamp</code>, and</li>
+<li>the object is the hour in which the timestamp is contained (e.g. <code>1425398400000</code> for the example above, where <code>1425398400000</code> corresponds to the date <em>Tue, 03 Mar 2015 17:00:00 GMT+1:00</em>).</li>
+</ul>
+<h2 id="examples-of-query"> Examples of Query</h2>
+<p>Here are some examples of SPARQL query:</p>
+<ul>
+<li>find all the model inserted:</li>
+</ul>
+<pre><code class="language-sparql">SELECT * {
+    ?s &lt;mo:timestamp&gt; ?o
+    FILTER (regex(str(?s), "model") &amp;&amp; !(regex(str(?s), "model/updates")) &amp;&amp; !(regex(str(?s), "model/cancellations")))
+}</code></pre>
+<ul>
+<li>find all the model inserted in a specific hourly timestamp:</li>
+</ul>
+<pre><code class="language-sparql">SELECT * {
+    ?s &lt;mo:timestamp&gt; ?o 
+    FILTER (?o = 1425574800000 &amp;&amp; regex(str(?s), "model") &amp;&amp; !(regex(str(?s), "model/updates")) &amp;&amp; !(regex(str(?s), "model/cancellations")))
+}</code></pre>
+<ul>
+<li>find all the model inserted in a range of hourly timestamps:</li>
+</ul>
+<pre><code class="language-sparql">SELECT * {
+    ?s &lt;mo:timestamp&gt; ?o
+    FILTER (?o &gt;= 1425574600000 &amp;&amp; ?o &lt;= 1425574900000 &amp;&amp; regex(str(?s), "model") &amp;&amp; !(regex(str(?s), "model/updates")) &amp;&amp; !(regex(str(?s), "model/cancellations")))
+}</code></pre>
+        </section>
+
+    </div>
+</main>
+
+
+
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="http://yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+<script>
+    $(function() {
+        $("section>h1").wrap('<div class="page-header" />');
+        // Syntax highlighting
+        hljs.initHighlightingOnLoad();
+    });
+</script>
+
+
+</body>
+</html>
