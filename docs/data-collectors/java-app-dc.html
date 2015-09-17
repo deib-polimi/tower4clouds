@@ -240,13 +240,13 @@ private void outgoingCall() {
     // write to DB
 }</code></pre>
 <p>Alternatively, the scope of both monitored methods and outgoing calls can be delimited programmatically:</p>
-<pre><code class="language-java">Registry.started("register");
+<pre><code class="language-java">Registry.notifyStart("register");
 // registration code
-AppDataCollectorFactory.startsExternalCall();
+Registry.notifyExternalCallStart();
 // write to DB
-AppDataCollectorFactory.endsExternalCall();
+Registry.notifyExternalCallEnd();
 // registration code
-Registry.ended("register");</code></pre>
+Registry.notifyEnd("register");</code></pre>
 <h2 id="developers">Developers</h2>
 <p>The source code of the latest release of the Java App DC can be found <a href="https://github.com/deib-polimi/tower4clouds/tree/master/data-collectors/java-app-dc">here</a>. </p>
         </section>
