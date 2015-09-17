@@ -29,7 +29,7 @@ sudo apt-get -y -q update
 sudo apt-get -y -q install default-jre
 
 # tower4clouds
-RELEASE=0.2.3
+RELEASE=$(curl --silent https://api.github.com/repos/deib-polimi/tower4clouds/releases/latest | grep "tag_name" | sed 's/.*"v\(.*\)",/\1/')
 components=(data-analyzer manager-server rdf-history-db-main)
 sudo mkdir /opt/tower4clouds
 for component in ${components[@]}
