@@ -101,13 +101,13 @@ private void outgoingCall() {
 Alternatively, the scope of both monitored methods and outgoing calls can be delimited programmatically:
 
 ```java
-Registry.started("register");
+Registry.notifyStart("register");
 // registration code
-AppDataCollectorFactory.startsExternalCall();
+Registry.notifyExternalCallStart();
 // write to DB
-AppDataCollectorFactory.endsExternalCall();
+Registry.notifyExternalCallEnd();
 // registration code
-Registry.ended("register");
+Registry.notifyEnd("register");
 ```
 
 ## Developers
