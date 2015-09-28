@@ -98,16 +98,14 @@ private void outgoingCall() {
 }
 ```
 
-Alternatively, the scope of both monitored methods and outgoing calls can be delimited programmatically:
+Alternatively, the scope of outgoing calls can be delimited programmatically:
 
 ```java
-Registry.notifyStart("register");
-// registration code
+// code
 Registry.notifyExternalCallStart();
 // write to DB
 Registry.notifyExternalCallEnd();
-// registration code
-Registry.notifyEnd("register");
+// code
 ```
 
 ## Developers

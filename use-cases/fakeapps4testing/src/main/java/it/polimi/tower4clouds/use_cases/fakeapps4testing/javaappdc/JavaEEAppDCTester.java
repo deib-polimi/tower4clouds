@@ -26,7 +26,9 @@ import it.polimi.tower4clouds.rules.MonitoringRules;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JavaAppDCTester {
+import javax.ws.rs.GET;
+
+public class JavaEEAppDCTester {
 
 	private static final String graphiteIP = "localhost";
 	private static final int graphitePort = 8001;
@@ -35,7 +37,7 @@ public class JavaAppDCTester {
 
 	public static void main(String[] args) throws Exception {
 		ManagerAPI manager = new ManagerAPI(managerIP, managerPort);
-		manager.installRules(XMLHelper.deserialize(JavaAppDCTester.class
+		manager.installRules(XMLHelper.deserialize(JavaEEAppDCTester.class
 				.getResourceAsStream("/rules4JavaAppDCTester.xml"),
 				MonitoringRules.class));
 		manager.registerHttpObserver("AverageResponseTime", "http://" + graphiteIP + ":" + graphitePort + "/data", "GRAPHITE");
@@ -49,22 +51,16 @@ public class JavaAppDCTester {
 		applicationProperties.put(Property.CLOUD_PROVIDER_ID, "AWS");
 		applicationProperties.put(Property.CLOUD_PROVIDER_TYPE, "IaaS");
 		Registry.initialize(managerIP, managerPort, applicationProperties,
-				JavaAppDCTester.class.getPackage().getName(), true, false);
+				JavaEEAppDCTester.class.getPackage().getName(), false, true);
 		Registry.startMonitoring();
+		JavaEEAppDCTester app = new JavaEEAppDCTester();
 		for (int i = 0; i < 100000; i++) {
-			login();
+			app.login();
 		}
 	}
 
-	@Monitor(type = "Login")
-	private static void login() throws InterruptedException {
-		Thread.sleep((long) (Math.random() * 100));
-		retrieveCredentials();
+	@GET
+	public void login() throws InterruptedException {
 		Thread.sleep((long) (Math.random() * 1000));
-	}
-
-	@ExternalCall
-	private static void retrieveCredentials() throws InterruptedException {
-		Thread.sleep((long) (Math.random() * 2000));
 	}
 }

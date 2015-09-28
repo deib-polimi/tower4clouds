@@ -15,17 +15,24 @@
  */
 package it.polimi.tower4clouds.java_app_dc;
 
+public aspect JaxRSAspect {
 
-public aspect ExternalCallAspect {
+	private pointcut monitoredMethod() : execution(@javax.ws.rs.* * *(..));
 
-	private pointcut monitoredMethod(ExternalCall methodType) : execution(@ExternalCall * *(..)) && @annotation(methodType);
-
-	before(ExternalCall methodType) : monitoredMethod(methodType) {
-		Registry.notifyExternalCallStart();
+	before() : monitoredMethod() {
+		if (!Registry.isAbstractClass(thisJoinPoint.getTarget().getClass())) {
+		Registry.notifyStarted(Registry.createJaxRSMethodType(thisJoinPoint
+				.getSignature().getName(), thisJoinPoint.getTarget().getClass()
+				.getSimpleName()));
+		}
 	}
 
-	after(ExternalCall methodType): monitoredMethod(methodType){
-		Registry.notifyExternalCallEnd();
+	after(): monitoredMethod(){
+		if (!Registry.isAbstractClass(thisJoinPoint.getTarget().getClass())) {
+		Registry.notifyEnded(Registry.createJaxRSMethodType(thisJoinPoint
+				.getSignature().getName(), thisJoinPoint.getTarget().getClass()
+				.getSimpleName()));
+		}
 	}
 
 }

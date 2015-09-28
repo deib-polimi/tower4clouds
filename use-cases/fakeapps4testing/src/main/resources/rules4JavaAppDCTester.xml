@@ -2,7 +2,7 @@
 	<monitoringRule id="ResponseTimeRule"
         startEnabled="true" timeStep="5" timeWindow="5">
         <monitoredTargets>
-            <monitoredTarget class="Method" type="Login"/>
+            <monitoredTarget class="Method"/>
         </monitoredTargets>
         <collectedMetric metricName="ResponseTime">
             <parameter name="samplingProbability">1</parameter>

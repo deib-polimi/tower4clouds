@@ -15,19 +15,17 @@
  */
 package it.polimi.tower4clouds.java_app_dc;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public aspect MonitorAspect {
 
 	private pointcut monitoredMethod(Monitor annotation) : execution(@Monitor * *(..)) && @annotation(annotation);
 
 	before(Monitor annotation) : monitoredMethod(annotation) {
-		Registry.notifyStart(annotation.type());
+		Registry.notifyStarted(annotation.type());
 	}
 
 	after(Monitor annotation): monitoredMethod(annotation){
-		Registry.notifyEnd(annotation.type());
+		Registry.notifyEnded(annotation.type());
 	}
 
 }

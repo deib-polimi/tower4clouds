@@ -27,12 +27,21 @@ import it.polimi.tower4clouds.model.ontology.Method;
 import it.polimi.tower4clouds.model.ontology.Resource;
 import it.polimi.tower4clouds.model.ontology.VM;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
+
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
@@ -63,11 +72,15 @@ public class Registry implements Observer {
 	public static Integer KEEP_ALIVE = null;
 	private static final int DEFAULT_CONFIG_SYNC_PERIOD = 30;
 
+	@SuppressWarnings("unchecked")
+	private static final Class<? extends Annotation>[] jaxrsAnnotations = new Class[] {
+			DELETE.class, GET.class, POST.class, PUT.class };
+
 	protected Registry() {
 	}
 
 	private void ended(String methodType) {
-		logger.debug("Method {} ended", methodType);
+		logger.info("Method {} ended", methodType);
 		if (monitoringStarted) {
 			for (Metric metric : metrics) {
 				metric.ended(methodsByType.get(methodType));
@@ -78,7 +91,7 @@ public class Registry implements Observer {
 	}
 
 	private void started(String methodType) {
-		logger.debug("Method {} started", methodType);
+		logger.info("Method {} started", methodType);
 		if (monitoringStarted) {
 			for (Metric metric : metrics) {
 				metric.started(methodsByType.get(methodType));
@@ -89,7 +102,7 @@ public class Registry implements Observer {
 	}
 
 	private void externalCallStarted() {
-		logger.debug("External call started");
+		logger.info("External call started");
 		if (monitoringStarted) {
 			for (Metric metric : metrics) {
 				metric.externalCallStarted();
@@ -100,7 +113,7 @@ public class Registry implements Observer {
 	}
 
 	private void externalCallEnded() {
-		logger.debug("External call ended");
+		logger.info("External call ended");
 		if (monitoringStarted) {
 			for (Metric metric : metrics) {
 				metric.externalCallEnded();
@@ -119,11 +132,13 @@ public class Registry implements Observer {
 	// TODO validate parameters
 	private synchronized void init(String managerIP, int managerPort,
 			Map<Property, String> applicationProperties,
-			String monitoredClassesPackage) {
+			String monitoredClassesPackage, boolean parseMonitorAnnotations,
+			boolean parseJaxRSAnnotations) {
 		if (registryInitialized)
 			throw new RuntimeException("Registry was already initialized");
 		this.methodsById = buildMethodsById(monitoredClassesPackage,
-				applicationProperties);
+				applicationProperties.get(Property.ID),
+				parseMonitorAnnotations, parseJaxRSAnnotations);
 		this.methodsByType = buildMethodsByType(methodsById);
 		this.application = buildInternalComponent(methodsById,
 				applicationProperties);
@@ -301,25 +316,79 @@ public class Registry implements Observer {
 	}
 
 	private static Map<String, Method> buildMethodsById(
-			String monitoredClassesPackage,
-			Map<Property, String> applicationProperties) {
+			String monitoredClassesPackage, String appId,
+			boolean parseMonitorAnnotations, boolean parseJaxRSAnnotations) {
 		Reflections.log = null;
 		Reflections reflections = new Reflections(new ConfigurationBuilder()
 				.setUrls(ClasspathHelper.forPackage(monitoredClassesPackage))
 				.setScanners(new MethodAnnotationsScanner()));
-		Set<java.lang.reflect.Method> annotatedMethods = reflections
-				.getMethodsAnnotatedWith(Monitor.class);
 		Map<String, Method> monitoredMethods = new HashMap<String, Method>();
-		for (java.lang.reflect.Method annotatedMethod : annotatedMethods) {
-			String methodType = annotatedMethod.getAnnotation(Monitor.class)
-					.type();
-			Method method = buildMethod(methodType,
-					applicationProperties.get(Property.ID));
-			monitoredMethods.put(method.getId(), method);
-			logger.info("Monitored method found: type={}, id={}",
-					method.getType(), method.getId());
+		if (parseMonitorAnnotations) {
+			Set<java.lang.reflect.Method> annotatedMethods = reflections
+					.getMethodsAnnotatedWith(Monitor.class);
+			for (java.lang.reflect.Method annotatedMethod : annotatedMethods) {
+				String methodType = annotatedMethod
+						.getAnnotation(Monitor.class).type();
+				Method method = buildMethod(methodType, appId);
+				monitoredMethods.put(method.getId(), method);
+				logger.info("Monitored method found: type={}, id={}",
+						method.getType(), method.getId());
+			}
+		}
+		if (parseJaxRSAnnotations) {
+			for (Class<? extends Annotation> annotation : jaxrsAnnotations) {
+				Set<java.lang.reflect.Method> annotatedMethods = reflections
+						.getMethodsAnnotatedWith(annotation);
+				for (java.lang.reflect.Method annotatedMethod : annotatedMethods) {
+					Class<?> declaringClass = annotatedMethod
+							.getDeclaringClass();
+					if (!isAbstractClass(declaringClass)) {
+						String methodType = createJaxRSMethodType(
+								annotatedMethod.getName(),
+								declaringClass.getSimpleName());
+						Method method = buildMethod(methodType, appId);
+						monitoredMethods.put(method.getId(), method);
+						logger.info("Monitored method found: type={}, id={}",
+								method.getType(), method.getId());
+					} else {
+						Set<?> concreteClasses = findImplementations(declaringClass, monitoredClassesPackage);
+						for (Object class1 : concreteClasses) { // TODO it
+																	// should
+																	// check
+																	// that the
+																	// method is
+																	// not
+																	// overwritten
+							String methodType = createJaxRSMethodType(
+									annotatedMethod.getName(),
+									((Class<?>)class1).getSimpleName());
+							Method method = buildMethod(methodType, appId);
+							monitoredMethods.put(method.getId(), method);
+							logger.info(
+									"Monitored method found: type={}, id={}",
+									method.getType(), method.getId());
+
+						}
+					}
+				}
+			}
 		}
 		return monitoredMethods;
+	}
+
+	private static <T> Set<Class<? extends T>> findImplementations(Class<T> clazz, String monitoredClassesPackage) {
+		Set<Class<? extends T>> classes = new HashSet<Class<? extends T>>();
+		Reflections reflections = new Reflections(monitoredClassesPackage);
+		Set<Class<? extends T>> subtypes = reflections.getSubTypesOf(clazz);
+		for (Class<? extends T> clz : subtypes) {
+			if (!isAbstractClass(clz)) classes.add(clz);
+		}
+		return classes;
+	}
+
+	protected static String createJaxRSMethodType(String methodName,
+			String className) {
+		return className + "_" + methodName;
 	}
 
 	private static Method buildMethod(String methodType, String applicationId) {
@@ -327,11 +396,29 @@ public class Registry implements Observer {
 				+ applicationId.hashCode());
 	}
 
+	/**
+	 * @deprecated annotations are required to have the method added to the
+	 *             model
+	 */
+	@Deprecated
 	public static void notifyStart(String methodType) {
 		_INSTANCE.started(methodType);
 	}
 
+	protected static void notifyStarted(String methodType) {
+		_INSTANCE.started(methodType);
+	}
+
+	/**
+	 * @deprecated annotations are required to have the method added to the
+	 *             model
+	 */
+	@Deprecated
 	public static void notifyEnd(String methodType) {
+		_INSTANCE.ended(methodType);
+	}
+
+	protected static void notifyEnded(String methodType) {
 		_INSTANCE.ended(methodType);
 	}
 
@@ -346,8 +433,17 @@ public class Registry implements Observer {
 	public static void initialize(String managerIP, int managerPort,
 			Map<Property, String> applicationProperties,
 			String monitoredClassesPackage) {
+		initialize(managerIP, managerPort, applicationProperties,
+				monitoredClassesPackage, true, false);
+	}
+
+	public static void initialize(String managerIP, int managerPort,
+			Map<Property, String> applicationProperties,
+			String monitoredClassesPackage, boolean parseMonitorAnnotations,
+			boolean parseJaxRSAnnotations) {
 		_INSTANCE.init(managerIP, managerPort, applicationProperties,
-				monitoredClassesPackage);
+				monitoredClassesPackage, parseMonitorAnnotations,
+				parseJaxRSAnnotations);
 	}
 
 	public static void startMonitoring() {
@@ -361,4 +457,21 @@ public class Registry implements Observer {
 	InternalComponent getApplication() {
 		return application;
 	}
+
+	public static void stopMonitoring() {
+		_INSTANCE.stop();
+	}
+
+	protected static boolean isAbstractClass(Class<?> clazz) {
+		return Modifier.isAbstract(clazz.getModifiers());
+	}
+
+//	protected static boolean isRestAnnotation(Class<?> clazz) {
+//		for (Class<? extends Annotation> annotation : jaxrsAnnotations) {
+//			if (clazz.isAnnotationPresent(annotation))
+//				return true;
+//		}
+//		return false;
+//	}
+
 }

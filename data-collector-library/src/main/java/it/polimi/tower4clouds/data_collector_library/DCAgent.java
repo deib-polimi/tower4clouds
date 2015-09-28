@@ -165,12 +165,12 @@ public class DCAgent extends Observable {
 					Map<String, Set<DCConfiguration>> newConfig = getRemoteDCConfiguration();
 					if (!newConfig.equals(dCConfigsByMetric)) {
 						dCConfigsByMetric = newConfig;
-						logger.debug("Downloaded new dc configuration: {}",
+						logger.info("Downloaded new dc configuration: {}",
 								dCConfigsByMetric);
 						setChanged();
 						notifyObservers();
 					} else {
-						logger.debug(
+						logger.info(
 								"Downloaded dc configuration, nothing changed from previous config",
 								dCConfigsByMetric);
 					}
@@ -211,7 +211,7 @@ public class DCAgent extends Observable {
 			@Override
 			public void run() {
 				try {
-					logger.debug("Keeping alive");
+					logger.info("Keeping alive");
 					keepAlive();
 				} catch (UnexpectedAnswerFromServerException e) {
 					logger.info("DC does not seem to be registered anymore, re-registering DC");
@@ -359,7 +359,7 @@ public class DCAgent extends Observable {
 		public void run() {
 
 			if (!dCConfigsByMetric.containsKey(metric)) {
-				logger.debug(
+				logger.info(
 						"Monitoring for metric {} no longer required, buffered data will be dropped",
 						metric);
 				return;
@@ -370,12 +370,12 @@ public class DCAgent extends Observable {
 			DCConfiguration dcConfiguration = dcConfigurations.iterator().next();
 
 			long ts = System.currentTimeMillis();
-			logger.debug("Sending {} monitoring data", data.size());
+			logger.info("Sending {} monitoring data", data.size());
 			try {
 
 				restClient.execute(RestMethod.POST, dcConfiguration.getDaUrl(),
 						data.toString(), 200, timeout);
-				logger.debug("Data sent in {} seconds",
+				logger.info("Data sent in {} seconds",
 						((double) (System.currentTimeMillis() - ts)) / 1000);
 			} catch (UnexpectedAnswerFromServerException e) {
 				logger.error(
