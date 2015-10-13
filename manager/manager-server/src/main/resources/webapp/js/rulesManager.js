@@ -29,7 +29,7 @@ document.getElementById('addedFile')
         .addEventListener('change', readSingleFile, false);
 
 /*
- * 
+ *
  * @param a anonymous function caller for make the lists of rules
  */
 $(document).ready(function () {
@@ -181,25 +181,25 @@ function xmlParser(xml) {
 
     $('<b>–<\/b>').prependTo('#treeView li:has(li)').click(function () {
         var sign = $(this).text();
-        if (sign == "–")
+        if (sign == "-")
             $(this).text('+').next().next().next().children().hide();
         else
-            $(this).text('–').next().next().next().children().show();
+            $(this).text('-').next().next().next().children().show();
     });
 }
 
 //Ricerca nell'albero xml
 function traverse(node, tree) {
     var children = $(tree).children();
-    
-    
+
+
     var attributes = " [  ";
     $(tree.attributes).each(function(){
         attributes += this.nodeName + " = ";
         attributes += ' "' +this.nodeValue + '" ; ';
     });
     attributes += " ] ";
-    
+
     if (tree.nodeName.indexOf("monitoringRule") > -1 && tree.nodeName.indexOf("monitoringRules") < 0) {
         // MonitoringRule
         node.append(" " +tree.nodeName.split(":")[1]  + '</span><span class="spanAttributes"> ' + attributes + ' </span> ');
@@ -210,14 +210,14 @@ function traverse(node, tree) {
     else{
         //MonitoringRules && MonitoringTargets
         node.append('<span> ' + tree.nodeName.split(":")[1]);
-        
+
         //Not MonitoringRules
         if(tree.nodeName.indexOf("monitoringRules")<0)
             node.append('</span><span  class="spanAttributes">' + attributes + '</span>');
-        else 
+        else
             node.append('</span><span  class="spanAttributes"> </span>');
     }
-        
+
     if (children.length) {
         var ul = $("<ul> ").appendTo(node);
         children.each(function () {
@@ -240,7 +240,7 @@ function traverse(node, tree) {
  var fieldValues = new Array(8);
  var separatorAttributesFromFields = 4;
  var listOfTypes = "";
- 
+
  for (var j = 0; j < 6; j++) {
  if (j < separatorAttributesFromFields) {
  fieldValues[j] = $(this).attr(listOfAttr[j]);
@@ -259,20 +259,20 @@ function traverse(node, tree) {
  }
  }
  }
- 
+
  fieldValues[6] = "<a href=javascript:redirector('" + fieldValues[0] + "');>link</a>";
  fieldValues[7] = "<button onclick=deleteRule('" + fieldValues[0] + "')><span class='glyphicon glyphicon-remove-circle' aria-hidden='true'></span></button>";
- 
+
  $("#tableOfRules").append("<tr>");
  for (var i = 0; i < 8; i++) {
  $("#tableOfRules").append("<td>" + fieldValues[i] + "</td>");
  }
- 
+
  $("#tableOfRules").append("</tr>");
- 
+
  }
  );
- 
+
  }*/
 
 function tableReloader() {
@@ -342,4 +342,3 @@ function cleanBoxes() {
     $("#error").hide();
     $("#success").hide();
 }
-
