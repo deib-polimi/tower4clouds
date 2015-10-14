@@ -64,6 +64,11 @@
                     </a>
                 </li>
                                                 <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/tutorial.html">
+                        Tutorial
+                    </a>
+                </li>
+                                                <li class="">
                     <a href="http://deib-polimi.github.io/tower4clouds/docs/mosaic-installation.html">
                         Installation on mOSAIC
                     </a>
@@ -239,14 +244,12 @@ private void register() {
 private void outgoingCall() {
     // write to DB
 }</code></pre>
-<p>Alternatively, the scope of both monitored methods and outgoing calls can be delimited programmatically:</p>
-<pre><code class="language-java">Registry.notifyStart("register");
-// registration code
+<p>Alternatively, the scope of outgoing calls can be delimited programmatically:</p>
+<pre><code class="language-java">// code
 Registry.notifyExternalCallStart();
 // write to DB
 Registry.notifyExternalCallEnd();
-// registration code
-Registry.notifyEnd("register");</code></pre>
+// code</code></pre>
 <h2 id="developers">Developers</h2>
 <p>The source code of the latest release of the Java App DC can be found <a href="https://github.com/deib-polimi/tower4clouds/tree/master/data-collectors/java-app-dc">here</a>. </p>
         </section>
