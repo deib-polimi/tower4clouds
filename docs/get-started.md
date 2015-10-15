@@ -11,7 +11,7 @@ Installation:
 - Download and untar the following packages from the [latest release](https://github.com/deib-polimi/tower4clouds/releases):
 	- manager-server-VERSION.tar.gz
 	- data-analyzer-VERSION.tar.gz
-	
+
 Start it:
 - Start the [Data Analyzer]:
 	```bash
@@ -28,9 +28,12 @@ Your Tower4Clouds Core instance is up, now you need:
 2. [Rules] to instruct the platform on what to do,
 3. [Observers] to visualize or make use of data or events.
 
-[Manager]: manager
+Have a look at our [tutorial][Tutorial] to see a complete usage example using Creator 4Clouds and CloudML 4Clouds.
+
+[Manager]: manager/
 [Data Analyzer]: data-analyzer/
 [Manager Webapp]: manager/webapp.html
 [Data Collectors]: data-collectors/
 [Rules]: rules/
 [Observers]: observers/
+[Tutorial]: tutorial

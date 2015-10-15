@@ -4,8 +4,9 @@ currentMenu: index
 
 # Documentation
 
-- [Overview](overview.md): get an idea of our solution 
+- [Overview](overview.md): get an idea of our solution
 - [Get started](get-started.md): make it run in seconds
+- [Tutorial](tutorial/): step by step guide
 - [Installation on mOSAIC](mosaic-installation.md): have it deployed on mOSAIC
 - [Data Collectors](data-collectors/): distribute them everywhere
 - [Manager](manager/): master your monitoring
