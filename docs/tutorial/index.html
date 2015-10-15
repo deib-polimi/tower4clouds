@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Tower 4Clouds</title>
+
+    <link rel="stylesheet" href="http://deib-polimi.github.io/tower4clouds/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://deib-polimi.github.io/tower4clouds/css/highlight.dark.css">
+    <link rel="stylesheet" href="http://deib-polimi.github.io/tower4clouds/css/main.css">
+</head>
+<body class="">
+
+<header class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="http://deib-polimi.github.io/tower4clouds/" class="navbar-brand"><img src="http://deib-polimi.github.io/tower4clouds/img/logo-small.png" alt=""></a>
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+
+        <div class="navbar-collapse collapse" id="navbar-main">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://deib-polimi.github.io/tower4clouds/">Home</a></li>
+                <li><a href="http://deib-polimi.github.io/tower4clouds/docs/get-started.html">Get started</a></li>
+                <li><a href="http://deib-polimi.github.io/tower4clouds/docs/">Documentation</a></li>
+                                <li>
+                    <a href="https://github.com/deib-polimi/tower4clouds">
+                        <i class="fa fa-github"></i> GitHub
+                    </a>
+                </li>
+                            </ul>
+        </div>
+    </div>
+</header>
+
+
+<main class="container-fluid">
+    <div class="row">
+
+        
+
+        <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+            <ul class="nav nav-pills nav-stacked">
+                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/">
+                        Documentation Index
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/overview.html">
+                        Overview
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/get-started.html">
+                        Get started
+                    </a>
+                </li>
+                                                <li class="active">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/tutorial/">
+                        Tutorial
+                    </a>
+                </li>
+                                <ul class="submenu nav nav-stacked nav-pills">
+                                    </ul>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/mosaic-installation.html">
+                        Installation on mOSAIC
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/data-collectors/">
+                        Data Collectors
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/manager/">
+                        Manager
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/data-analyzer/">
+                        Data Analyzer
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/model/">
+                        The Model
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/rules/">
+                        Rules
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/docs/observers/">
+                        Observers
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/CHANGELOG.html">
+                        Change log
+                    </a>
+                </li>
+                                                <li class="">
+                    <a href="http://deib-polimi.github.io/tower4clouds/CONTRIBUTING.html">
+                        Contributing
+                    </a>
+                </li>
+                                            </ul>
+
+        </nav>
+
+        
+        <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+            <h1 id="tutorial">Tutorial</h1>
+<p>In this tutorial we see how to use Tower 4Clouds exploiting Creator 4Clouds and CloudML 4Clouds.</p>
+<h2 id="use-case-application">Use case application</h2>
+<p>For our tutorial we are going to use Ticket Monster, a Java EE application developed
+by JBoss for demo purposes. You can find the source code, already instrumented with
+the <a href="../data-collectors/java-app-dc.html">Java Application Data Collector</a> on the <code>modaclouds</code> branch of <a href="https://github.com/deib-polimi/ticket-monster"><a href="https://github.com/deib-polimi/ticket-monster">https://github.com/deib-polimi/ticket-monster</a></a>.</p>
+<p><img src="img/tm.png" alt="TicketMonster" /></p>
+<h2 id="instrumenting-ticket-monster-with-the-java-app-dc">Instrumenting Ticket Monster with the Java App DC</h2>
+<p>The Java App DC was first added as dependency.</p>
+<pre><code class="language-xml">...
+&lt;dependencies&gt;
+    ...
+    &lt;dependency&gt;
+        &lt;groupId&gt;it.polimi.tower4clouds&lt;/groupId&gt;
+        &lt;artifactId&gt;java-app-dc&lt;/artifactId&gt;
+        &lt;version&gt;0.4-SNAPSHOT&lt;/version&gt;
+        &lt;exclusions&gt;
+            &lt;exclusion&gt;
+                &lt;groupId&gt;it.polimi.tower4clouds&lt;/groupId&gt;
+                &lt;artifactId&gt;rules&lt;/artifactId&gt;
+            &lt;/exclusion&gt;
+            &lt;exclusion&gt;
+                &lt;artifactId&gt;jsr311-api&lt;/artifactId&gt;
+                &lt;groupId&gt;javax.ws.rs&lt;/groupId&gt;
+            &lt;/exclusion&gt;
+            &lt;exclusion&gt;
+                &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+                &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+            &lt;/exclusion&gt;
+        &lt;/exclusions&gt;
+    &lt;/dependency&gt;
+    ...
+&lt;/dependencies&gt;
+...
+&lt;repositories&gt;
+    ...
+    &lt;repository&gt;
+            &lt;id&gt;deib-polimi-releases&lt;/id&gt;
+            &lt;url&gt;https://github.com/deib-polimi/deib-polimi-mvn-repo/raw/master/releases&lt;/url&gt;
+        &lt;/repository&gt;
+        &lt;repository&gt;
+            &lt;id&gt;deib-polimi-snapshots&lt;/id&gt;
+            &lt;url&gt;https://github.com/deib-polimi/deib-polimi-mvn-repo/raw/master/snapshots&lt;/url&gt;
+        &lt;/repository&gt;
+        ...
+&lt;/repositories&gt;
+...
+&lt;build&gt;
+    ...
+    &lt;plugins&gt;
+        ...
+        &lt;plugin&gt;
+                &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+                &lt;artifactId&gt;aspectj-maven-plugin&lt;/artifactId&gt;
+                &lt;version&gt;1.5&lt;/version&gt;
+                &lt;executions&gt;
+                    &lt;execution&gt;
+                        &lt;goals&gt;
+                            &lt;goal&gt;compile&lt;/goal&gt;
+                            &lt;goal&gt;test-compile&lt;/goal&gt;
+                        &lt;/goals&gt;
+                    &lt;/execution&gt;
+                &lt;/executions&gt;
+                &lt;configuration&gt;
+                    &lt;complianceLevel&gt;1.7&lt;/complianceLevel&gt;
+                    &lt;source&gt;1.7&lt;/source&gt;
+                    &lt;target&gt;1.7&lt;/target&gt;
+                    &lt;aspectLibraries&gt;
+                        &lt;aspectLibrary&gt;
+                            &lt;groupId&gt;it.polimi.tower4clouds&lt;/groupId&gt;
+                            &lt;artifactId&gt;java-app-dc&lt;/artifactId&gt;
+                        &lt;/aspectLibrary&gt;
+                    &lt;/aspectLibraries&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+            ...
+        &lt;/plugins&gt;
+        ...
+    &lt;/build&gt;
+    ...</code></pre>
+<p>A servlet used for inizialization is then implemented, which retrieves variables from the environement containing information about the context where the app is going to be deployed and starts the data collector.</p>
+<pre><code class="language-java">package org.jboss.jdf.example.ticketmonster.monitoring;
+
+import it.polimi.tower4clouds.java_app_dc.Property;
+import it.polimi.tower4clouds.java_app_dc.Registry;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+
+import org.jboss.jdf.example.ticketmonster.rest.BaseEntityService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@WebListener
+public class ConfigurationInitializer implements ServletContextListener {
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        Registry.stopMonitoring();
+    }
+
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        Map&lt;Property, String&gt; applicationProperties = new HashMap&lt;Property, String&gt;();
+        applicationProperties.put(Property.ID, loadVariable("MODACLOUDS_TOWER4CLOUDS_INTERNAL_COMPONENT_ID", "_ic1"));
+        applicationProperties.put(Property.TYPE, loadVariable("MODACLOUDS_TOWER4CLOUDS_INTERNAL_COMPONENT_TYPE","WebApp"));
+        applicationProperties.put(Property.VM_ID, loadVariable("MODACLOUDS_TOWER4CLOUDS_VM_ID", "_vm1"));
+        applicationProperties.put(Property.VM_TYPE, loadVariable("MODACLOUDS_TOWER4CLOUDS_VM_TYPE","WebVM"));
+        applicationProperties.put(Property.CLOUD_PROVIDER_ID, loadVariable("MODACLOUDS_TOWER4CLOUDS_CLOUD_PROVIDER_ID", "_cp1"));
+        applicationProperties.put(Property.CLOUD_PROVIDER_TYPE, "IaaS");
+        String mpIP = loadVariable("MODACLOUDS_TOWER4CLOUDS_MANAGER_IP", "localhost");
+        String mpPort = loadVariable("MODACLOUDS_TOWER4CLOUDS_MANAGER_PORT", "8170");
+        Registry.initialize(mpIP, Integer.parseInt(mpPort), applicationProperties,
+                BaseEntityService.class.getPackage().getName(), false, true);
+        Registry.startMonitoring();
+    }
+
+    public static String loadVariable(String variableName, String defaultValue) {
+        if (System.getenv().containsKey(variableName)) {
+            return System.getenv(variableName);
+        }
+        return defaultValue;
+    }
+
+}</code></pre>
+<p>Note that, by setting the last parameter of <code>Registry.initialize(...)</code> to true, we instructed the data collector to monitor all methods annotated with JAXRS annotations (i.e., @GET, @POST, @DELETE, @PUT).</p>
+<h2 id="modeling-the-application-with-creator-4clouds">Modeling the application with Creator 4Clouds</h2>
+<p>We then modeled the deployment of Ticket Monster on Creator 4Clouds. A tutorial on how to use Creator 4Clouds can be found at this <a href="http://forge.modelio.org/projects/creator-4clouds/wiki/Creator4Clouds-Tutorial-C4C">link</a>.</p>
+<h2 id="modeling-data-collectors-in-creator-4clouds">Modeling Data Collectors in Creator 4Clouds</h2>
+<p>Data collectors must be deployed together with the application therefore they must be modeled in Creator 4Clouds in order to be deployed. The <a href="../data-collectors/java-app-dc.html">Java Application Data Collector</a> is a library and therefore there's no need of modeling it, it will be deployed together with the web app.</p>
+<p>We wanted to add the standalone data collector developed by Imperial (<a href="https://github.com/imperial-modaclouds/modaclouds-data-collectors">https://github.com/imperial-modaclouds/modaclouds-data-collectors</a>) for monitoring CPU utilization of our WebVM. So we modeled it at the Type Level of our CPIM Model as shown in the following figure.</p>
+<p><img src="img/dc.png" alt="Imperial DC" /></p>
+<p>Data collectors also require information about the resources they monitor and their context. We therefore added such information to the WebApp component as application properties as shown in the following figure.</p>
+<p><img src="img/props.png" alt="Properties" /></p>
+<p>Such environement variables will be exported by CloudML 4Clouds during deployment.</p>
+<h2 id="modeling-monitoring-rules">Modeling monitoring rules</h2>
+<p>We want to monitor CPU utilization of the WebVM, the response time and the throughput of all API exposed by the WebApp. We therefore need to add 3 <a href="../rules/">Monitoring Rules</a>.
+Inside Creator 4Clouds, at the CPIM level, right click on Monitoring Rules &gt; Creator4Clouds &gt; Elements &gt; &quot;create monitoring rule&quot;. Then, we added monitoring rules field as shown in the following figure.</p>
+<p><img src="img/rules.png" alt="Rules" /></p>
+<p>In order to add tagets (or <code>monitors</code> dependencies) to monitoring rules just drag and drop rules to the diagram where the target resource is visible and use the <code>monitor link</code> to link rules to resources. The following figures show the result.</p>
+<p><img src="img/rule1.png" alt="Rule1" /></p>
+<p><img src="img/rule2.png" alt="Rule2" /></p>
+<p><img src="img/rule3.png" alt="Rule3" /></p>
+<h2 id="deployment">Deployment</h2>
+<p>Once the CPSM model is generated and the required cloud providers information is added the application and the rules can be deployed.</p>
+<p>The application instrumented with data collectors is deployed by means of CloudML 4Clouds. In Creator 4Clouds: right click on the CPSM deployment model &gt; Creator4Clouds &gt; CloudML 4Clouds &gt; &quot;publish application...&quot;. Rules must be registered in Tower 4Clouds and can be done from Creator 4Clouds as well by: right click on the CPSM deployment model &gt; Creator4Clouds &gt; Tower 4Clouds &gt; &quot;Publish monitoring rules...&quot;. Tower 4Clouds Manager IP address and Port must be provided.</p>
+<h2 id="attaching-the-metrics-explorer-graphite-to-observable-metrics">Attaching the Metrics Explorer (Graphite) to observable metrics</h2>
+<p>From the <a href="../manager/webapp.html">manager webapp</a> the installed rules can be visualized. From the metrics tab you can see all observable metrics, and from the model tab you can see the current deployed model (which is updated by data collectors once started).</p>
+<p>From the metrics tab you can add the Metrics Explorer as observer to all the 3 available metrics to make it graph the metrics:</p>
+<ul>
+<li>first, you should add graphite host and port (N.B., it must be reachable by the <a href="../data-analyzer/">Data Analyzer</a>)</li>
+<li>then, add <code>GRAPHITE</code> as format and <code>TCP</code> as protocol</li>
+<li>finally, click &quot;add observer&quot;.</li>
+</ul>
+<p>We used Grafana as alternative dashboard to the one provided by Graphite and here is the result.</p>
+<p><img src="img/graph.png" alt="graph" /></p>
+        </section>
+
+    </div>
+</main>
+
+
+
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="http://yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+<script>
+    $(function() {
+        $("section>h1").wrap('<div class="page-header" />');
+        // Syntax highlighting
+        hljs.initHighlightingOnLoad();
+    });
+</script>
+
+
+</body>
+</html>
