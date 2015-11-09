@@ -71,6 +71,9 @@ EOF
 chmod +x stop-tower4clouds
 sudo mv stop-tower4clouds /usr/bin
 
+export LANGUAGE="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
 # grafana (default credentials: admin, admin)
 wget --quiet https://grafanarel.s3.amazonaws.com/builds/grafana_2.0.2_amd64.deb
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -q --force-yes install adduser libfontconfig
@@ -82,6 +85,9 @@ rm grafana_2.0.2_amd64.deb
 # graphite (https://www.digitalocean.com/community/tutorials/how-to-install-and-use-graphite-on-an-ubuntu-14-04-server)
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -q --force-yes install graphite-web graphite-carbon
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -q --force-yes install postgresql libpq-dev python-psycopg2
+
+sudo pg_createcluster 9.3 main --start
+
 cat > /tmp/init.sql <<- EOF
 CREATE USER graphite WITH PASSWORD 'password';
 CREATE DATABASE graphite WITH OWNER graphite;
