@@ -805,6 +805,7 @@ public class MonitoringManager implements IManagerAPI {
 				updateExistingRelations(resources);
 				knowledgeBase.addMany(resources, MOVocabulary.idParameterName,
 						ManagerConfig.MODEL_GRAPH_NAME);
+				logger.debug("{} added to KB", resources);
 			}
 			registeredDCs.put(dcId, dCDescriptor);
 			int keepAlive = dCDescriptor.getKeepAlive();
