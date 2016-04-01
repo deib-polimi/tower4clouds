@@ -56,10 +56,10 @@ public class Main {
 			VM vm = new VM("TestVM", vmId);
 			dCDescriptor.addResource(vm);
 			dCDescriptor.addMonitoredResource("CPUUtilization", vm);
-			dCDescriptor.setConfigSyncPeriod(10);
+			dCDescriptor.setConfigSyncPeriod(1000);
 			dcAgent.setDCDescriptor(dCDescriptor);
 			dcAgent.start();
-			LOG.debug("DC for {} started", vmId);
+			LOG.info("DC for {} started", vmId);
 		}
 	}
 

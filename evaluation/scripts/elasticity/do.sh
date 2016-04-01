@@ -24,28 +24,18 @@ fi
 
 SCRIPT_PATH=`pwd`
 
-# PIPE_FILE=/tmp/pipe_tower_evaluation
-# if [ ! -e $PIPE_FILE ]
-# then
-#   mkfifo $PIPE_FILE
-# fi
-
 nClients=$(($1*$2))
 echo "Number of clients = ${nClients}"
 RES_FOLDER=${SCRIPT_PATH}/results/$nClients
 rm -rf $RES_FOLDER
 mkdir -p $RES_FOLDER
 
-# tail -f $PIPE_FILE > $RES_FOLDER/dc.log &
-# KILL=$!
-# echo "" > /tmp/pipe_tower_evaluation
-
 java -jar ../../../data-analyzer/target/data-analyzer-*-jar-with-dependencies.jar 2> $RES_FOLDER/da.log &
 KILL="${!}"
 java -jar ../../../manager/manager-server/target/manager-server-*-jar-with-dependencies.jar 2> $RES_FOLDER/man.log &
 KILL="${!} ${KILL}"
 
-sleep 10
+sleep 20
 
 i="0"
 while [ $i -lt $1 ]
@@ -55,13 +45,24 @@ do
 	i=$[$i+1]
 done
 
-sleep 60
+sleep $(echo $nClients | awk '{print log($1)/log(10)*60}')
 
-kill -SIGINT $KILL
+kill $KILL
 
 cat $RES_FOLDER/dc_*.log > $RES_FOLDER/dc.log
 rm $RES_FOLDER/dc_*.log
-cat $RES_FOLDER/dc.log | grep started | awk -F' ' '{print $8","$1}' > $RES_FOLDER/dc-started.csv
-cat $RES_FOLDER/man.log | grep added | sed 's/\([^ ]*\).*id=\(.*\)]].*/\2,\1/' > $RES_FOLDER/dc-registered.csv
+cat $RES_FOLDER/dc.log | grep -i "started" | awk -F' ' '{print $8","$1}' > $RES_FOLDER/dc-started.csv
+cat $RES_FOLDER/man.log | grep -i "adding" | sed 's/\([^ ]*\).*id=\(.*\)]].*/\2,\1/' > $RES_FOLDER/man-adding.csv
+cat $RES_FOLDER/man.log | grep -i "added" | sed 's/\([^ ]*\).*id=\(.*\)]].*/\2,\1/' > $RES_FOLDER/man-added.csv
+cat $RES_FOLDER/dc.log | grep -i "registered" | sed 's/\([^ ]*\).*id=\(.*\)]].*/\2,\1/' > $RES_FOLDER/dc-registered.csv
 
-join -t, <(sort -t, -k 1 -n $RES_FOLDER/dc-started.csv) <(sort -t, -k 1 -n $RES_FOLDER/dc-registered.csv) > $RES_FOLDER/join.csv
+echo "id,dc-started,man-adding,man-added,dc-registered" > $RES_FOLDER/join.csv
+join -t, \
+	<(sort -t, -k 1 -n $RES_FOLDER/dc-started.csv) \
+	<(sort -t, -k 1 -n $RES_FOLDER/man-adding.csv) \
+	| join -t, - \
+	<(sort -t, -k 1 -n $RES_FOLDER/man-added.csv) \
+	| join -t, - \
+	<(sort -t, -k 1 -n $RES_FOLDER/dc-registered.csv) \
+	| sort -t, -k 2 - \
+	>> $RES_FOLDER/join.csv

@@ -803,9 +803,10 @@ public class MonitoringManager implements IManagerAPI {
 			resources = dCDescriptor.getResources();
 			if (resources != null && !resources.isEmpty()) {
 				updateExistingRelations(resources);
+				logger.info("Adding {} to KB", resources);
 				knowledgeBase.addMany(resources, MOVocabulary.idParameterName,
 						ManagerConfig.MODEL_GRAPH_NAME);
-				logger.debug("{} added to KB", resources);
+				logger.info("{} added to KB", resources);
 			}
 			registeredDCs.put(dcId, dCDescriptor);
 			int keepAlive = dCDescriptor.getKeepAlive();

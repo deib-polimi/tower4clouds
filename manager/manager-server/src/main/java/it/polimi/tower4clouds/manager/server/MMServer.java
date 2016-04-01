@@ -91,7 +91,8 @@ public class MMServer extends Application {
 						.getInstance().getMmPort());
 				Context context = new Context();
 				context.getParameters().add("maxThreads", "500");
-				context.getParameters().add("maxTotalConnections", "500");
+//				context.getParameters().add("maxTotalConnections", "500");
+				context.getParameters().add("maxQueued", "5000");
 				server.setContext(context);
 				component.getServers().add(server);
 				component.getClients().add(Protocol.CLAP);

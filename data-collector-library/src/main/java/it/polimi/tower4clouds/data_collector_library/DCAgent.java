@@ -55,7 +55,7 @@ public class DCAgent extends Observable {
 	private boolean registered = false;
 
 	private final int connectionRetryPeriod = 5;
-	private int timeout = 10000;
+	private int timeout = 100000;
 
 	private final ScheduledExecutorService syncExecService = Executors
 			.newScheduledThreadPool(2);
@@ -115,6 +115,8 @@ public class DCAgent extends Observable {
 					dataCollectorId = manager
 							.registerDataCollector(dCDescriptor);
 				}
+				logger.info("DC descriptor registered: {}",
+						dCDescriptor.toString());
 				registered = true;
 			} catch (IOException e) {
 				logger.warn(
