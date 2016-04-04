@@ -18,7 +18,7 @@
 pkill java
 
 if [[ $# -lt 2 ]] ; then
-    echo 'Missing arguments [processes] [threads].'
+    echo 'Missing arguments [#processes] [#threads].'
     exit 1
 fi
 
