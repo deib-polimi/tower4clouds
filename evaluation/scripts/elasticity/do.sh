@@ -45,7 +45,7 @@ do
 	i=$[$i+1]
 done
 
-sleep $(echo $nClients | awk '{print log($1)/log(10)*60}')
+sleep $(echo $nClients | awk '{print log($1)/log(10)*60+10}')
 
 kill $KILL
 
