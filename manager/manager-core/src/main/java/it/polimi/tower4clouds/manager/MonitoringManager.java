@@ -1118,6 +1118,8 @@ public class MonitoringManager implements IManagerAPI {
 								resourcesIdsToRemove,
 								MOVocabulary.idParameterName,
 								ManagerConfig.MODEL_GRAPH_NAME);
+						logger.info("Resources {} removed",
+								resourcesIdsToRemove);
 						for (String resourceId : resourcesIdsToRemove) {
 							resourcesKeepAlive.remove(resourceId);
 							resourcesKATimestamp.remove(resourceId);

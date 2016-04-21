@@ -15,21 +15,19 @@
     limitations under the License.
 
 -->
-<configuration>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>it.polimi.tower4clouds</groupId>
+		<artifactId>tower4clouds</artifactId>
+		<version>0.4-SNAPSHOT</version>
+	</parent>
+	<artifactId>eval-scalability</artifactId>
+	<packaging>pom</packaging>
 
-	<appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
-		<target>System.err</target>
-		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
-			</pattern>
-		</encoder>
-	</appender>
-
-	<logger name="it.polimi" level="DEBUG" />
-	<logger name="eu.larkc" level="DEBUG" />
-	
-
-	<root level="INFO">
-		<appender-ref ref="STDERR" />
-	</root>
-</configuration>
+	<modules>
+		<module>eval-scalability-traffic</module>
+		<module>eval-scalability-rules</module>
+	</modules>
+</project>
