@@ -154,6 +154,7 @@
 		<module>common</module>
 		<module>observers</module>
 		<module>data-collector-library</module>
+		<module>evaluation</module>
 	</modules>
 
 	<dependencyManagement>

@@ -26,7 +26,7 @@
 	</appender>
 
 	<logger name="it.polimi" level="DEBUG" />
-	<!-- <logger name="eu.larkc" level="DEBUG" /> -->
+	<logger name="eu.larkc" level="DEBUG" />
 	
 
 	<root level="INFO">

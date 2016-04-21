@@ -803,8 +803,10 @@ public class MonitoringManager implements IManagerAPI {
 			resources = dCDescriptor.getResources();
 			if (resources != null && !resources.isEmpty()) {
 				updateExistingRelations(resources);
+				logger.info("Adding {} to KB", resources);
 				knowledgeBase.addMany(resources, MOVocabulary.idParameterName,
 						ManagerConfig.MODEL_GRAPH_NAME);
+				logger.info("{} added to KB", resources);
 			}
 			registeredDCs.put(dcId, dCDescriptor);
 			int keepAlive = dCDescriptor.getKeepAlive();
@@ -1116,6 +1118,8 @@ public class MonitoringManager implements IManagerAPI {
 								resourcesIdsToRemove,
 								MOVocabulary.idParameterName,
 								ManagerConfig.MODEL_GRAPH_NAME);
+						logger.info("Resources {} removed",
+								resourcesIdsToRemove);
 						for (String resourceId : resourcesIdsToRemove) {
 							resourcesKeepAlive.remove(resourceId);
 							resourcesKATimestamp.remove(resourceId);
